@@ -1,0 +1,64 @@
+[tool.poetry]
+name = "rfa_toolbox"
+version = "0.1.0"
+description = "A toolbox for analyzing the receptive field expansion in neural networks."
+authors = ["Mats L. Richter <matrichter@uni-osnabrueck.de>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/MLRichter/rfa_toolbox"
+documentation = "https://rfa_toolbox.readthedocs.io"
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries",
+]
+packages = [
+    { include = "rfa_toolbox" },
+]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/MLRichter/rfa_toolbox/issues"
+"Changelog" = "https://rfa_toolbox.readthedocs.io/changelog.html"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+# Documentation Dependencies
+Sphinx = {version = "^4.0.0", optional = true}
+sphinx-rtd-theme = {version = "^1.0.0", optional = true}
+myst-parser = {version = "^0.15.0", optional = true}
+
+[tool.poetry.extras]
+docs = [
+    "myst-parser",
+    "sphinx",
+    "sphinx-rtd-theme",
+]
+
+[tool.poetry.dev-dependencies]
+black = "^21.11b1"
+flake8 = "^4.0.0"
+isort = "^5.10.1"
+pytest = "^6.1.2"
+pytest-cov = "^3.0.0"
+pyupgrade = "^2.29.1"
+tox = "^3.20.1"
+
+[tool.semantic_release]
+branch = "main"
+version_toml = "pyproject.toml:tool.poetry.version"
+version_variable = "rfa_toolbox/__init__.py:__version__"
+build_command = "pip install poetry && poetry build"
+
+[tool.pytest.ini_options]
+addopts = "-v -Wdefault --cov=rfa_toolbox"
+
+[tool.isort]
+profile = "black"
+known_first_party = ["rfa_toolbox", "tests"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
