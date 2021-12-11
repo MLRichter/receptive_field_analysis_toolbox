@@ -23,7 +23,7 @@ packages = [
 "Changelog" = "https://rfa_toolbox.readthedocs.io/changelog.html"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.11"
+python = ">=3.7,<3.11"
 
 # Documentation Dependencies
 Sphinx = {version = "^4.0.0", optional = true}
