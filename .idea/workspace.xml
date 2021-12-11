@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21d2183c-f311-425d-a7b9-10154f7dfb14" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rfa_toolbox/domain.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/domain.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rfa_toolbox/network_components.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/network_components.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_graph/test_graph_components.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_graph/test_graph_components.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,7 +143,7 @@
       <option name="presentableId" value="Default" />
       <updated>1639129034047</updated>
       <workItem from="1639129036229" duration="16048000" />
-      <workItem from="1639207412067" duration="12861000" />
+      <workItem from="1639207412067" duration="13243000" />
     </task>
     <task id="LOCAL-00001" summary="Initial structure for the network graph, also some initial work on the domain-protocols">
       <created>1639149152838</created>
@@ -162,7 +159,14 @@
       <option name="project" value="LOCAL" />
       <updated>1639239586677</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="implemented und tested graph">
+      <created>1639249194252</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1639249194252</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -170,7 +174,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial structure for the network graph, also some initial work on the domain-protocols" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial structure for the network graph, also some initial work on the domain-protocols" />
+    <MESSAGE value="implemented und tested graph" />
+    <option name="LAST_COMMIT_MESSAGE" value="implemented und tested graph" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

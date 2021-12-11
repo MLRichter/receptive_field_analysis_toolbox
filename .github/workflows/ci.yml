@@ -78,7 +78,6 @@ jobs:
     needs:
       - test
       - lint
-      - commitlint
 
     steps:
       - uses: actions/checkout@v2
