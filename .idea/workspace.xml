@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21d2183c-f311-425d-a7b9-10154f7dfb14" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-    </list>
+    <list default="true" id="21d2183c-f311-425d-a7b9-10154f7dfb14" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -143,7 +141,7 @@
       <option name="presentableId" value="Default" />
       <updated>1639129034047</updated>
       <workItem from="1639129036229" duration="16048000" />
-      <workItem from="1639207412067" duration="13243000" />
+      <workItem from="1639207412067" duration="13811000" />
     </task>
     <task id="LOCAL-00001" summary="Initial structure for the network graph, also some initial work on the domain-protocols">
       <created>1639149152838</created>
@@ -166,7 +164,14 @@
       <option name="project" value="LOCAL" />
       <updated>1639249194252</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="implemented und tested graph">
+      <created>1639249798485</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1639249798485</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
