@@ -1,4 +1,8 @@
-from typing import Protocol, Optional, List, Dict, Union
+try:
+    from typing import Protocol, Optional, List, Dict, Union
+except:
+    from typing import Optional, List, Dict, Union
+    from typing_extensions import Protocol
 
 
 class Layer(Protocol):
