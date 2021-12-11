@@ -1,7 +1,8 @@
 try:
-    from typing import Protocol, Optional, List, Dict, Union
-except:
-    from typing import Optional, List, Dict, Union
+    from typing import Dict, List, Optional, Protocol, Union
+except ImportError:
+    from typing import Dict, List, Optional, Union
+
     from typing_extensions import Protocol
 
 

@@ -1,16 +1,12 @@
 import json
 
-from rfa_toolbox.network_components import ModelGraph, NetworkNode, \
-    EnrichedNetworkNode, LayerDefinition
+from rfa_toolbox.network_components import LayerDefinition, NetworkNode
 
 
 class TestLayerDefinition:
-
     def test_can_initialize_from_dict(self):
-        layer = LayerDefinition.from_dict(**{
-            "name": "test",
-            "kernel_size": 3,
-            "stride_size": 1}
+        layer = LayerDefinition.from_dict(
+            **{"name": "test", "kernel_size": 3, "stride_size": 1}
         )
         assert layer.name == "test"
         assert layer.kernel_size == 3
@@ -18,11 +14,7 @@ class TestLayerDefinition:
 
     def test_to_dict(self):
         layer = LayerDefinition("test", 3, 1)
-        assert layer.to_dict() == {
-            "name": "test",
-            "kernel_size": 3,
-            "stride_size": 1
-        }
+        assert layer.to_dict() == {"name": "test", "kernel_size": 3, "stride_size": 1}
 
     def test_to_dict_can_be_jsonified(self):
         layer = LayerDefinition("test", 3, 1)
@@ -37,17 +29,14 @@ class TestLayerDefinition:
 
 
 class TestNetworkNode:
-
     def test_can_initialize_from_dict_without_nodes_and_id(self):
-        node = NetworkNode.from_dict(**{
-            "name": "test",
-            "layer_type": {
-                "name": "test1",
-                "kernel_size": 3,
-                "stride_size": 1
-            },
-            "predecessor_list": []
-        })
+        node = NetworkNode.from_dict(
+            **{
+                "name": "test",
+                "layer_type": {"name": "test1", "kernel_size": 3, "stride_size": 1},
+                "predecessor_list": [],
+            }
+        )
         assert node.name == "test"
         assert node.layer_type.name == "test1"
         assert node.layer_type.kernel_size == 3
@@ -55,16 +44,14 @@ class TestNetworkNode:
         assert node.predecessor_list == []
 
     def test_can_initialize_from_dict_without_nodes(self):
-        node = NetworkNode.from_dict(**{
-            "id": 123,
-            "name": "test",
-            "layer_type": {
-                "name": "test1",
-                "kernel_size": 3,
-                "stride_size": 1
-            },
-            "predecessor_list": []
-        })
+        node = NetworkNode.from_dict(
+            **{
+                "id": 123,
+                "name": "test",
+                "layer_type": {"name": "test1", "kernel_size": 3, "stride_size": 1},
+                "predecessor_list": [],
+            }
+        )
         assert node.name == "test"
         assert node.layer_type.name == "test1"
         assert node.layer_type.kernel_size == 3
@@ -72,38 +59,32 @@ class TestNetworkNode:
         assert node.predecessor_list == []
 
     def test_can_initialize_from_dict(self):
-        node1 = NetworkNode.from_dict(**{
-            "id": 124,
-            "name": "B",
-            "layer_type": {
-                "name": "test1",
-                "kernel_size": 3,
-                "stride_size": 1
-            },
-            "predecessor_list": []
-        })
+        node1 = NetworkNode.from_dict(
+            **{
+                "id": 124,
+                "name": "B",
+                "layer_type": {"name": "test1", "kernel_size": 3, "stride_size": 1},
+                "predecessor_list": [],
+            }
+        )
 
-        node2 = NetworkNode.from_dict(**{
-            "id": 125,
-            "name": "C",
-            "layer_type": {
-                "name": "test1",
-                "kernel_size": 3,
-                "stride_size": 1
-            },
-            "predecessor_list": []
-        })
+        node2 = NetworkNode.from_dict(
+            **{
+                "id": 125,
+                "name": "C",
+                "layer_type": {"name": "test1", "kernel_size": 3, "stride_size": 1},
+                "predecessor_list": [],
+            }
+        )
 
-        node = NetworkNode.from_dict(**{
-            "id": 123,
-            "name": "A",
-            "layer_type": {
-                "name": "test1",
-                "kernel_size": 3,
-                "stride_size": 1
-            },
-            "predecessor_list": [node1, node2]
-        })
+        node = NetworkNode.from_dict(
+            **{
+                "id": 123,
+                "name": "A",
+                "layer_type": {"name": "test1", "kernel_size": 3, "stride_size": 1},
+                "predecessor_list": [node1, node2],
+            }
+        )
 
         assert node.name == "A"
         assert node.layer_type.name == "test1"
@@ -116,12 +97,8 @@ class TestNetworkNode:
         assert node.to_dict() == {
             "id": id(node),
             "name": "test",
-            "layer_type": {
-                "name": "test1",
-                "kernel_size": 3,
-                "stride_size": 1
-            },
-            "predecessor_list": []
+            "layer_type": {"name": "test1", "kernel_size": 3, "stride_size": 1},
+            "predecessor_list": [],
         }
 
     def test_to_dict_with_predecessor(self):
@@ -131,12 +108,8 @@ class TestNetworkNode:
         assert node2.to_dict() == {
             "id": id(node2),
             "name": "B",
-            "layer_type": {
-                "name": "test2",
-                "kernel_size": 3,
-                "stride_size": 1
-            },
-            "predecessor_list": [id(node1)]
+            "layer_type": {"name": "test2", "kernel_size": 3, "stride_size": 1},
+            "predecessor_list": [id(node1)],
         }
 
     def test_to_dict_can_be_jsonified(self):
