@@ -1,7 +1,10 @@
-from typing import Tuple, List, Union
+from typing import Tuple, List
+
+from rfa_toolbox.network_components import LayerDefinition
 
 NASBenchNetwork = Tuple[List[List[bool]], List[str]]
 
 
-def compute_receptive_field(network_config: NASBenchNetwork, layer_definitions: List[LayerDefinition]):
+def compute_receptive_field(network_config: NASBenchNetwork,
+                            layer_definitions: List[LayerDefinition]):
     ...

@@ -21,4 +21,3 @@ def convolutional_config_from_string(config_string: str,
 
 def obtain_paths_from_graph():
     ...
-
