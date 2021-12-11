@@ -171,7 +171,14 @@
       <option name="project" value="LOCAL" />
       <updated>1639249798485</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="removed comitlint">
+      <created>1639250550734</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1639250550734</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -180,7 +187,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial structure for the network graph, also some initial work on the domain-protocols" />
     <MESSAGE value="implemented und tested graph" />
-    <option name="LAST_COMMIT_MESSAGE" value="implemented und tested graph" />
+    <MESSAGE value="removed comitlint" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed comitlint" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

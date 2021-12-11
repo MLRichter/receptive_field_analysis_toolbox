@@ -30,7 +30,6 @@
   <img src="https://img.shields.io/pypi/l/rfa_toolbox.svg?style=flat-square" alt="License">
 </p>
 
-
 A toolbox for analyzing the receptive field expansion in neural networks.
 
 ## Installation
@@ -48,6 +47,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

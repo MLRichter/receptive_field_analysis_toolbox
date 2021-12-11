@@ -1,6 +1,7 @@
-from typing import Optional, List, Dict, Callable, Union, Any
-from attr import attrs, attrib
+from typing import Any, Callable, Dict, List, Optional, Union
+
 import numpy as np
+from attr import attrib, attrs
 
 from rfa_toolbox.domain import Layer, Node
 
@@ -17,9 +18,9 @@ class LayerDefinition(Layer):
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
         return {
-            'name': self.name,
-            'kernel_size': self.kernel_size,
-            'stride_size': self.stride_size
+            "name": self.name,
+            "kernel_size": self.kernel_size,
+            "stride_size": self.stride_size,
         }
 
 
@@ -35,9 +36,9 @@ class InputLayer(Layer):
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
         return {
-            'name': self.name,
-            'kernel_size': self.kernel_size,
-            'stride_size': self.stride_size
+            "name": self.name,
+            "kernel_size": self.kernel_size,
+            "stride_size": self.stride_size,
         }
 
 
@@ -53,9 +54,9 @@ class OutputLayer(Layer):
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
         return {
-            'name': self.name,
-            'kernel_size': self.kernel_size,
-            'stride_size': self.stride_size
+            "name": self.name,
+            "kernel_size": self.kernel_size,
+            "stride_size": self.stride_size,
         }
 
 
@@ -79,10 +80,10 @@ class NetworkNode(Node):
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
         return {
-            'id': id(self),
-            'name': self.name,
-            'layer_type': self.layer_type.to_dict(),
-            'predecessor_list': [id(pred) for pred in self.predecessor_list]
+            "id": id(self),
+            "name": self.name,
+            "layer_type": self.layer_type.to_dict(),
+            "predecessor_list": [id(pred) for pred in self.predecessor_list],
         }
 
 
@@ -105,23 +106,28 @@ class EnrichedNetworkNode(Node):
             self.succecessor_list.append(successor)
 
     def _apply_function_to_all_successors(
-        self,
-        func: Callable[["EnrichedNetworkNode"], Any]
+        self, func: Callable[["EnrichedNetworkNode"], Any]
     ) -> List[Any]:
-        direct_successors = [func(succ)
-                             for succ in self.succecessor_list]
-        return direct_successors + [succ._apply_function_to_all_successors(func)
-                                    for succ in self.succecessor_list]
+        direct_successors = [func(succ) for succ in self.succecessor_list]
+        return direct_successors + [
+            succ._apply_function_to_all_successors(func)
+            for succ in self.succecessor_list
+        ]
 
-    def is_border(self, input_resolution: int,
-                  receptive_field_provider:
-                  Callable[["EnrichedNetworkNode"], int]
-                  = lambda x: x.receptive_field_min) -> bool:
+    def is_border(
+        self,
+        input_resolution: int,
+        receptive_field_provider: Callable[
+            ["EnrichedNetworkNode"], int
+        ] = lambda x: x.receptive_field_min,
+    ) -> bool:
         # the border layer is defined as the layer that receives
         # all inputs with a receptive field size
         # SMALLER than the input resolution
-        direct_predecessors = [input_resolution <= receptive_field_provider(pred)
-                               for pred in self.predecessor_list]
+        direct_predecessors = [
+            input_resolution <= receptive_field_provider(pred)
+            for pred in self.predecessor_list
+        ]
         # of course, this means that this layer also needs to fullfill this property
         own = input_resolution <= receptive_field_provider(self)
         # additionally (only relevant for multipath architectures)
@@ -143,12 +149,12 @@ class EnrichedNetworkNode(Node):
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
         return {
-            'id': id(self),
-            'name': self.name,
-            'layer_type': self.layer_type.to_dict(),
-            'receptive_field_max': self.receptive_field_max,
-            'receptive_field_min': self.receptive_field_min,
-            'predecessor_list': [id(pred) for pred in self.predecessor_list]
+            "id": id(self),
+            "name": self.name,
+            "layer_type": self.layer_type.to_dict(),
+            "receptive_field_max": self.receptive_field_max,
+            "receptive_field_min": self.receptive_field_min,
+            "predecessor_list": [id(pred) for pred in self.predecessor_list],
         }
 
 
@@ -188,8 +194,7 @@ class ModelGraph:
 
     @staticmethod
     def enrich_node_sequence(
-        sequence: Node,
-        start_receptive_field: int = 0
+        sequence: Node, start_receptive_field: int = 0
     ) -> EnrichedNetworkNode:
         ...
 
@@ -200,17 +205,17 @@ class ModelGraph:
     @staticmethod
     def from_dict(**config) -> "ModelGraph":
         node_mapping = {
-            identity:
-                EnrichedNetworkNode.from_dict(**node)
-                if "receptive_field_sizes" in node else NetworkNode.from_dict(**node)
-            for identity, node in config['node_mapping'].items()
+            identity: EnrichedNetworkNode.from_dict(**node)
+            if "receptive_field_sizes" in node
+            else NetworkNode.from_dict(**node)
+            for identity, node in config["node_mapping"].items()
         }
         graph = ModelGraph(config["name"], node_mapping[config["input_node"]])
         return graph
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
         return {
-            'name': self.name,
-            'input_node': id(self.input_node),
-            'node_mapping': {id(node): node.to_dict() for node in self.node_list}
+            "name": self.name,
+            "input_node": id(self.input_node),
+            "node_mapping": {id(node): node.to_dict() for node in self.node_list},
         }
