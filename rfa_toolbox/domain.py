@@ -18,10 +18,6 @@ class Node(Protocol):
     name: str
     layer_type: Layer
     predecessor_list: List["Node"]
-    successors_list: List["Node"]
-
-    def predecessors(self) -> Dict[str, Layer]:
-        ...
 
     def successors(self) -> Dict[str, Layer]:
         ...

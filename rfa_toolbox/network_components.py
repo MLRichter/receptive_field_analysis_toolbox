@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict, Callable, Union
+from typing import Optional, List, Dict, Callable, Union, Any
 from attr import attrs, attrib
 import numpy as np
 
@@ -7,7 +7,6 @@ from rfa_toolbox.domain import Layer, Node
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class LayerDefinition(Layer):
-
     name: str
     kernel_size: Optional[int] = attrib(factory=lambda x: np.inf if x is None else x)
     stride_size: int = 1
@@ -60,24 +59,22 @@ class OutputLayer(Layer):
         }
 
 
+# FIXME: Replace Successors with Predecessors to make network building more intuitive
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class NetworkNode(Node):
-
     name: str
     layer_type: Layer
     predecessor_list: List["NetworkNode"] = attrib(factory=list)
-    successors_list: List["NetworkNode"] = attrib(factory=list)
 
     @property
     def predecessors(self) -> Dict[str, Layer]:
-        return {predec.name: predec for predec in self.predecessor_list}
-
-    @property
-    def successors(self) -> Dict[str, Layer]:
-        return {succ.name: succ for succ in self.successors_list}
+        return {pred.name: pred for pred in self.predecessor_list}
 
     @staticmethod
     def from_dict(**config) -> "NetworkNode":
+        if "id" in config:
+            config.pop("id")
+        config["layer_type"] = LayerDefinition.from_dict(**config["layer_type"])
         return NetworkNode(**config)
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
@@ -85,26 +82,60 @@ class NetworkNode(Node):
             'id': id(self),
             'name': self.name,
             'layer_type': self.layer_type.to_dict(),
-            'predecessor_list': [id(predec) for predec in self.predecessor_list],
-            'successors_list': [id(succ) for succ in self.successors_list]
+            'predecessor_list': [id(pred) for pred in self.predecessor_list]
         }
 
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class EnrichedNetworkNode(Node):
-
     name: str
     layer_type: LayerDefinition
     receptive_field_max: int
     receptive_field_min: int
     receptive_field_sizes: List[int]
     predecessor_list: List["EnrichedNetworkNode"] = attrib(factory=list)
-    successors_list: List["EnrichedNetworkNode"] = attrib(factory=list)
+    succecessor_list: List["EnrichedNetworkNode"] = attrib(init=False, factory=list)
+
+    def __attrs_post_init__(self):
+        for pred in self.predecessor_list:
+            pred.succecessor_list.append(self)
+
+    def add_successor(self, successor: "EnrichedNetworkNode") -> None:
+        if successor not in self.succecessor_list:
+            self.succecessor_list.append(successor)
+
+    def _apply_function_to_all_successors(
+        self,
+        func: Callable[["EnrichedNetworkNode"], Any]
+    ) -> List[Any]:
+        direct_successors = [func(succ)
+                             for succ in self.succecessor_list]
+        return direct_successors + [succ._apply_function_to_all_successors(func)
+                                    for succ in self.succecessor_list]
 
     def is_border(self, input_resolution: int,
-                  receptive_field_provider: Callable[["EnrichedNetworkNode"], int]
+                  receptive_field_provider:
+                  Callable[["EnrichedNetworkNode"], int]
                   = lambda x: x.receptive_field_min) -> bool:
-        ...
+        # the border layer is defined as the layer that receives
+        # all inputs with a receptive field size
+        # SMALLER than the input resolution
+        direct_predecessors = [input_resolution <= receptive_field_provider(pred)
+                               for pred in self.predecessor_list]
+        # of course, this means that this layer also needs to fullfill this property
+        own = input_resolution <= receptive_field_provider(self)
+        # additionally (only relevant for multipath architectures)
+        # all following layer are border layers as well
+        successors = [
+            input_resolution <= result
+            for result in self._apply_function_to_all_successors(
+                receptive_field_provider
+            )
+        ]
+        # in short all direct predecessors,
+        # the layer itself and all following layers have a receptive field size
+        # GREATER than the input resolution
+        return all(direct_predecessors) and own and all(successors)
 
     @staticmethod
     def from_dict(**config) -> "EnrichedNetworkNode":
@@ -117,39 +148,38 @@ class EnrichedNetworkNode(Node):
             'layer_type': self.layer_type.to_dict(),
             'receptive_field_max': self.receptive_field_max,
             'receptive_field_min': self.receptive_field_min,
-            'predecessor_list': [id(predec) for predec in self.predecessor_list],
-            'successors_list': [id(succ) for succ in self.successors_list]
+            'predecessor_list': [id(pred) for pred in self.predecessor_list]
         }
 
 
 @attrs(auto_attribs=True, slots=True)
 class ModelGraph:
     name: str
-    input_node: Node
+    output_node: Node
     _node_list: List[EnrichedNetworkNode] = attrib(init=False)
 
     @staticmethod
-    def obtain_all_nodes_from_root(input_node: Node) -> List[Node]:
-        node_list = [input_node]
-        for node in input_node.successors_list:
+    def obtain_all_nodes_from_root(output_node: Node) -> List[Node]:
+        node_list = [output_node]
+        for node in output_node.predecessor_list:
             node_list.extend(ModelGraph.obtain_all_nodes_from_root(node))
         return list(set(node_list))
 
     @staticmethod
     def obtain_paths(start: Node, end: Node) -> List[List[Node]]:
         paths: List[List[Node]] = []
-        for node in start.successors_list:
-            if node == end:
+        for node in start.predecessor_list:
+            if node == start:
                 # found the shortest possible path
                 paths.append([start, end])
-            elif isinstance(node.layer_type, OutputLayer):
+            elif isinstance(node.layer_type, InputLayer):
                 # no need to go further
                 continue
             else:
                 # recursivly search for paths
-                paths = ModelGraph.obtain_paths(start=node, end=end)
+                paths = ModelGraph.obtain_paths(start=start, end=node)
                 for path in paths:
-                    path.insert(0, start)
+                    path.append(end)
         return paths
 
     @staticmethod
