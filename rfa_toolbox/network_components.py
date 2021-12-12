@@ -60,7 +60,6 @@ class OutputLayer(Layer):
         }
 
 
-# FIXME: Replace Successors with Predecessors to make network building more intuitive
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class NetworkNode(Node):
     name: str
@@ -145,6 +144,9 @@ class EnrichedNetworkNode(Node):
 
     @staticmethod
     def from_dict(**config) -> "EnrichedNetworkNode":
+        if "id" in config:
+            config.pop("id")
+        config["layer_type"] = LayerDefinition.from_dict(**config["layer_type"])
         return EnrichedNetworkNode(**config)
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
@@ -154,6 +156,7 @@ class EnrichedNetworkNode(Node):
             "layer_type": self.layer_type.to_dict(),
             "receptive_field_max": self.receptive_field_max,
             "receptive_field_min": self.receptive_field_min,
+            "receptive_field_sizes": self.receptive_field_sizes,
             "predecessor_list": [id(pred) for pred in self.predecessor_list],
         }
 
