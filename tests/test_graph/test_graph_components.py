@@ -1,9 +1,14 @@
 import json
 
+import pytest
+
 from rfa_toolbox.network_components import (
     EnrichedNetworkNode,
+    InputLayer,
     LayerDefinition,
+    ModelGraph,
     NetworkNode,
+    OutputLayer,
 )
 
 
@@ -285,24 +290,141 @@ class TestEnrichedNetworkNode:
         assert node4.is_border(10)
 
 
+@pytest.fixture
+def simple_network_nodes():
+    node0 = EnrichedNetworkNode(
+        name="A",
+        layer_type=InputLayer(),
+        predecessor_list=[],
+        receptive_field_sizes=[1],
+    )
+    node1 = EnrichedNetworkNode(
+        name="B",
+        layer_type=LayerDefinition("test1", 3, 1),
+        receptive_field_sizes=[3],
+        predecessor_list=[node0],
+    )
+    node2 = EnrichedNetworkNode(
+        name="C",
+        layer_type=LayerDefinition("test2", 3, 1),
+        receptive_field_sizes=[5],
+        predecessor_list=[node1],
+    )
+    node3 = EnrichedNetworkNode(
+        name="D",
+        layer_type=LayerDefinition("test3", 3, 1),
+        receptive_field_sizes=[7],
+        predecessor_list=[node2],
+    )
+    node4 = EnrichedNetworkNode(
+        name="E",
+        layer_type=LayerDefinition("test4", 3, 1),
+        receptive_field_sizes=[9],
+        predecessor_list=[node3],
+    )
+    node5 = EnrichedNetworkNode(
+        name="F",
+        layer_type=OutputLayer(),
+        receptive_field_sizes=[9],
+        predecessor_list=[node4],
+    )
+    return node0, node1, node2, node3, node4, node5
+
+
+@pytest.fixture
+def simple_non_sequential_network_nodes():
+    node0 = EnrichedNetworkNode(
+        name="A",
+        layer_type=InputLayer(),
+        predecessor_list=[],
+        receptive_field_sizes=[1],
+    )
+    node1 = EnrichedNetworkNode(
+        name="B",
+        layer_type=LayerDefinition("test1", 3, 1),
+        receptive_field_sizes=[3],
+        predecessor_list=[node0],
+    )
+    node2 = EnrichedNetworkNode(
+        name="C",
+        layer_type=LayerDefinition("test2", 3, 1),
+        receptive_field_sizes=[5],
+        predecessor_list=[node1],
+    )
+    node3 = EnrichedNetworkNode(
+        name="D",
+        layer_type=LayerDefinition("test3", 3, 1),
+        receptive_field_sizes=[7],
+        predecessor_list=[node0],
+    )
+    node4 = EnrichedNetworkNode(
+        name="E",
+        layer_type=LayerDefinition("test4", 3, 1),
+        receptive_field_sizes=[9],
+        predecessor_list=[node3],
+    )
+    node5 = EnrichedNetworkNode(
+        name="F",
+        layer_type=OutputLayer(),
+        receptive_field_sizes=[9],
+        predecessor_list=[node2, node4],
+    )
+    return node0, node1, node2, node3, node4, node5
+
+
 class TestModelGraphStaticMethods:
-    def test_obtain_all_nodes_from_root_on_single_node_graph(self):
-        ...
+    def test_obtain_all_nodes_from_root_on_single_node_graph(
+        self, simple_network_nodes
+    ):
+        node0, node1, node2, node3, node4, node5 = simple_network_nodes
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(node0)
+        assert node0 in all_nodes
+        assert node1 not in all_nodes
+        assert node2 not in all_nodes
+        assert node3 not in all_nodes
+        assert node4 not in all_nodes
+        assert node5 not in all_nodes
 
-    def test_obtain_all_nodes_from_a_sequential_graph(self):
-        ...
+    def test_obtain_all_nodes_from_a_sequential_graph(self, simple_network_nodes):
+        node0, node1, node2, node3, node4, node5 = simple_network_nodes
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(node5)
+        assert node0 in all_nodes
+        assert node1 in all_nodes
+        assert node2 in all_nodes
+        assert node3 in all_nodes
+        assert node4 in all_nodes
+        assert node5 in all_nodes
 
-    def test_obtain_all_nodes_from_a_nonsequential_graph(self):
-        ...
+    def test_obtain_all_nodes_from_a_nonsequential_graph(
+        self, simple_non_sequential_network_nodes
+    ):
+        node0, node1, node2, node3, node4, node5 = simple_non_sequential_network_nodes
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(node5)
+        assert node0 in all_nodes
+        assert node1 in all_nodes
+        assert node2 in all_nodes
+        assert node3 in all_nodes
+        assert node4 in all_nodes
+        assert node5 in all_nodes
 
-    def test_find_input_node_with_input_node(self):
-        ...
+    def test_find_input_node_with_input_node(self, simple_non_sequential_network_nodes):
+        input_node, _, _, _, _, _ = simple_non_sequential_network_nodes
+        assert (
+            ModelGraph._find_input_node(list(simple_non_sequential_network_nodes))
+            == input_node
+        )
 
-    def test_find_input_node_without_input_node_in_graph(self):
-        ...
+    def test_find_input_node_without_input_node_in_graph(
+        self, simple_non_sequential_network_nodes
+    ):
+        node0, node1, node2, node3, node4, node5 = simple_non_sequential_network_nodes
+        with pytest.raises(ValueError):
+            ModelGraph._find_input_node([node5, node4, node3, node2, node1])
 
-    def test_obtain_paths_from_sequential_path(self):
-        ...
+    def test_obtain_paths_from_sequential_path(
+        self, simple_non_sequential_network_nodes
+    ):
+        node0, node1, node2, node3, node4, node5 = simple_non_sequential_network_nodes
 
     def test_obtain_paths_from_multipath_architecture(self):
         ...

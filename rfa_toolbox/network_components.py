@@ -25,10 +25,10 @@ class LayerDefinition(Layer):
 
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
-class InputLayer(Layer):
+class InputLayer(LayerDefinition):
     name: str = "input"
-    kernel_size = 1
-    stride_size = 1
+    kernel_size: int = 1
+    stride_size: int = 1
 
     @staticmethod
     def from_dict(**config) -> "InputLayer":
@@ -43,10 +43,10 @@ class InputLayer(Layer):
 
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
-class OutputLayer(Layer):
+class OutputLayer(LayerDefinition):
     name: str = "output"
-    kernel_size = 1
-    stride_size = 1
+    kernel_size: int = 1
+    stride_size: int = 1
 
     @staticmethod
     def from_dict(**config) -> "OutputLayer":
@@ -190,9 +190,13 @@ class ModelGraph:
         output_node: EnrichedNetworkNode,
     ) -> List[EnrichedNetworkNode]:
         node_list = [output_node]
+        print("\n\n\n")
         for node in output_node.predecessor_list:
-            node_list.extend(ModelGraph.obtain_all_nodes_from_root(node))
-        return list(set(node_list))
+            additional_nodes = ModelGraph.obtain_all_nodes_from_root(node)
+            node_list = node_list + additional_nodes
+            print("currently at", output_node, "adding", node_list)
+
+        return node_list
 
     @staticmethod
     def obtain_paths(
@@ -220,6 +224,7 @@ class ModelGraph:
         for node in all_node_list:
             if isinstance(node.layer_type, InputLayer):
                 return node
+            raise ValueError("No input node found")
 
     @staticmethod
     def _compute_receptive_field_for_node(
