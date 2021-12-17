@@ -1,5 +1,5 @@
 try:
-    from typing import Dict, List, Optional, Protocol, Union
+    from typing import Any, Dict, List, Optional, Protocol, Union
 except ImportError:
     from typing import Dict, List, Optional, Union
 
@@ -32,6 +32,9 @@ class Node(Protocol):
         ...
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
+        ...
+
+    def is_in(self, container: Union[List["Node"], Dict["Node", Any]]) -> bool:
         ...
 
 

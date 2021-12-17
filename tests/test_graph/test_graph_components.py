@@ -1,5 +1,6 @@
 import json
 
+import numpy as np
 import pytest
 
 from rfa_toolbox.network_components import (
@@ -35,6 +36,24 @@ class TestLayerDefinition:
         jsonified = json.dumps(layer.to_dict())
         reconstituted = LayerDefinition.from_dict(**json.loads(jsonified))
         assert layer == reconstituted
+
+    def test_cannot_set_illegal_stride_size_values(self):
+        for i in range(10):
+            with pytest.raises(ValueError):
+                LayerDefinition("test", i, -i)
+
+    def test_cannot_set_illegal_kernel_size_values(self):
+        for i in range(10):
+            with pytest.raises(ValueError):
+                LayerDefinition("test", -i, i)
+
+    def test_cannot_set_illegal_kernel_and_stride_size_values(self):
+        for i in range(10):
+            strides = np.random.randint(-100, 0)
+            kernel = np.random.randint(-100, 0)
+
+            with pytest.raises(ValueError):
+                LayerDefinition("test", kernel, strides)
 
 
 class TestNetworkNode:
@@ -164,7 +183,6 @@ class TestEnrichedNetworkNode:
         assert node.predecessor_list == []
 
     def test_to_dict_with_predecessor(self):
-
         node0 = EnrichedNetworkNode(
             name="B",
             layer_type=LayerDefinition("test0", 1, 2),
@@ -291,6 +309,37 @@ class TestEnrichedNetworkNode:
 
 
 @pytest.fixture
+def simple_non_enrichted_network_nodes():
+    node0 = NetworkNode(name="A", layer_type=InputLayer(), predecessor_list=[])
+    node1 = NetworkNode(
+        name="B",
+        layer_type=LayerDefinition("test1", 3, 1),
+        predecessor_list=[node0],
+    )
+    node2 = NetworkNode(
+        name="C",
+        layer_type=LayerDefinition("test2", 3, 1),
+        predecessor_list=[node1],
+    )
+    node3 = NetworkNode(
+        name="D",
+        layer_type=LayerDefinition("test3", 3, 1),
+        predecessor_list=[node2],
+    )
+    node4 = NetworkNode(
+        name="E",
+        layer_type=LayerDefinition("test4", 3, 1),
+        predecessor_list=[node3],
+    )
+    node5 = NetworkNode(
+        name="F",
+        layer_type=OutputLayer(),
+        predecessor_list=[node4],
+    )
+    return node0, node1, node2, node3, node4, node5
+
+
+@pytest.fixture
 def simple_network_nodes():
     node0 = EnrichedNetworkNode(
         name="A",
@@ -332,6 +381,129 @@ def simple_network_nodes():
 
 
 @pytest.fixture
+def simple_network_nodes_with_strides():
+    node0 = EnrichedNetworkNode(
+        name="A",
+        layer_type=InputLayer(),
+        predecessor_list=[],
+        receptive_field_sizes=[1],
+    )
+    node1 = EnrichedNetworkNode(
+        name="B",
+        layer_type=LayerDefinition("test1", 3, 2),
+        receptive_field_sizes=[3],
+        predecessor_list=[node0],
+    )
+    node2 = EnrichedNetworkNode(
+        name="C",
+        layer_type=LayerDefinition("test2", 3, 2),
+        receptive_field_sizes=[7],
+        predecessor_list=[node1],
+    )
+    node3 = EnrichedNetworkNode(
+        name="D",
+        layer_type=LayerDefinition("test3", 3, 1),
+        receptive_field_sizes=[15],
+        predecessor_list=[node2],
+    )
+    node4 = EnrichedNetworkNode(
+        name="E",
+        layer_type=LayerDefinition("test4", 3, 2),
+        receptive_field_sizes=[23],
+        predecessor_list=[node3],
+    )
+    node5 = EnrichedNetworkNode(
+        name="F",
+        layer_type=OutputLayer(),
+        receptive_field_sizes=[23],
+        predecessor_list=[node4],
+    )
+    return node0, node1, node2, node3, node4, node5
+
+
+@pytest.fixture
+def simple_network_nodes_with_kernel_size1():
+    node0 = EnrichedNetworkNode(
+        name="A",
+        layer_type=InputLayer(),
+        predecessor_list=[],
+        receptive_field_sizes=[1],
+    )
+    node1 = EnrichedNetworkNode(
+        name="B",
+        layer_type=LayerDefinition("test1", 3, 1),
+        receptive_field_sizes=[3],
+        predecessor_list=[node0],
+    )
+    node2 = EnrichedNetworkNode(
+        name="C",
+        layer_type=LayerDefinition("test2", 1, 1),
+        receptive_field_sizes=[3],
+        predecessor_list=[node1],
+    )
+    node3 = EnrichedNetworkNode(
+        name="D",
+        layer_type=LayerDefinition("test3", 3, 1),
+        receptive_field_sizes=[5],
+        predecessor_list=[node2],
+    )
+    node4 = EnrichedNetworkNode(
+        name="E",
+        layer_type=LayerDefinition("test4", 1, 1),
+        receptive_field_sizes=[5],
+        predecessor_list=[node3],
+    )
+    node5 = EnrichedNetworkNode(
+        name="F",
+        layer_type=OutputLayer(),
+        receptive_field_sizes=[5],
+        predecessor_list=[node4],
+    )
+    return node0, node1, node2, node3, node4, node5
+
+
+@pytest.fixture
+def simple_network_nodes_with_dense_layer():
+    node0 = EnrichedNetworkNode(
+        name="A",
+        layer_type=InputLayer(),
+        predecessor_list=[],
+        receptive_field_sizes=[1],
+    )
+    node1 = EnrichedNetworkNode(
+        name="B",
+        layer_type=LayerDefinition("test1", 3, 1),
+        receptive_field_sizes=[3],
+        predecessor_list=[node0],
+    )
+    node2 = EnrichedNetworkNode(
+        name="C",
+        layer_type=LayerDefinition("test2", 1, 1),
+        receptive_field_sizes=[3],
+        predecessor_list=[node1],
+    )
+    node3 = EnrichedNetworkNode(
+        name="D",
+        layer_type=LayerDefinition("test3", np.inf, 1),
+        receptive_field_sizes=[np.inf],
+        predecessor_list=[node2],
+    )
+    node4 = EnrichedNetworkNode(
+        name="E",
+        layer_type=LayerDefinition("test4", np.inf, 1),
+        receptive_field_sizes=[np.inf],
+        predecessor_list=[node3],
+    )
+    node5 = EnrichedNetworkNode(
+        name="F",
+        layer_type=OutputLayer(),
+        receptive_field_sizes=[np.inf],
+        predecessor_list=[node4],
+    )
+    return node0, node1, node2, node3, node4, node5
+
+
+@pytest.fixture
 def simple_non_sequential_network_nodes():
     node0 = EnrichedNetworkNode(
         name="A",
@@ -354,19 +526,19 @@ def simple_non_sequential_network_nodes():
     node3 = EnrichedNetworkNode(
         name="D",
         layer_type=LayerDefinition("test3", 3, 1),
-        receptive_field_sizes=[7],
+        receptive_field_sizes=[3],
         predecessor_list=[node0],
     )
     node4 = EnrichedNetworkNode(
         name="E",
         layer_type=LayerDefinition("test4", 3, 1),
-        receptive_field_sizes=[9],
+        receptive_field_sizes=[5],
         predecessor_list=[node3],
     )
     node5 = EnrichedNetworkNode(
         name="F",
         layer_type=OutputLayer(),
-        receptive_field_sizes=[9],
+        receptive_field_sizes=[5],
         predecessor_list=[node2, node4],
     )
     return node0, node1, node2, node3, node4, node5
@@ -406,6 +578,7 @@ class TestModelGraphStaticMethods:
         assert node3 in all_nodes
         assert node4 in all_nodes
         assert node5 in all_nodes
+        assert len(all_nodes) == 6
 
     def test_find_input_node_with_input_node(self, simple_non_sequential_network_nodes):
         input_node, _, _, _, _, _ = simple_non_sequential_network_nodes
@@ -421,55 +594,193 @@ class TestModelGraphStaticMethods:
         with pytest.raises(ValueError):
             ModelGraph._find_input_node([node5, node4, node3, node2, node1])
 
-    def test_obtain_paths_from_sequential_path(
+    def test_obtain_paths_from_sequential_path(self, simple_network_nodes):
+        node0, node1, node2, node3, node4, node5 = simple_network_nodes
+        paths = ModelGraph.obtain_paths(node0, node5)
+        assert len(paths) == 1
+        assert paths[0] == [node0, node1, node2, node3, node4, node5]
+
+    def test_obtain_paths_from_multipath_architecture(
         self, simple_non_sequential_network_nodes
     ):
         node0, node1, node2, node3, node4, node5 = simple_non_sequential_network_nodes
+        paths = ModelGraph.obtain_paths(node0, node5)
+        assert len(paths) == 2
+        assert paths[0] == [node0, node1, node2, node5]
+        assert paths[1] == [node0, node3, node4, node5]
 
-    def test_obtain_paths_from_multipath_architecture(self):
-        ...
+    def test_obtain_paths_from_subgraph(self, simple_non_sequential_network_nodes):
+        node0, node1, node2, node3, node4, node5 = simple_non_sequential_network_nodes
+        paths = ModelGraph.obtain_paths(node1, node5)
+        assert len(paths) == 1
+        assert paths[0] == [node1, node2, node5]
 
-    def test_obtain_paths_from_subgraph(self):
-        ...
-
-    def test_obtain_paths_from_subgraph_with_input_node(self):
-        ...
-
-    def test_compute_receptive_field_for_node_with_kernel_greater_than_1(self):
-        ...
-
-    def test_compute_receptive_field_for_node_with_kernel_equal_to_1(self):
-        ...
-
-    def test_compute_receptive_field_for_node_with_infinite_kernel_size(self):
-        ...
-
-    def test_compute_receptive_field_for_large_stride_sizes(self):
-        ...
-
-    def test_compute_receptive_field_for_illegal_kernel_sizes(self):
-        ...
-
-    def test_compute_receptive_field_for_illegal_stride_sizes(self):
-        ...
-
-    def test_compute_receptive_field_for_illegal_growth_rate(self):
-        ...
-
-    def test_compute_receptive_field_for_node_sequence_in_a_sequential_architecture(
-        self,
+    def test_obtain_paths_from_subgraph_with_input_node(
+        self, simple_non_sequential_network_nodes
     ):
-        ...
+        node0, node1, node2, node3, node4, node5 = simple_non_sequential_network_nodes
+        paths = ModelGraph.obtain_paths(node0, node4)
+        assert len(paths) == 1
+        assert paths[0] == [node0, node3, node4]
+
+    def test_compute_receptive_field_for_node_with_kernel_greater_than_1(
+        self, simple_network_nodes
+    ):
+        node0, node1, node2, node3, node4, node5 = simple_network_nodes
+        r_l = []
+        for node in simple_network_nodes:
+            r_l.append(node.receptive_field_sizes[0])
+            node.receptive_field_sizes.remove(r_l[-1])
+        for node in simple_network_nodes:
+            assert len(node.receptive_field_sizes) == 0
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(node5)
+        for node in all_nodes:
+            assert len(node.receptive_field_sizes) == 0
+        graph = ModelGraph.compute_receptive_field_for_node_sequence(all_nodes)
+        assert len(graph) == len(r_l)
+        for layer, receptive_field in zip(graph, r_l):
+            print(layer, receptive_field)
+            assert layer.receptive_field_max == receptive_field
+            assert layer.receptive_field_min == receptive_field
+            assert len(layer.receptive_field_sizes) == 1
+
+    def test_compute_receptive_field_for_node_with_kernel_equal_to_1(
+        self, simple_network_nodes_with_kernel_size1
+    ):
+        (
+            node0,
+            node1,
+            node2,
+            node3,
+            node4,
+            node5,
+        ) = simple_network_nodes_with_kernel_size1
+        r_l = []
+        for node in simple_network_nodes_with_kernel_size1:
+            r_l.append(node.receptive_field_sizes[0])
+            node.receptive_field_sizes.remove(r_l[-1])
+        for node in simple_network_nodes_with_kernel_size1:
+            assert len(node.receptive_field_sizes) == 0
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(node5)
+        for node in all_nodes:
+            assert len(node.receptive_field_sizes) == 0
+        graph = ModelGraph.compute_receptive_field_for_node_sequence(all_nodes)
+        assert len(graph) == len(r_l)
+        for layer, receptive_field in zip(graph, r_l):
+            print(layer, receptive_field)
+            assert layer.receptive_field_max == receptive_field
+            assert layer.receptive_field_min == receptive_field
+            assert len(layer.receptive_field_sizes) == 1
+
+    def test_compute_receptive_field_for_node_with_infinite_kernel_size(
+        self, simple_network_nodes_with_dense_layer
+    ):
+        node0, node1, node2, node3, node4, node5 = simple_network_nodes_with_dense_layer
+        r_l = []
+        for node in simple_network_nodes_with_dense_layer:
+            r_l.append(node.receptive_field_sizes[0])
+            node.receptive_field_sizes.remove(r_l[-1])
+        for node in simple_network_nodes_with_dense_layer:
+            assert len(node.receptive_field_sizes) == 0
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(node5)
+        for node in all_nodes:
+            assert len(node.receptive_field_sizes) == 0
+        graph = ModelGraph.compute_receptive_field_for_node_sequence(all_nodes)
+        assert len(graph) == len(r_l)
+        for layer, receptive_field in zip(graph, r_l):
+            print(layer, receptive_field)
+            assert layer.receptive_field_max == receptive_field
+            assert layer.receptive_field_min == receptive_field
+            assert len(layer.receptive_field_sizes) == 1
+
+    def test_compute_receptive_field_for_large_stride_sizes(
+        self, simple_network_nodes_with_strides
+    ):
+        node0, node1, node2, node3, node4, node5 = simple_network_nodes_with_strides
+        r_l = []
+        for node in simple_network_nodes_with_strides:
+            r_l.append(node.receptive_field_sizes[0])
+            node.receptive_field_sizes.remove(r_l[-1])
+        for node in simple_network_nodes_with_strides:
+            assert len(node.receptive_field_sizes) == 0
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(node5)
+        for node in all_nodes:
+            assert len(node.receptive_field_sizes) == 0
+        graph = ModelGraph.compute_receptive_field_for_node_sequence(all_nodes)
+        assert len(graph) == len(r_l)
+        for layer, receptive_field in zip(graph, r_l):
+            print(layer, receptive_field)
+            assert layer.receptive_field_max == receptive_field
+            assert layer.receptive_field_min == receptive_field
+            assert len(layer.receptive_field_sizes) == 1
 
     def test_compute_receptive_field_for_node_sequence_in_a_non_sequential_architecture(
-        self,
+        self, simple_non_sequential_network_nodes
     ):
-        ...
+        node0, node1, node2, node3, node4, node5 = simple_non_sequential_network_nodes
+        r_l = []
+        for node in simple_non_sequential_network_nodes:
+            r_l.append(node.receptive_field_sizes[0])
+            node.receptive_field_sizes.remove(r_l[-1])
+        for node in simple_non_sequential_network_nodes:
+            assert len(node.receptive_field_sizes) == 0
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(node5)
+        for node in all_nodes:
+            assert len(node.receptive_field_sizes) == 0
+        paths = ModelGraph.obtain_paths(node0, node5)
+        for path in paths:
+            ModelGraph.compute_receptive_field_for_node_sequence(path)
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(node5)
+        assert len(all_nodes) == len(r_l)
+        for layer, receptive_field in zip(all_nodes, r_l):
+            print(layer, receptive_field)
+            assert layer.receptive_field_max == receptive_field
+            assert layer.receptive_field_min == receptive_field
+            assert len(layer.receptive_field_sizes) == 1
 
-    def test_enrich_graph_on_sequential_graph(self):
-        ...
+    def test_enrich_graph_on_sequential_graph(self, simple_non_enrichted_network_nodes):
+        node0, node1, node2, node3, node4, node5 = simple_non_enrichted_network_nodes
+        root_node = ModelGraph.enrich_graph(node5)
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(root_node)
+        assert len(all_nodes) == 6
+        for o, l in zip(simple_non_enrichted_network_nodes, all_nodes):
+            assert isinstance(l, EnrichedNetworkNode)
+            assert o.layer_type.stride_size == l.layer_type.stride_size
+            assert o.layer_type.kernel_size == l.layer_type.kernel_size
 
-    def test_enrich_graph_on_non_sequential_graph(self):
+    def test_enrich_graph_on_sequential_graph_correct_predecessor(
+        self, simple_non_enrichted_network_nodes
+    ):
+        node0, node1, node2, node3, node4, node5 = simple_non_enrichted_network_nodes
+        root_node = ModelGraph.enrich_graph(node5)
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(root_node)
+        assert len(all_nodes) == 6
+        for o, l in zip(simple_non_enrichted_network_nodes, all_nodes):
+            if l.predecessor_list:
+                for predecessor in l.predecessor_list:
+                    assert predecessor.is_in(all_nodes)
+                    assert isinstance(predecessor, EnrichedNetworkNode)
+                assert len(l.predecessor_list) == len(o.predecessor_list)
+
+    def test_enrich_graph_on_sequential_graph_correct_successor(
+        self, simple_non_enrichted_network_nodes
+    ):
+        node0, node1, node2, node3, node4, node5 = simple_non_enrichted_network_nodes
+        root_node = ModelGraph.enrich_graph(node5)
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(root_node)
+        assert len(all_nodes) == 6
+        for o, l in zip(simple_non_enrichted_network_nodes, all_nodes):
+            if l.predecessor_list:
+                for predecessor in l.predecessor_list:
+                    assert l.is_in(predecessor.succecessor_list)
+                for successor in l.succecessor_list:
+                    assert successor.is_in(all_nodes)
+                    assert l.is_in(successor.predecessor_list)
+                assert len(l.predecessor_list) == len(o.predecessor_list)
+
+    def test_enrich_graph_on_non_sequential_graph(
+        self, simple_non_enrichted_network_nodes
+    ):
         ...
 
     def test_enrich_graph_on_enriched_graph_can_be_isomorph(self):

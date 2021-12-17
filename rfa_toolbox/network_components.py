@@ -10,7 +10,23 @@ from rfa_toolbox.domain import Layer, Node
 class LayerDefinition(Layer):
     name: str
     kernel_size: Optional[int] = attrib(factory=lambda x: np.inf if x is None else x)
-    stride_size: int = 1
+    stride_size: int = attrib(default=1)
+
+    @kernel_size.validator
+    def validate_kernel_size(self, attribute: str, value: int) -> None:
+        if value < 1:
+            raise ValueError(
+                f"{attribute} must be greater than 0 or "
+                f"infinite (which indicates a dense layer)"
+            )
+
+    @stride_size.validator
+    def validate_stride_size(self, attribute: str, value: int) -> None:
+        if value < 1:
+            raise ValueError(
+                f"{attribute} must be greater than 0 "
+                f"(choose 1, if this is a dense layer)"
+            )
 
     @staticmethod
     def from_dict(**config) -> "LayerDefinition":
@@ -66,6 +82,12 @@ class NetworkNode(Node):
     layer_type: Layer
     predecessor_list: List["NetworkNode"] = attrib(factory=list)
 
+    def is_in(self, container: Union[List[Node], Dict[Node, Any]]) -> bool:
+        if isinstance(container, list):
+            return any(id(self) == id(node) for node in container)
+        else:
+            return any(id(self) == id(node) for node in container.keys())
+
     @property
     def predecessors(self) -> Dict[str, Layer]:
         return {pred.name: pred for pred in self.predecessor_list}
@@ -86,21 +108,27 @@ class NetworkNode(Node):
         }
 
 
-@attrs(auto_attribs=True, frozen=True, slots=True)
+@attrs(auto_attribs=True, frozen=True, slots=True, hash=True)
 class EnrichedNetworkNode(Node):
     name: str
     layer_type: LayerDefinition
-    receptive_field_sizes: List[int]
+    receptive_field_sizes: List[int] = attrib(factory=list)
     predecessor_list: List["EnrichedNetworkNode"] = attrib(factory=list)
     succecessor_list: List["EnrichedNetworkNode"] = attrib(init=False, factory=list)
 
+    def is_in(self, container: Union[List[Node], Dict[Node, Any]]) -> bool:
+        if isinstance(container, list):
+            return any(id(self) == id(node) for node in container)
+        else:
+            return any(id(self) == id(node) for node in container.keys())
+
     @property
     def receptive_field_min(self):
-        return min(self.receptive_field_sizes)
+        return min(self.receptive_field_sizes, default=0)
 
     @property
     def receptive_field_max(self):
-        return max(self.receptive_field_sizes)
+        return max(self.receptive_field_sizes, default=0)
 
     def __attrs_post_init__(self):
         for pred in self.predecessor_list:
@@ -159,14 +187,16 @@ class EnrichedNetworkNode(Node):
 
     @staticmethod
     def from_node(
-        node: Node, predecessor_mapping: Dict[Node, "EnrichedNetworkNode"]
+        node: Node,
+        predecessor_mapping: Optional[Dict[int, "EnrichedNetworkNode"]] = None,
     ) -> "EnrichedNetworkNode":
         node_dict: Dict[
             str, Union[str, int, List["EnrichedNetworkNode"]]
         ] = node.to_dict()
-        node_dict["predecessor_list"] = [
-            predecessor_mapping[pred] for pred in node.predecessor_list
-        ]
+        if predecessor_mapping is not None:
+            node_dict["predecessor_list"] = [
+                predecessor_mapping[id(pred)] for pred in node.predecessor_list
+            ]
         return EnrichedNetworkNode.from_dict(**node_dict)
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
@@ -186,24 +216,30 @@ class ModelGraph:
     _node_list: List[EnrichedNetworkNode] = attrib(init=False)
 
     @staticmethod
+    def merge_node_lists(
+        node_list: List[EnrichedNetworkNode], node_list2: List[EnrichedNetworkNode]
+    ) -> List[EnrichedNetworkNode]:
+        for node in node_list2:
+            if node not in node_list:
+                node_list.append(node)
+        return node_list
+
+    @staticmethod
     def obtain_all_nodes_from_root(
         output_node: EnrichedNetworkNode,
     ) -> List[EnrichedNetworkNode]:
         node_list = [output_node]
-        print("\n\n\n")
         for node in output_node.predecessor_list:
             additional_nodes = ModelGraph.obtain_all_nodes_from_root(node)
-            node_list = node_list + additional_nodes
-            print("currently at", output_node, "adding", node_list)
-
+            node_list = ModelGraph.merge_node_lists(additional_nodes, node_list)
         return node_list
 
     @staticmethod
     def obtain_paths(
         start: EnrichedNetworkNode, end: EnrichedNetworkNode
     ) -> List[List[EnrichedNetworkNode]]:
-        paths: List[List[Node]] = []
-        for node in start.predecessor_list:
+        paths: List[List[EnrichedNetworkNode]] = []
+        for node in end.predecessor_list:
             if node == start:
                 # found the shortest possible path
                 paths.append([start, end])
@@ -212,9 +248,10 @@ class ModelGraph:
                 continue
             else:
                 # recursivly search for paths
-                paths = ModelGraph.obtain_paths(start=start, end=node)
-                for path in paths:
+                new_paths = ModelGraph.obtain_paths(start=start, end=node)
+                for i, path in enumerate(new_paths):
                     path.append(end)
+                    paths.append(path)
         return paths
 
     @staticmethod
@@ -256,34 +293,49 @@ class ModelGraph:
                     receptive_field_size,
                     node.layer_type.kernel_size,
                     multiplicator,
-                )[
-                    0
-                ]
+                )
             if receptive_field_size not in node.receptive_field_sizes:
                 node.receptive_field_sizes.append(receptive_field_size)
         return sequence
 
     @staticmethod
     def enrich_graph(
-        current_node: Node, enriched_nodes: Dict[Node, EnrichedNetworkNode]
+        current_node: Node,
+        processed_nodes: Optional[List[Node]] = None,
+        enriched_nodes: Optional[List[EnrichedNetworkNode]] = None,
     ) -> EnrichedNetworkNode:
+        enriched_nodes = [] if enriched_nodes is None else enriched_nodes
+        processed_nodes = [] if processed_nodes is None else processed_nodes
         if not current_node.predecessor_list:
-            node = EnrichedNetworkNode.from_node(current_node)
-            enriched_nodes[current_node] = node
-            return node
+            if not current_node.is_in(processed_nodes):
+                node = EnrichedNetworkNode.from_node(current_node, {})
+                processed_nodes.append(current_node)
+                enriched_nodes.append(node)
+                return node
+            else:
+                return enriched_nodes[processed_nodes.index(current_node)]
         else:
             nodes_known = [
-                node in enriched_nodes for node in current_node.predecessor_list
+                node.is_in(processed_nodes) for node in current_node.predecessor_list
             ]
             if not all(nodes_known):
                 for predecessor in current_node.predecessor_list:
-                    if predecessor in enriched_nodes:
+                    if predecessor.is_in(processed_nodes):
                         continue
                     else:
                         # enrich the predecessor
-                        ModelGraph.enrich_graph(predecessor, enriched_nodes)
-            node = EnrichedNetworkNode.from_node(current_node, enriched_nodes)
-            enriched_nodes[current_node] = node
+                        ModelGraph.enrich_graph(
+                            predecessor,
+                            processed_nodes=processed_nodes,
+                            enriched_nodes=enriched_nodes,
+                        )
+            id_mapper = {
+                id(processed_nodes[i]): enriched_nodes[i]
+                for i in range(len(processed_nodes))
+            }
+            node = EnrichedNetworkNode.from_node(current_node, id_mapper)
+            enriched_nodes.append(node)
+            processed_nodes.append(current_node)
             return node
 
     @staticmethod
@@ -295,7 +347,7 @@ class ModelGraph:
         return paths
 
     def __attrs_post_init__(self):
-        node = ModelGraph.enrich_graph(self.output_node, {})
+        node = ModelGraph.enrich_graph(self.output_node)
         self.output_node = node
         self.node_list = self.obtain_all_nodes_from_root(node)
         # obtain all paths from input to output
