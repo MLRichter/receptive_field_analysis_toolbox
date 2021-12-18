@@ -88,6 +88,14 @@ class NetworkNode(Node):
         else:
             return any(id(self) == id(node) for node in container.keys())
 
+    @predecessor_list.validator
+    def verify_predecessor_list(
+        self, attribute: str, value: List["NetworkNode"]
+    ) -> None:
+        if len(value) != 0:
+            if not all(isinstance(node, NetworkNode) for node in value):
+                raise ValueError(f"{attribute} must be a list of NetworkNodes")
+
     @property
     def predecessors(self) -> Dict[str, Layer]:
         return {pred.name: pred for pred in self.predecessor_list}
@@ -114,7 +122,9 @@ class EnrichedNetworkNode(Node):
     layer_type: LayerDefinition
     receptive_field_sizes: List[int] = attrib(factory=list)
     predecessor_list: List["EnrichedNetworkNode"] = attrib(factory=list)
-    succecessor_list: List["EnrichedNetworkNode"] = attrib(init=False, factory=list)
+    succecessor_list: List["EnrichedNetworkNode"] = attrib(
+        init=False, factory=list, eq=False
+    )
 
     def is_in(self, container: Union[List[Node], Dict[Node, Any]]) -> bool:
         if isinstance(container, list):
@@ -130,13 +140,17 @@ class EnrichedNetworkNode(Node):
     def receptive_field_max(self):
         return max(self.receptive_field_sizes, default=0)
 
+    @predecessor_list.validator
+    def verify_predecessor_list(
+        self, attribute: str, value: List["EnrichedNetworkNode"]
+    ) -> None:
+        if len(value) != 0:
+            if not all(isinstance(node, EnrichedNetworkNode) for node in value):
+                raise ValueError(f"{attribute} must be a list of NetworkNodes")
+
     def __attrs_post_init__(self):
         for pred in self.predecessor_list:
             pred.succecessor_list.append(self)
-
-    def add_successor(self, successor: "EnrichedNetworkNode") -> None:
-        if successor not in self.succecessor_list:
-            self.succecessor_list.append(successor)
 
     def _apply_function_to_all_successors(
         self, func: Callable[["EnrichedNetworkNode"], Any]

@@ -544,6 +544,41 @@ def simple_non_sequential_network_nodes():
     return node0, node1, node2, node3, node4, node5
 
 
+@pytest.fixture
+def simple_non_sequential_network_non_enriched_nodes():
+    node0 = NetworkNode(
+        name="A",
+        layer_type=InputLayer(),
+        predecessor_list=[],
+    )
+    node1 = NetworkNode(
+        name="B",
+        layer_type=LayerDefinition("test1", 3, 1),
+        predecessor_list=[node0],
+    )
+    node2 = NetworkNode(
+        name="C",
+        layer_type=LayerDefinition("test2", 3, 1),
+        predecessor_list=[node1],
+    )
+    node3 = NetworkNode(
+        name="D",
+        layer_type=LayerDefinition("test3", 3, 1),
+        predecessor_list=[node0],
+    )
+    node4 = NetworkNode(
+        name="E",
+        layer_type=LayerDefinition("test4", 5, 1),
+        predecessor_list=[node3],
+    )
+    node5 = NetworkNode(
+        name="F",
+        layer_type=OutputLayer(),
+        predecessor_list=[node2, node4],
+    )
+    return node0, node1, node2, node3, node4, node5
+
+
 class TestModelGraphStaticMethods:
     def test_obtain_all_nodes_from_root_on_single_node_graph(
         self, simple_network_nodes
@@ -779,17 +814,58 @@ class TestModelGraphStaticMethods:
                 assert len(l.predecessor_list) == len(o.predecessor_list)
 
     def test_enrich_graph_on_non_sequential_graph(
-        self, simple_non_enrichted_network_nodes
+        self, simple_non_sequential_network_non_enriched_nodes
     ):
-        ...
+        (
+            node0,
+            node1,
+            node2,
+            node3,
+            node4,
+            node5,
+        ) = simple_non_sequential_network_non_enriched_nodes
+        root_node = ModelGraph.enrich_graph(node5)
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(root_node)
+        assert len(all_nodes) == 6
+        for o, l in zip(simple_non_sequential_network_non_enriched_nodes, all_nodes):
+            if l.predecessor_list:
+                for predecessor in l.predecessor_list:
+                    assert l.is_in(predecessor.succecessor_list)
+                for successor in l.succecessor_list:
+                    assert successor.is_in(all_nodes)
+                    assert l.is_in(successor.predecessor_list)
+                assert len(l.predecessor_list) == len(o.predecessor_list)
 
-    def test_enrich_graph_on_enriched_graph_can_be_isomorph(self):
-        ...
-
-    def test_enrich_graph_on_oneiched_graph_not_isomorph_for_set_receptive_field_values(
-        self,
+    def test_enrich_graph_on_enriched_graph_can_be_isomorph(
+        self, simple_non_sequential_network_non_enriched_nodes
     ):
-        ...
+        (
+            node0,
+            node1,
+            node2,
+            node3,
+            node4,
+            node5,
+        ) = simple_non_sequential_network_non_enriched_nodes
+        root_node = ModelGraph.enrich_graph(node5)
+        root_node2 = ModelGraph.enrich_graph(node5)
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(root_node)
+        all_nodes2 = ModelGraph.obtain_all_nodes_from_root(root_node2)
+        assert len(all_nodes) == len(all_nodes2)
+        for nodeA, nodeB in zip(all_nodes, all_nodes2):
+            assert id(nodeA) != id(nodeB)
+            assert nodeA == nodeB
+
+    def test_enrich_graph_on_enriched_graph_not_isomorph_for_set_receptive_field_values(
+        self, simple_non_sequential_network_nodes
+    ):
+        node0, node1, node2, node3, node4, node5 = simple_non_sequential_network_nodes
+        for node in simple_non_sequential_network_nodes:
+            node.receptive_field_sizes.append(666)
+        root_node = ModelGraph.enrich_graph(node5)
+        all_nodes = ModelGraph.obtain_all_nodes_from_root(root_node)
+        all_nodes2 = simple_non_sequential_network_nodes
+        assert len(all_nodes) == len(all_nodes2)
 
 
 class TestModelGraph:

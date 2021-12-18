@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="21d2183c-f311-425d-a7b9-10154f7dfb14" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rfa_toolbox/domain.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/domain.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rfa_toolbox/network_components.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/network_components.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_graph/test_graph_components.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_graph/test_graph_components.py" afterDir="false" />
     </list>
@@ -153,7 +152,8 @@
       <workItem from="1639559623745" duration="598000" />
       <workItem from="1639643795483" duration="2185000" />
       <workItem from="1639663065422" duration="8423000" />
-      <workItem from="1639773275865" duration="2827000" />
+      <workItem from="1639773275865" duration="3919000" />
+      <workItem from="1639815555072" duration="2941000" />
     </task>
     <task id="LOCAL-00001" summary="Initial structure for the network graph, also some initial work on the domain-protocols">
       <created>1639149152838</created>
@@ -212,7 +212,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_graph/test_graph_components.py</url>
-          <line>607</line>
+          <line>643</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
@@ -220,6 +220,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/rfa_toolbox$main.coverage" NAME="main Coverage Results" MODIFIED="1639129405341" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
-    <SUITE FILE_PATH="coverage/rfa_toolbox$.coverage" NAME=" Coverage Results" MODIFIED="1639779554147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/rfa_toolbox$.coverage" NAME=" Coverage Results" MODIFIED="1639818329812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
   </component>
 </project>
