@@ -8,9 +8,19 @@ from rfa_toolbox.domain import Layer, Node
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class LayerDefinition(Layer):
+    """The standard representation of a neural network layer.
+    Contains information needed for receptive field computation.
+
+    Args:
+        name:           name of the layer
+        kernel_size:    size of the kernel, None if this is a dense-layer
+        stride_size:    the stride size the kernel is convolved. None for dense-layers.
+
+    """
+
     name: str
     kernel_size: Optional[int] = attrib(factory=lambda x: np.inf if x is None else x)
-    stride_size: int = attrib(default=1)
+    stride_size: Optional[int] = attrib(factory=lambda x: 1 if x is None else x)
 
     @kernel_size.validator
     def validate_kernel_size(self, attribute: str, value: int) -> None:
