@@ -377,25 +377,21 @@ class TestReceptiveFieldsOfImportantArchitectures:
     def test_compute_receptive_field_size_for_vgg11(self, vgg11_model, vgg11_model_rf):
         rf_nodes = obtain_all_nodes(vgg11_model)
         rf = [node.receptive_field_min for node in rf_nodes]
-        rf.reverse()
         assert rf == vgg11_model_rf
 
     def test_compute_receptive_field_size_for_vgg13(self, vgg13_model, vgg13_model_rf):
         rf_nodes = obtain_all_nodes(vgg13_model)
         rf = [node.receptive_field_min for node in rf_nodes]
-        rf.reverse()
         assert rf == vgg13_model_rf
 
     def test_compute_receptive_field_size_for_vgg16(self, vgg16_model, vgg16_model_rf):
         rf_nodes = obtain_all_nodes(vgg16_model)
         rf = [node.receptive_field_min for node in rf_nodes]
-        rf.reverse()
         assert rf == vgg16_model_rf
 
     def test_compute_receptive_field_size_for_vgg19(self, vgg19_model, vgg19_model_rf):
         rf_nodes = obtain_all_nodes(vgg19_model)
         rf = [node.receptive_field_min for node in rf_nodes]
-        rf.reverse()
         assert rf == vgg19_model_rf
 
     def test_compute_receptive_field_size_for_resnet18(self, resnet18_model):

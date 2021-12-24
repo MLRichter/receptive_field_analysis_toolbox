@@ -5,20 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21d2183c-f311-425d-a7b9-10154f7dfb14" name="Changes" comment="Changes">
-      <change afterPath="$PROJECT_DIR$/rfa_toolbox/architectures/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rfa_toolbox/architectures/resnet.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rfa_toolbox/architectures/vgg.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rfa_toolbox/graphs.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rfa_toolbox/utils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rfa_toolbox/utils/graph_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rfa_toolbox/utils/memoize_receptive_field_computations.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_graph/test_dynamic_graph.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/watcherTasks.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rfa_toolbox/vizualize.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_graph/test_utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_graph/test_viz.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/architectures/resnet.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/architectures/resnet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/graphs.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/graphs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rfa_toolbox/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rfa_toolbox/network_components.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_graph/test_graph_components.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/utils/graph_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/utils/graph_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/utils/memoize_receptive_field_computations.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_graph/test_dynamic_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_graph/test_dynamic_graph.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,16 +78,16 @@
     </key>
   </component>
   <component name="RunManager" selected="Python tests.pytest2">
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="rfa_toolbox" />
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="receptive_field_analysis_toolbox" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\matrichter\AppData\Local\pypoetry\Cache\virtualenvs\rfa-toolbox-MKQesiS8-py3.8\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/rfa_toolbox" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
@@ -215,18 +212,17 @@
     </configuration>
     <list>
       <item itemvalue="Python.main" />
+      <item itemvalue="Python tests.pytest2" />
+      <item itemvalue="Python tests.pytest" />
       <item itemvalue="Python tests.pytest for test_dynamic_graph.TestEnrichedNetworkNode.test_resnet36" />
       <item itemvalue="Python tests.pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet18" />
       <item itemvalue="Python tests.pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet34" />
-      <item itemvalue="Python tests.pytest2" />
-      <item itemvalue="Python tests.pytest" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest for test_dynamic_graph.TestEnrichedNetworkNode.test_resnet36" />
         <item itemvalue="Python tests.pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet34" />
         <item itemvalue="Python tests.pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet18" />
-        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -250,7 +246,8 @@
       <workItem from="1639815555072" duration="2941000" />
       <workItem from="1639819260339" duration="2484000" />
       <workItem from="1639911735067" duration="74244000" />
-      <workItem from="1640261529859" duration="4810000" />
+      <workItem from="1640261529859" duration="6887000" />
+      <workItem from="1640282047359" duration="10350000" />
     </task>
     <task id="LOCAL-00001" summary="Initial structure for the network graph, also some initial work on the domain-protocols">
       <created>1639149152838</created>
@@ -322,18 +319,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_graph/test_dynamic_graph.py</url>
-          <line>53</line>
+          <line>46</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_graph/test_dynamic_graph.py</url>
-          <line>276</line>
+          <line>269</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/rfa_toolbox/graphs.py</url>
-          <line>180</line>
+          <line>194</line>
           <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_graph/test_utils.py</url>
+          <line>109</line>
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -343,8 +345,9 @@
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest.coverage" NAME="pytest Coverage Results" MODIFIED="1639820206996" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_graph_components_TestReceptiveFieldsOfImportantArchitectures_test_compute_border_for_resnet34.coverage" NAME="pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet34 Coverage Results" MODIFIED="1640108210705" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_dynamic_graph_TestEnrichedNetworkNode_test_resnet36.coverage" NAME="pytest for test_dynamic_graph.TestEnrichedNetworkNode.test_resnet36 Coverage Results" MODIFIED="1640166036616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$main.coverage" NAME="main Coverage Results" MODIFIED="1640282758963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_graph_components_TestReceptiveFieldsOfImportantArchitectures_test_compute_border_for_resnet18.coverage" NAME="pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet18 Coverage Results" MODIFIED="1640096177299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
-    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1640271374211" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1640349879584" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/rfa_toolbox$.coverage" NAME=" Coverage Results" MODIFIED="1639818329812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
   </component>
 </project>

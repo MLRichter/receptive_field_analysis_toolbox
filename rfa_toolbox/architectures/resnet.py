@@ -81,8 +81,11 @@ def bottleneck(
     conv1 = conv_batch_norm_relu_squeeze(
         input_node, f"Stage{idx}-Block{i}-{0}", strides
     )
+    print(f"\tStage{idx}-Block{i}-{0}")
     conv2 = conv_batch_norm_relu(conv1, f"Stage{idx}-Block{i}-{1}", 1)
-    conv3 = conv_batch_norm_relu_squeeze(conv2, f"Stage{idx}-Block{i}-{1}", 1)
+    print(f"\tStage{idx}-Block{i}-{1}")
+    conv3 = conv_batch_norm_relu_squeeze(conv2, f"Stage{idx}-Block{i}-{2}", 1)
+    print(f"\tStage{idx}-Block{i}-{2}")
 
     residual = (
         input_node
@@ -90,6 +93,7 @@ def bottleneck(
         else skip_downsample(predecessor=input_node, idx=f"BlockSkip{idx}-")
     )
     add = addition([residual, conv3], f"Stage{idx}-Block{i}")
+    print(f"\tStage{idx}-Block{i}-Add")
 
     return add
 
@@ -100,6 +104,7 @@ def head(feature_extractor: EnrichedNetworkNode) -> EnrichedNetworkNode:
         layer_info=LayerDefinition(name="GAP", kernel_size=None, stride_size=None),
         predecessors=[feature_extractor],
     )
+    print("GAP")
     softmax = EnrichedNetworkNode(
         name="Softmax",
         layer_info=LayerDefinition(
@@ -107,6 +112,7 @@ def head(feature_extractor: EnrichedNetworkNode) -> EnrichedNetworkNode:
         ),
         predecessors=[readout],
     )
+    print("Softmax")
     return softmax
 
 
@@ -119,6 +125,7 @@ def stage(
 ) -> EnrichedNetworkNode:
     current_block = block(predecessor, idx, 0, strides)
     for i in range(1, num_blocks):
+        print("Bulding stage", idx, "block", i)
         current_block = block(current_block, idx, i, 1)
     return current_block
 

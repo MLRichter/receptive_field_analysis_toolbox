@@ -1,3 +1,4 @@
+from operator import attrgetter
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
 
 import numpy as np
@@ -14,6 +15,18 @@ def receptive_field_provider_with_1x1_handling(
 
 def receptive_field_provider(node: "EnrichedNetworkNode") -> Optional[int]:
     return node.receptive_field_min
+
+
+def naive_minmax_filter(
+    info: Tuple["ReceptiveFieldInfo"],
+) -> Tuple["ReceptiveFieldInfo", "ReceptiveFieldInfo"]:
+    maximum_receptive_field: ReceptiveFieldInfo = max(
+        info, key=attrgetter("receptive_field")
+    )
+    minimum_receptive_field: ReceptiveFieldInfo = min(
+        info, key=attrgetter("receptive_field")
+    )
+    return minimum_receptive_field, maximum_receptive_field
 
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
@@ -95,6 +108,11 @@ class EnrichedNetworkNode(Node):
     receptive_field_min: int = attrib(init=False)
     receptive_field_max: int = attrib(init=False)
 
+    receptive_field_info_filter: Callable[
+        [Tuple[ReceptiveFieldInfo]], Tuple[ReceptiveFieldInfo]
+    ] = naive_minmax_filter
+    all_layers: List["EnrichedNetworkNode"] = attrib(init=False)
+
     @property
     def receptive_field_sizes(self) -> List[int]:
         return [elem.receptive_field for elem in self.receptive_field_info]
@@ -130,13 +148,21 @@ class EnrichedNetworkNode(Node):
                 infos.update(pred.receptive_field_info)
         else:
             infos.update([ReceptiveFieldInfo(receptive_field=1, multiplicator=1)])
+        rf_infos = compute_receptive_field_sizes(infos, self.layer_info)
+        rf_infos_filtered = self.receptive_field_info_filter(rf_infos)
         object.__setattr__(
             self,
             "receptive_field_info",
-            compute_receptive_field_sizes(infos, self.layer_info),
+            rf_infos_filtered,
         )
         object.__setattr__(self, "receptive_field_min", self._receptive_field_min())
         object.__setattr__(self, "receptive_field_max", self._receptive_field_max())
+        object.__setattr__(
+            self,
+            "all_layers",
+            [] if not self.predecessors else self.predecessors[0].all_layers,
+        )
+        self.all_layers.append(self)
         for pred in self.predecessors:
             pred.succecessors.append(self)
 
@@ -152,7 +178,7 @@ class EnrichedNetworkNode(Node):
         # SMALLER than the input resolution
         direct_predecessors = [
             input_resolution <= receptive_field_provider(pred)
-            for pred in self.predecessor_list
+            for pred in self.predecessors
         ]
         # of course, this means that this layer also needs to fullfill this property
         own = input_resolution <= self.receptive_field_min
