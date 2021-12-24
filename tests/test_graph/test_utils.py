@@ -237,11 +237,3 @@ class TestObtainBorderLayers:
             assert border.receptive_field_min >= input_res
             for pred in border.predecessors:
                 assert pred.receptive_field_min >= input_res
-
-
-class TestObtainObjectIDToReceptiveFieldMapping:
-    ...
-
-
-class FiltersNonConvolutionalNode:
-    ...
