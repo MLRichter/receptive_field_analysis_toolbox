@@ -15,7 +15,7 @@ def find_border_layer():
 
 if __name__ == "__main__":
     f = graphviz.Digraph("finite_state_machine", filename="fsm.gv")
-    f.attr(rankdir="LR", size="8,5")
+    f.attr(rankdir="TB", size="10,5")
 
     f.attr("node", shape="rectangle")
     f.node("Input", label="Input")

@@ -31,7 +31,7 @@ def obtain_border_layers(
     output_node: EnrichedNetworkNode, input_resolution: int, filter_dense: bool = True
 ) -> List[EnrichedNetworkNode]:
     all_nodes = obtain_all_nodes(output_node)
-    print(all_nodes)
+    # print(all_nodes)
     result = [node for node in all_nodes if node.is_border(input_resolution)]
     return filters_non_convolutional_node(result) if filter_dense else result
 

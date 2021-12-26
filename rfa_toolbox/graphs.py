@@ -100,7 +100,7 @@ def compute_receptive_field_sizes(
 class EnrichedNetworkNode(Node):
     name: str
     layer_info: LayerDefinition
-    predecessors: List["EnrichedNetworkNode"] = attrib(converter=tuple)
+    predecessors: List["EnrichedNetworkNode"] = attrib(converter=list)
     succecessors: List["EnrichedNetworkNode"] = attrib(
         init=False, factory=list, eq=False
     )

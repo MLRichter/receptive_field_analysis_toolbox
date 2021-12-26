@@ -33,6 +33,8 @@ numpy = "^1.21.4"
 attrs = "^21.2.0"
 tqdm = "^4.62.3"
 graphviz = "^0.19.1"
+torch = "^1.10.1"
+torchvision = "^0.11.2"
 
 [tool.poetry.extras]
 docs = [
