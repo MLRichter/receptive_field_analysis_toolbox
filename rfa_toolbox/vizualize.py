@@ -19,9 +19,21 @@ def visualize_node(
         color = "red"
     elif node.receptive_field_min > input_res and color_critical:
         color = "orange"
+    l_name = node.layer_info.name
+    rf_info = "\\n" + f"r={node.receptive_field_min}"
+    filters = f"\\n{node.layer_info.filters} filters"
+    units = f"\\n{node.layer_info.units} units"
+
+    label = l_name
+    if node.layer_info.filters is not None:
+        label += filters
+    elif node.layer_info.units is not None:
+        label += units
+    label += rf_info
+
     dot.node(
         f"{node.name}-{id(node)}",
-        label=node.layer_info.name + "\\n" + f"r={node.receptive_field_min}",
+        label=label,
         fillcolor=color,
         style="filled",
     )

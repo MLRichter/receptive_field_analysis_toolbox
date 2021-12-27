@@ -44,12 +44,16 @@ class LayerDefinition(Layer):
         name:           name of the layer
         kernel_size:    size of the kernel, None if this is a dense-layer
         stride_size:    the stride size the kernel is convolved. None for dense-layers.
+        filters:        number of filter produced by the convolution operation
+        units:          number of units of a densly connected layer
 
     """
 
     name: str
     kernel_size: Optional[int] = attrib(converter=lambda x: np.inf if x is None else x)
     stride_size: Optional[int] = attrib(converter=lambda x: 1 if x is None else x)
+    filters: Optional[int] = None
+    units: Optional[int] = None
 
     @kernel_size.validator
     def validate_kernel_size(self, attribute: str, value: int) -> None:

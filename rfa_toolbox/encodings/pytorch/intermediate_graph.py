@@ -33,7 +33,6 @@ class Digraph:
     ref_mod: torch.nn.Module
     format: str
     graph_attr: Dict[str, str]
-    inner_graph: GraphVizDigraph = attrib(init=False)
     edge_collection: List[Tuple[str, str]] = attrib(factory=list)
     raw_nodes: Dict[str, Tuple[str, str]] = attrib(factory=dict)
     layer_definitions: Dict[str, LayerDefinition] = attrib(factory=dict)
@@ -44,11 +43,6 @@ class Digraph:
         factory=standard_substitutions_strategy
     )
 
-    def __attrs_post_init__(self):
-        self.inner_graph = GraphVizDigraph(
-            format=self.format, graph_attr=self.graph_attr
-        )
-
     def _find_predecessors(self, name: str) -> List[str]:
         return [e[0] for e in self.edge_collection if e[1] == name]
 
@@ -57,17 +51,17 @@ class Digraph:
         name = self._get_name(label)
         for handler in self.layer_info_handlers:
             if handler.can_handle(label):
+                print(label, handler)
                 return handler(
                     model=self.ref_mod, resolvable_string=resolvable, name=name
                 )
         raise ValueError(f"Did not find a way to handle the following layer: {name}")
 
     def attr(self, label: str) -> None:
-        self.inner_graph.attr(label=label)
+        pass
 
     def edge(self, node_id1: str, node_id2: str) -> None:
         self.edge_collection.append((node_id1, node_id2))
-        self.inner_graph.edge(node_id1, node_id2)
 
     def node(
         self,
@@ -77,13 +71,12 @@ class Digraph:
         style: Optional[str] = None,
     ) -> None:
         # print(name, label)
-        self.inner_graph.node(name, label=label, shape=shape, style=style)
         label = name if label is None else label
         layer_definition = self._get_layer_definition(label)
         self.layer_definitions[name] = layer_definition
 
     def subgraph(self, name: str) -> GraphVizDigraph:
-        return self.inner_graph.subgraph(name=name)
+        pass
 
     def _is_resolvable(
         self, predecessors: List[str], resolved_nodes: Dict[str, EnrichedNetworkNode]

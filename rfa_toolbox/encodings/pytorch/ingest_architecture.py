@@ -264,8 +264,9 @@ def make_graph(
 
 
 if __name__ == "__main__":
+
     m = torchvision.models.resnet18()
-    tm = torch.jit.trace(m, [torch.randn(1, 3, 224, 224)])
+    tm = torch.jit.trace(m, [torch.randn(1, 3, 399, 399)])
     d = make_graph(tm, ref_mod=m)
     output_node = d.to_graph()
     visualize_architecture(output_node, "ResNet18", input_res=32).view()

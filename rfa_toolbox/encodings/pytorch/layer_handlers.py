@@ -22,7 +22,11 @@ def obtain_module_with_resolvable_string(
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class Conv2d(LayerInfoHandler):
     def can_handle(self, name: str) -> bool:
-        return "Conv2d" in name
+        if "Conv2d" in name.split(".")[-1]:
+            print(name)
+            return True
+        else:
+            return False
 
     def __call__(
         self, model: torch.nn.Module, resolvable_string: str, name: str
@@ -38,23 +42,30 @@ class Conv2d(LayerInfoHandler):
             if isinstance(conv_layer.stride, int)
             else conv_layer.stride[0]
         )
+        filters = conv_layer.out_channels
         return LayerDefinition(
-            name=f"Conv{kernel_size}x{kernel_size}",
+            name=f"{name} {kernel_size}x{kernel_size}",
             kernel_size=kernel_size,
             stride_size=stride_size,
+            filters=filters,
         )
 
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class AnyConv(Conv2d):
     def can_handle(self, name: str) -> bool:
-        return "conv" in name.lower()
+        if "Conv2d" in name.split(".")[-1]:
+            print(name)
+            return True
+        else:
+            return False
 
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class AnyPool(Conv2d):
     def can_handle(self, name: str) -> bool:
-        return "pool" in name.lower() and "adaptive" not in name.lower()
+        working_name = name.split(".")[-1]
+        return "Pool" in working_name and "Adaptive" not in working_name
 
     def __call__(
         self, model: torch.nn.Module, resolvable_string: str, name: str
@@ -71,7 +82,7 @@ class AnyPool(Conv2d):
             else conv_layer.stride[0]
         )
         return LayerDefinition(
-            name=f"{name}{kernel_size}x{kernel_size}",
+            name=f"{name} {kernel_size}x{kernel_size}",
             kernel_size=kernel_size,
             stride_size=stride_size,
         )
@@ -80,7 +91,7 @@ class AnyPool(Conv2d):
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class AnyAdaptivePool(Conv2d):
     def can_handle(self, name: str) -> bool:
-        return "pool" in name.lower() and "adaptive" in name.lower()
+        return "Pool" in name and "adaptive" in name
 
     def __call__(
         self, model: torch.nn.Module, resolvable_string: str, name: str
@@ -102,8 +113,14 @@ class LinearHandler(LayerInfoHandler):
     ) -> LayerDefinition:
         kernel_size = None
         stride_size = 1
+        features = obtain_module_with_resolvable_string(
+            resolvable_string, model
+        ).out_features
         return LayerDefinition(
-            name="DenseLayer", kernel_size=kernel_size, stride_size=stride_size
+            name="Fully Connected",
+            kernel_size=kernel_size,
+            stride_size=stride_size,
+            units=features,
         )
 
 

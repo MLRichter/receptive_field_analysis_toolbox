@@ -10,6 +10,7 @@ class Layer(Protocol):
     name: str
     kernel_size: Optional[int]
     stride_size: int
+    filters: Optional[int]
 
     @staticmethod
     def from_dict(**config) -> "Layer":
