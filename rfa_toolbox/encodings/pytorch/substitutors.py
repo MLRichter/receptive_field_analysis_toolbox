@@ -8,6 +8,13 @@ from rfa_toolbox.graphs import EnrichedNetworkNode
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class PatternSubstitutor(NodeSubstitutor):
+    """A simple substitutor that removes nodes from the graph, based on
+    on a regular expression matching the name of the node.
+
+    Args:
+        substring:  a string that can be interpreted as a regular expression.
+
+    """
 
     substring: re.Pattern = attrib(converter=re.compile)
 
@@ -31,12 +38,21 @@ class PatternSubstitutor(NodeSubstitutor):
 
 
 def output_substitutor() -> PatternSubstitutor:
+    """A factory producing a Substitutor-Instance, which removes
+    functionless output-nodes from the compute-graph.
+    """
     return PatternSubstitutor(substring=r"inp_\d+")
 
 
 def input_substitutor() -> PatternSubstitutor:
+    """A factory producing a Substitutor-Instance, which removes
+    functionless input-nodes from the compute-graph.
+    """
     return PatternSubstitutor(substring=r"out_\d+")
 
 
 def numeric_substitutor() -> PatternSubstitutor:
+    """A factory producing a Substitutor-Instance, which removes
+    nodes from the compute-graph that have an resolvable name.
+    """
     return PatternSubstitutor(substring=r"\d")

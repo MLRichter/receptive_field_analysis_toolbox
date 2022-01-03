@@ -10,16 +10,50 @@ from rfa_toolbox.domain import Layer, Node
 def receptive_field_provider_with_1x1_handling(
     node: "EnrichedNetworkNode",
 ) -> Optional[int]:
+    """Provides the MINIMUM receptive field size of a layer
+    with an exception handling for 1x1-convolutions, which are treated
+    as having an infinite receptive field size. This provider
+    is based on the hypothesis that 1x1 convolutions are
+    always unproductive. It is worth noting that this
+    hypothesis is still under investigation.
+
+    Args:
+        node:   the node to receive the receptive field size from.
+
+    Returns:
+        the receptive field size, infinite if the kernel size is equal to 1.
+    """
     return node.receptive_field_min if node.layer_type.kernel_size > 1 else np.inf
 
 
 def receptive_field_provider(node: "EnrichedNetworkNode") -> Optional[int]:
+    """Provides the MINIMUM receptive field size from a node.
+    Based on the result of https://arxiv.org/abs/2106.12307 this
+    is currently the most reliable way of predicting unproductive layers.
+
+
+    Args:
+        node: the node to return the receptive field size.
+
+    Returns:
+        the minimum receptive field size.
+    """
     return node.receptive_field_min
 
 
 def naive_minmax_filter(
     info: Tuple["ReceptiveFieldInfo"],
 ) -> Tuple["ReceptiveFieldInfo", "ReceptiveFieldInfo"]:
+    """Filters all receptive field infos, except for the one
+    with the mininum and maximum receptive field size.
+
+    Args:
+        info:   Tuple of receptive field info containers to filters
+
+    Returns:
+        A two-tuple containing the minimum and maximum receptive field size info.
+
+    """
     maximum_receptive_field: ReceptiveFieldInfo = max(
         info, key=attrgetter("receptive_field")
     )
@@ -31,6 +65,15 @@ def naive_minmax_filter(
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class ReceptiveFieldInfo:
+    """The container holding information for the successive receptive
+    field size computation.
+
+    Args:
+        receptive_field:    the receptive field size
+        multiplicator:      the current growth multiplicator,
+                            increased by stride sizes > 1
+    """
+
     receptive_field: int
     multiplicator: int
 
@@ -45,7 +88,7 @@ class LayerDefinition(Layer):
         kernel_size:    size of the kernel, None if this is a dense-layer
         stride_size:    the stride size the kernel is convolved. None for dense-layers.
         filters:        number of filter produced by the convolution operation
-        units:          number of units of a densly connected layer
+        units:          number of units of a fully connected layer
 
     """
 
@@ -73,9 +116,24 @@ class LayerDefinition(Layer):
 
     @classmethod
     def from_dict(cls, config) -> "LayerDefinition":
+        """Create a LayerDefinition from the dictionary.
+
+        Args:
+            config: create layer definiton from the dictionary.
+
+        Returns:
+            A LayerDefinition instance
+
+        """
         return LayerDefinition(**config)
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
+        """Create a json-serializable dictionary from this object instance.
+
+        Returns:
+            A diction from which this object can be reconstructed.
+
+        """
         return {
             "name": self.name,
             "kernel_size": self.kernel_size,
@@ -86,6 +144,19 @@ class LayerDefinition(Layer):
 def compute_receptive_field_sizes(
     receptive_field_info: Set[ReceptiveFieldInfo], layer_info: Layer
 ) -> Tuple[ReceptiveFieldInfo]:
+    """Compute the receptive field sizes for a node given
+    receptive field-infos from predecessor-nodes and the
+    current layer information.
+
+    Args:
+        receptive_field_info:   A iterable collection of receptive field informations
+                                collected from predecessor layers.
+        layer_info:             The layer information container for the current layer.
+
+    Returns:
+        A tuple of ReceptiveFieldInfo-instances for this particular layer.
+
+    """
     result: List[ReceptiveFieldInfo] = list()
     for rf_info in receptive_field_info:
         receptive_field = rf_info.receptive_field + (
@@ -102,6 +173,36 @@ def compute_receptive_field_sizes(
 
 @attrs(auto_attribs=True, frozen=True, slots=True, hash=False, repr=False)
 class EnrichedNetworkNode(Node):
+    """The EnrichedNetworkNode is the core component of a network graph in this framework.
+    Any node af a network can be used as a handle for the entire graph.
+    A neural network is exspected to have exactly one input and arbitrary
+    many outputs. Networks with multiple inputs may cause inconsistencies.
+
+    Args:
+        name:                       the name of the current node
+        layer_info:                 the layer information container
+        predecessors:               A list of predecessor nodes, empty-list by default.
+        receptie_field_info_filter: Function, which filters the ReceptiveFieldInfo
+                                    to reduce the number of computations in networks
+                                    with many pathways or skip connections.
+                                    By default only the highest and lowest
+                                    receptive field size container are kept.
+
+    Params:
+        receptive_field_info:   a n-tuple holding the ReceptiveFieldInfo-instances,
+                                used for receptive field size computation
+        receptive_field_min:    minimum receptive field size
+        receptive_field_max:    maximum receptive field size
+        receptive_field_sizes:  all receptive field sizes, please note
+                                that a filter is applied
+        all_laxers:             a list of all nodes contained in the graph
+        kernel_size:            the size of the kernel, passthrough from
+                                the layer_info container
+        stride_size:            the stride size, passthrough from
+                                the layer_info container
+
+    """
+
     name: str
     layer_info: LayerDefinition
     predecessors: List["EnrichedNetworkNode"] = attrib(converter=list)
@@ -177,6 +278,27 @@ class EnrichedNetworkNode(Node):
             ["EnrichedNetworkNode"], Union[float, int]
         ] = receptive_field_provider,
     ) -> bool:
+        """Checks if this layer is a border layer.
+        A border layer is predicted not advance the
+        intermediate solution
+        quality and can thus be considered "dead weight".
+
+        Args:
+            input_resolution:           the input resolution to check for
+            receptive_field_provider:   a provider function that produces a
+                                        receptive field value, from which the
+                                        border-layer decision can be derived.
+                                        By default the minimum receptive field size
+                                        will yielded from the set of
+                                        receptive field sizes, which is currently
+                                        the most reliable  way of predicting
+                                        unproductive layers.
+
+        Returns:
+            True if this layer is predicted to be unproductive
+            for the given input resolution, else False.
+
+        """
         # the border layer is defined as the layer that receives
         # all inputs with a receptive field size
         # SMALLER than the input resolution
@@ -201,6 +323,14 @@ class EnrichedNetworkNode(Node):
         return all(direct_predecessors) and own  # and all(successors)
 
     def is_in(self, container: Union[List[Node], Dict[Node, Any]]) -> bool:
+        """Checks if this node is inside a an iterable collection.
+        Args:
+            container: dictionary with node as key or list of EnrichedNetworkNodes.
+
+        Returns:
+            True if the node is contained in the collection, else False.
+
+        """
         if isinstance(container, list):
             return any(id(self) == id(node) for node in container)
         else:

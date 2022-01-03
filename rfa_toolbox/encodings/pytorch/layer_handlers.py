@@ -8,6 +8,21 @@ from rfa_toolbox.graphs import LayerDefinition
 def obtain_module_with_resolvable_string(
     resolvable: str, model: torch.nn.Module
 ) -> torch.nn.Module:
+    """Attempts to find the module inside a PyTorch-model based on a
+    resolvable-string extracted from
+    a JIT-compiled version of the same model.
+
+    Args:
+        resolvable: the resolvable string
+        model:      the PyTorch-model instance in which the layer can be found.
+
+    Returns:
+        PyTorch-Module extracted from the model.
+
+    Raises:
+        ValueError if the module cannot be extracted from the module.
+
+    """
     current = model
     for elem in resolvable.split("."):
         if elem.isnumeric():
@@ -21,9 +36,10 @@ def obtain_module_with_resolvable_string(
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class Conv2d(LayerInfoHandler):
+    """This handler explicitly operated on the torch.nn.Conv2d-Layer."""
+
     def can_handle(self, name: str) -> bool:
         if "Conv2d" in name.split(".")[-1]:
-            print(name)
             return True
         else:
             return False
@@ -53,9 +69,10 @@ class Conv2d(LayerInfoHandler):
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class AnyConv(Conv2d):
+    """Extract layer information in convolutional layers."""
+
     def can_handle(self, name: str) -> bool:
-        if "Conv2d" in name.split(".")[-1]:
-            print(name)
+        if "Conv" in name.split(".")[-1]:
             return True
         else:
             return False
@@ -63,6 +80,8 @@ class AnyConv(Conv2d):
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class AnyPool(Conv2d):
+    """Extract layer information in any pooling layer that is not adaptive."""
+
     def can_handle(self, name: str) -> bool:
         working_name = name.split(".")[-1]
         return "Pool" in working_name and "Adaptive" not in working_name
@@ -90,6 +109,8 @@ class AnyPool(Conv2d):
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class AnyAdaptivePool(Conv2d):
+    """Extract information from adaptive pooling layers."""
+
     def can_handle(self, name: str) -> bool:
         return "Pool" in name and "adaptive" in name
 
@@ -105,6 +126,8 @@ class AnyAdaptivePool(Conv2d):
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class LinearHandler(LayerInfoHandler):
+    """Extracts information from linear (fully connected) layers."""
+
     def can_handle(self, name: str) -> bool:
         return "Linear" in name
 
@@ -126,6 +149,15 @@ class LinearHandler(LayerInfoHandler):
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
 class AnyHandler(LayerInfoHandler):
+    """This handler is a catch-all handler, which transform
+    any layer into an EnrichedNetworkNode.
+    However, this Handler will assume a kernel-size of 1 and a
+    stride-size of 1 and will not attempt to extract
+    any information on the number of filters or units.
+    Therefore, it is mostly meant as a "last-resort"-handler
+    for layers that are not handleable by any other handler.
+    """
+
     def can_handle(self, name: str) -> bool:
         return True
 

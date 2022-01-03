@@ -7,10 +7,13 @@
     <list default="true" id="21d2183c-f311-425d-a7b9-10154f7dfb14" name="Changes" comment="Changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rfa_toolbox/domain.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/domain.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/domain.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/domain.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/ingest_architecture.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/ingest_architecture.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/intermediate_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/intermediate_graph.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/layer_handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/layer_handlers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/substitutors.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/substitutors.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rfa_toolbox/graphs.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/graphs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/utils/graph_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/utils/graph_utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rfa_toolbox/vizualize.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/vizualize.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,14 +59,14 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/rfa_toolbox" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../delve" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -73,7 +76,7 @@
       <recent name="C:\Users\van30\Documents\rfa_toolbox\rfa_toolbox" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.ingest_architecture">
+  <component name="RunManager" selected="Python tests.pytest2">
     <configuration name="ingest_architecture" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="receptive_field_analysis_toolbox" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -251,8 +254,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.main" />
       <item itemvalue="Python.ingest_architecture" />
+      <item itemvalue="Python.main" />
       <item itemvalue="Python.pytorch_viz_test2" />
       <item itemvalue="Python.pytorch_viz_test" />
       <item itemvalue="Python.vizualize" />
@@ -291,7 +294,10 @@
       <workItem from="1639819260339" duration="2484000" />
       <workItem from="1639911735067" duration="74244000" />
       <workItem from="1640261529859" duration="6887000" />
-      <workItem from="1640282047359" duration="54911000" />
+      <workItem from="1640282047359" duration="59550000" />
+      <workItem from="1640865749480" duration="6244000" />
+      <workItem from="1640955607122" duration="626000" />
+      <workItem from="1641050878548" duration="17254000" />
     </task>
     <task id="LOCAL-00001" summary="Initial structure for the network graph, also some initial work on the domain-protocols">
       <created>1639149152838</created>
@@ -373,13 +379,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/rfa_toolbox/graphs.py</url>
-          <line>210</line>
+          <line>340</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_graph/test_utils.py</url>
           <line>113</line>
           <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/ingest_architecture.py</url>
+          <line>265</line>
+          <option name="timeStamp" value="33" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -397,13 +408,13 @@
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytorch_viz_test.coverage" NAME="pytorch_viz_test Coverage Results" MODIFIED="1640470812657" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$witness_hook_test_script.coverage" NAME="witness_hook_test_script Coverage Results" MODIFIED="1640451933610" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_graph_components_TestReceptiveFieldsOfImportantArchitectures_test_compute_border_for_resnet18.coverage" NAME="pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet18 Coverage Results" MODIFIED="1640096177299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
-    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1640604998587" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1641154078872" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$vizualize.coverage" NAME="vizualize Coverage Results" MODIFIED="1640559706688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytorch_viz_test2.coverage" NAME="pytorch_viz_test2 Coverage Results" MODIFIED="1640452451147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest.coverage" NAME="pytest Coverage Results" MODIFIED="1639820206996" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_dynamic_graph_TestEnrichedNetworkNode_test_resnet36.coverage" NAME="pytest for test_dynamic_graph.TestEnrichedNetworkNode.test_resnet36 Coverage Results" MODIFIED="1640166036616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$main.coverage" NAME="main Coverage Results" MODIFIED="1640282758963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
     <SUITE FILE_PATH="coverage/rfa_toolbox$.coverage" NAME=" Coverage Results" MODIFIED="1639818329812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$ingest_architecture.coverage" NAME="ingest_architecture Coverage Results" MODIFIED="1640606092360" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$ingest_architecture.coverage" NAME="ingest_architecture Coverage Results" MODIFIED="1641151032090" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch" />
   </component>
 </project>

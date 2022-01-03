@@ -4,6 +4,16 @@ from rfa_toolbox.graphs import EnrichedNetworkNode
 
 
 def node_id(node: EnrichedNetworkNode) -> str:
+    """Provide a unique string for each node based on its name and object id.
+    This makes the node-id human readable while also easy to process since it contains
+    human interpretable elements while also being unique.
+
+    Args:
+        node: the EnrichedNetworkNode-instance the unique id shall be obtained
+
+    Returns:
+        A unique node id as a string of the following format ${node.name}-${id(node}
+    """
     return f"{node.name}-{id(node)}"
 
 
@@ -13,7 +23,22 @@ def visualize_node(
     input_res: int,
     color_border: bool,
     color_critical: bool,
-):
+) -> None:
+    """Create a node in a graphviz-graph based on an EnrichedNetworkNode instance.
+    Also creates all edges that lead from predecessor nodes to this node.
+
+    Args:
+        node:               The node in question
+        dot:                The graphviz-graph
+        input_res:          The input resolution of the model - required for
+                            coloring critical and border layers
+        color_border:       The color used for marking border layer
+        color_critical:     The color used for marking critical layers
+
+    Returns:
+        Nothing.
+
+    """
     color = "white"
     if node.is_border(input_resolution=input_res):
         color = "red"
@@ -48,6 +73,24 @@ def visualize_architecture(
     color_critical: bool = True,
     color_border: bool = True,
 ) -> graphviz.Digraph:
+    """Visualize an architecture using graphviz
+    and mark critical and border layers in the graph visualization.
+
+    Args:
+        output_node:    an EnrichedNetworkNode-instance that belong to the
+                        network graph to visualize. This function can handle
+                        architectures with arbitrary many output
+                        and one input node.
+        model_name:     the name of the model
+        input_res:      the input resolution (used for determining
+                        critical and border layers)
+        color_critical: if True the critical layers are colored orange, True by default.
+        color_border:   if True the border layers are colored red, True by default.
+
+    Returns:
+        A graphviz.Digraph object that can visualize the network architecture.
+
+    """
     f = graphviz.Digraph(model_name, filename=".gv")
     f.attr(rankdir="TB")
     f.attr("node", shape="rectangle")
