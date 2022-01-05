@@ -7,9 +7,9 @@
   <a href="https://rfa_toolbox.readthedocs.io">
     <img src="https://img.shields.io/readthedocs/rfa_toolbox.svg?logo=read-the-docs&logoColor=fff&style=flat-square" alt="Documentation Status">
   </a>
-  <a href="https://codecov.io/gh/MLRichter/rfa_toolbox">
-    <img src="https://img.shields.io/codecov/c/github/MLRichter/rfa_toolbox.svg?logo=codecov&logoColor=fff&style=flat-square" alt="Test coverage percentage">
-  </a>
+    <a href="https://codecov.io/gh/MLRichter/receptive_field_analysis_toolbox">
+        <img src="https://codecov.io/gh/MLRichter/receptive_field_analysis_toolbox/branch/main/graph/badge.svg?token=3K52NPEAEU"/>
+    </a>
 </p>
 <p align="center">
   <a href="https://python-poetry.org/">
