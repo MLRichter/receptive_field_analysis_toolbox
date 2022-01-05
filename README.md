@@ -1,11 +1,11 @@
 # ReceptiveFieldAnalysisToolbox
 
 <p align="center">
-  <a href="https://github.com/MLRichter/rfa_toolbox/actions?query=workflow%3ACI">
-    <img src="https://img.shields.io/github/workflow/status/MLRichter/rfa_toolbox/CI/main?label=CI&logo=github&style=flat-square" alt="CI Status" >
+  <a href="https://github.com/MLRichter/receptive_field_analysis_toolbox/actions?query=workflow%3ACI">
+    <img src="https://img.shields.io/github/workflow/status/MLRichter/receptive_field_analysis_toolbox/CI/main?label=CI&logo=github&style=flat-square" alt="CI Status" >
   </a>
-  <a href="https://rfa_toolbox.readthedocs.io">
-    <img src="https://img.shields.io/readthedocs/rfa_toolbox.svg?logo=read-the-docs&logoColor=fff&style=flat-square" alt="Documentation Status">
+  <a href="https://receptive-field-analysis-toolbox.readthedocs.io/en/latest/index.html">
+    <img src="https://img.shields.io/readthedocs/receptive-field-analysis-toolbox.svg?logo=read-the-docs&logoColor=fff&style=flat-square" alt="Documentation Status">
   </a>
     <a href="https://codecov.io/gh/MLRichter/receptive_field_analysis_toolbox">
         <img src="https://codecov.io/gh/MLRichter/receptive_field_analysis_toolbox/branch/main/graph/badge.svg?token=3K52NPEAEU"/>
