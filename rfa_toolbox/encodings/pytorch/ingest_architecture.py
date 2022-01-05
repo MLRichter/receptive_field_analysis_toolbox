@@ -1,11 +1,11 @@
 try:
     import torch
     import torchvision
+
+    from rfa_toolbox.vizualize import visualize_architecture
 except ImportError:
     pass
-from intermediate_graph import Digraph
-
-from rfa_toolbox.vizualize import visualize_architecture
+from rfa_toolbox.encodings.pytorch.intermediate_graph import Digraph
 
 
 def make_graph(

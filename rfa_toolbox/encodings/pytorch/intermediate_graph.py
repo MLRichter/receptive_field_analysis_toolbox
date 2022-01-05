@@ -88,7 +88,6 @@ class Digraph:
         name = self._get_name(label)
         for handler in self.layer_info_handlers:
             if handler.can_handle(label):
-                print(label, handler)
                 return handler(
                     model=self.ref_mod, resolvable_string=resolvable, name=name
                 )
