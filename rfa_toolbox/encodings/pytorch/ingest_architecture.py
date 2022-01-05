@@ -1,3 +1,7 @@
+from typing import Tuple
+
+from rfa_toolbox.graphs import EnrichedNetworkNode
+
 try:
     import torch
     import torchvision
@@ -261,6 +265,26 @@ def make_graph(
         pr, op = preds[o]
         make_edges(pr, "inp_" + name, name, op)
     return dot
+
+
+def create_graph_from_model(
+    model: torch.nn.Module, input_res: Tuple[int, int, int, int] = (1, 3, 399, 399)
+) -> EnrichedNetworkNode:
+    """Create a graph of enriched network nodes from a PyTorch-Model.
+
+    Args:
+        model:          a PyTorch-Model.
+        input_res:      input-tuple shape that can be processed by the model.
+                        Needs to be a 4-Tuple of shape (batch_size,
+                        color_channels, height, width) for CNNs.
+                        Needs to be a 2-Tuple of shape (batch_size,
+                        num_features) for fully connected networks.
+
+    Returns:
+        The EnrichedNetworkNodeGraph
+    """
+    tm = torch.jit.trace(m, (torch.randn(*input_res),))
+    return make_graph(tm, ref_mod=model)
 
 
 if __name__ == "__main__":
