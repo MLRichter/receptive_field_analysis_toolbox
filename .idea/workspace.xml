@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21d2183c-f311-425d-a7b9-10154f7dfb14" name="Changes" comment="added tests">
-      <change beforePath="$PROJECT_DIR$/rfa_toolbox/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -247,8 +247,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.main" />
       <item itemvalue="Python.ingest_architecture" />
+      <item itemvalue="Python.main" />
       <item itemvalue="Python.pytorch_viz_test2" />
       <item itemvalue="Python.pytorch_viz_test" />
       <item itemvalue="Python.vizualize" />
@@ -291,7 +291,7 @@
       <workItem from="1640865749480" duration="6244000" />
       <workItem from="1640955607122" duration="626000" />
       <workItem from="1641050878548" duration="19312000" />
-      <workItem from="1641287205120" duration="2695000" />
+      <workItem from="1641287205120" duration="3615000" />
     </task>
     <task id="LOCAL-00001" summary="Initial structure for the network graph, also some initial work on the domain-protocols">
       <created>1639149152838</created>

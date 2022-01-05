@@ -132,8 +132,6 @@ class Digraph:
         Returns:
             Nothing.
         """
-
-        # print(name, label)
         label = name if label is None else label
         layer_definition = self._get_layer_definition(label)
         self.layer_definitions[name] = layer_definition
