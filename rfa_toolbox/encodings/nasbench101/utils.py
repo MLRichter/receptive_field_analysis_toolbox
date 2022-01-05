@@ -1,7 +1,7 @@
 import re
 from typing import Callable, Optional
 
-from rfa_toolbox.network_components import LayerDefinition
+from rfa_toolbox.graphs import LayerDefinition
 
 
 def convolutional_config_from_string(
