@@ -104,7 +104,7 @@ Let's take for example the good old AlexNet architecture from 2012, which is a v
 Let's assume we want to train Cifar10 on AlexNet, which has a 32 pixel input resolution.
 When we apply Receptive receptive field analysis, wen can see that most convolutional layer will in fact not contribute
 to the inference process (unproductive layers marked red, probable unproductive layers marked orange):
-![rf_stides.PNG](./images/alexnet.PNG)
+![rf_stides.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/alexnet.PNG?raw=true)
 
 We can clearly see that most of the network will not contribute anything useful to the quality of the output, since
 their receptive field sizes war way to large.
@@ -121,13 +121,6 @@ resulting in better predictive performance.
 
 If you want to see a deeper dive into these optimization strategies using receptive field analysis,
 I recommend you reading [Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training](https://arxiv.org/abs/2106.12307)
-
-### Related Publications
-
-- [(Input) Size Matters for Convolutional Neural Network Classifier](https://link.springer.com/chapter/10.1007/978-3-030-86340-1_11)
-- [Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training](https://arxiv.org/abs/2106.12307)
-  (published at the 20th IEEE Internation Conference for Machine Learning Application - ICMLA)
-- Towards Efficient Convolutional Neural Architecture Design (my Dissertation, currently in print)
 
 ## Examples
 
