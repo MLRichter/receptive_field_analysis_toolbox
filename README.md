@@ -51,7 +51,7 @@ Every layer in a (convolutional) neural network has a receptive field. It can be
 In more precise terms, we define a receptive field as the area influencing the output of a single position of the
 convolutional kernel.
 Here is a simple, 1-dimensional example:
-![rf.PNG](./images/rf.PNG)
+![rf.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/rf.PNG?raw=true)
 As you can see, the first layer of this simple architecture can only evaluate the information the input pixels directly
 under his kernel, which has a size of three pixels. Of course, in most convolutional neural architectures, this kernel
 would be a square area, since most CNN-models process images.
@@ -65,7 +65,7 @@ This ultimately allows networks to go from detecting small and simple patterns t
 
 The effective size of the kernel is not the only factor influence the growth of the receptive field size.
 Another important factor is the stride size:
-![rf_stides.PNG](./images/rf_strides.PNG)
+![rf_stides.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/rf_strides.PNG?raw=true)
 The stride size is the size of the step between the individual kernel position. Commonly, every possible
 position is evaluated, which is not affecting the receptive field size in any way.
 When the stride size is greater than one however valid positions of the kernel are skipped, which reduces
