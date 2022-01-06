@@ -7,7 +7,7 @@
     <list default="true" id="21d2183c-f311-425d-a7b9-10154f7dfb14" name="Changes" comment="added tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rfa_toolbox/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/ingest_architecture.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/ingest_architecture.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,17 +70,17 @@
       <recent name="C:\Users\van30\Documents\rfa_toolbox\rfa_toolbox" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest2">
+  <component name="RunManager" selected="Python.ingest_architecture">
     <configuration name="ingest_architecture" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="receptive_field_analysis_toolbox" />
+      <module name="rfa_toolbox" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\van30\Anaconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
@@ -231,10 +231,10 @@
       <method v="2" />
     </configuration>
     <configuration name="pytest2" type="tests" factoryName="py.test">
-      <module name="receptive_field_analysis_toolbox" />
+      <module name="rfa_toolbox" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="C:\Users\matrichter\anaconda3\python.exe" />
+      <option name="SDK_HOME" value="C:\Users\van30\Anaconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -248,8 +248,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.ingest_architecture" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.ingest_architecture" />
       <item itemvalue="Python.pytorch_viz_test2" />
       <item itemvalue="Python.pytorch_viz_test" />
       <item itemvalue="Python.vizualize" />
@@ -294,6 +294,8 @@
       <workItem from="1641050878548" duration="19312000" />
       <workItem from="1641287205120" duration="6243000" />
       <workItem from="1641471318119" duration="6514000" />
+      <workItem from="1641500789501" duration="1439000" />
+      <workItem from="1641504438661" duration="965000" />
     </task>
     <task id="LOCAL-00001" summary="Initial structure for the network graph, also some initial work on the domain-protocols">
       <created>1639149152838</created>
@@ -401,17 +403,19 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/rfa_toolbox$main.coverage" NAME="main Coverage Results" MODIFIED="1639129405341" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$vizualize.coverage" NAME="vizualize Coverage Results" MODIFIED="1640559706688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
+    <SUITE FILE_PATH="coverage/rfa_toolbox$ingest_architecture.coverage" NAME="ingest_architecture Coverage Results" MODIFIED="1641504626634" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch" />
+    <SUITE FILE_PATH="coverage/rfa_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1641503929537" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1641415934758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_graph_components_TestReceptiveFieldsOfImportantArchitectures_test_compute_border_for_resnet18.coverage" NAME="pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet18 Coverage Results" MODIFIED="1640096177299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytorch_viz_test2.coverage" NAME="pytorch_viz_test2 Coverage Results" MODIFIED="1640452451147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_dynamic_graph_TestEnrichedNetworkNode_test_resnet36.coverage" NAME="pytest for test_dynamic_graph.TestEnrichedNetworkNode.test_resnet36 Coverage Results" MODIFIED="1640166036616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$witness_hook_test_script.coverage" NAME="witness_hook_test_script Coverage Results" MODIFIED="1640451933610" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
+    <SUITE FILE_PATH="coverage/rfa_toolbox$.coverage" NAME=" Coverage Results" MODIFIED="1639818329812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest.coverage" NAME="pytest Coverage Results" MODIFIED="1639820206996" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$ingest_architecture.coverage" NAME="ingest_architecture Coverage Results" MODIFIED="1641151032090" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_graph_components_TestReceptiveFieldsOfImportantArchitectures_test_compute_border_for_resnet34.coverage" NAME="pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet34 Coverage Results" MODIFIED="1640108210705" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytorch_viz_test.coverage" NAME="pytorch_viz_test Coverage Results" MODIFIED="1640470812657" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
-    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$witness_hook_test_script.coverage" NAME="witness_hook_test_script Coverage Results" MODIFIED="1640451933610" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
-    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_graph_components_TestReceptiveFieldsOfImportantArchitectures_test_compute_border_for_resnet18.coverage" NAME="pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet18 Coverage Results" MODIFIED="1640096177299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
-    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1641415934758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$vizualize.coverage" NAME="vizualize Coverage Results" MODIFIED="1640559706688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
-    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytorch_viz_test2.coverage" NAME="pytorch_viz_test2 Coverage Results" MODIFIED="1640452451147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
-    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest.coverage" NAME="pytest Coverage Results" MODIFIED="1639820206996" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_dynamic_graph_TestEnrichedNetworkNode_test_resnet36.coverage" NAME="pytest for test_dynamic_graph.TestEnrichedNetworkNode.test_resnet36 Coverage Results" MODIFIED="1640166036616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$main.coverage" NAME="main Coverage Results" MODIFIED="1640282758963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
-    <SUITE FILE_PATH="coverage/rfa_toolbox$.coverage" NAME=" Coverage Results" MODIFIED="1639818329812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$ingest_architecture.coverage" NAME="ingest_architecture Coverage Results" MODIFIED="1641151032090" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch" />
   </component>
 </project>

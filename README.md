@@ -100,6 +100,28 @@ and when this is no longer possible, the layer is not able to contribute to the 
 Of course, being able to predict why and which layer will become dead weight during training is highly useful, since
 we can now adjust the design of the architecture to fit our input resolution better.
 
+Let's take for example the good old AlexNet architecture from 2012, which is a very simple CNN-model.
+Let's assume we want to train Cifar10 on AlexNet, which has a 32 pixel input resolution.
+When we apply Receptive receptive field analysis, wen can see that most convolutional layer will in fact not contribute
+to the inference process (unproductive layers marked red, probable unproductive layers marked orange):
+![rf_stides.PNG](./images/alexnet.PNG)
+
+We can clearly see that most of the network will not contribute anything useful to the quality of the output, since
+their receptive field sizes war way to large.
+
+From here on we have multiple ways of optimizing the setup.
+Of course, we can simply increase the resolution, to involve more layers in the inference process, but that is usually
+very expensive from a computational point of view.
+If we are satisfied with the performance of the model, we may simply replace all unproductive layers with a simple output
+head and save a lot of computation time.
+On the other hand we could fiddle around with he downsampling layers and kernel sizes of the convolutional layers down,
+such that only the final 1 or 2 layers have a receptive field that can grasp the entire image.
+This is likely to be the more computational expensive choice, but it utilize the parameters in the model better, likely
+resulting in better predictive performance.
+
+If you want to see a deeper dive into these optimization strategies using receptive field analysis,
+I recommend you reading [Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training](https://arxiv.org/abs/2106.12307)
+
 ### Related Publications
 
 - [(Input) Size Matters for Convolutional Neural Network Classifier](https://link.springer.com/chapter/10.1007/978-3-030-86340-1_11)

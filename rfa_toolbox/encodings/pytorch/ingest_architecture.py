@@ -288,7 +288,7 @@ def create_graph_from_model(
 
 
 if __name__ == "__main__":
-    model = torchvision.models.inception_v3
+    model = torchvision.models.alexnet
     m = model()
     tm = torch.jit.trace(m, [torch.randn(1, 3, 399, 399)])
     d = make_graph(tm, ref_mod=m)
