@@ -30,13 +30,88 @@
   <img src="https://img.shields.io/pypi/l/rfa_toolbox.svg?style=flat-square" alt="License">
 </p>
 
-A toolbox for analyzing the receptive field expansion in neural networks.
+This is RFA-Toolbox, a simple and easy-to-use library that allows you to optimize your neural network architectures
+using receptive field analysis (RFA) and graph visualizations of your architecture.
 
 ## Installation
 
 Install this via pip (or your favourite package manager):
 
 `pip install rfa_toolbox`
+
+## What is Receptive Field Analysis?
+
+Receptive Field Analysis (RFA) is simple yet effective way to optimize the efficiency of any neural architecture without
+training it.
+
+### A quick primer on the Receptive Field
+
+To understand how it works, we first need to understand what a receptive field is, and it affects what the network is doing.
+Every layer in a (convolutional) neural network has a receptive field. It can be considered the "field of view" of this layer.
+In more precise terms, we define a receptive field as the area influencing the output of a single position of the
+convolutional kernel.
+Here is a simple, 1-dimensional example:
+![rf.PNG](./images/rf.PNG)
+As you can see, the first layer of this simple architecture can only evaluate the information the input pixels directly
+under his kernel, which has a size of three pixels. Of course, in most convolutional neural architectures, this kernel
+would be a square area, since most CNN-models process images.
+Another observation we can make from this example is that the receptive field size is actually expanding from layer
+to layer.
+This is happening, because the consecutive layers also have kernel sizes greater than 1 pixel, which means that
+they combine multiple adjacent positions on the feature map into a single position in their output, expanding the receptive
+field of the previous layer in the process.
+In other words, every consecutive layer adds additional context to each feature map position by expanding the receptive field.
+This ultimately allows networks to go from detecting small and simple patterns to big and very complicated ones.
+
+The effective size of the kernel is not the only factor influence the growth of the receptive field size.
+Another important factor is the stride size:
+![rf_stides.PNG](./images/rf_strides.PNG)
+The stride size is the size of the step between the individual kernel position. Commonly, every possible
+position is evaluated, which is not affecting the receptive field size in any way.
+When the stride size is greater than one however valid positions of the kernel are skipped, which reduces
+the size of the feature map. Since now information on the feature map is now condensed on fewer feature map positions,
+the growth of the receptive field is multiplied for future layers.
+In real-world architectures, this is typically the case when downsampling layers like convolutions with a stride size of 2
+are used.
+
+### Why does the Receptive Field Matter?
+
+At this point you may be wondering why the receptive field of all things is useful for optimizing an
+architecture.
+The short answer to this is: because it influences where the network can process patterns of a certain size.
+Simply speaking each convolutional layer is only able to detect a certain size of pattern because of its receptive field size.
+Interestingly this also means that there is an upper limited to the usefulness of expanding the receptive field.
+At the latest, this is the case when the receptive field of a layer is BIGGER than the input image, since no novel
+context be added at this point.
+For convolutional layers this is in fact a big issue, because layers pas this "Border Layer" are unproductive and
+do not contribute anymore to the inference process.
+If you are interested in the details of this phenomenon I recommend that you read these papers that investigate this phenomenon
+in greater detail:
+
+- [(Input) Size Matters for Convolutional Neural Network Classifier](https://link.springer.com/chapter/10.1007/978-3-030-86340-1_11)
+- [Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training](https://arxiv.org/abs/2106.12307)
+  (published at the 20th IEEE Internation Conference for Machine Learning Application - ICMLA)
+
+### Optimizing Architecture using Receptive Field Analysis
+
+So far, we learned that the expansion of the receptive field allows a layer to enrich the data with more context
+and when this is no longer possible, the layer is not able to contribute to the quality of the output of the model.
+
+Of course, being able to predict why and which layer will become dead weight during training is highly useful, since
+we can now adjust the design of the architecture to fit our input resolution better.
+
+### Related Publications
+
+- [(Input) Size Matters for Convolutional Neural Network Classifier](https://link.springer.com/chapter/10.1007/978-3-030-86340-1_11)
+- [Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training](https://arxiv.org/abs/2106.12307)
+  (published at the 20th IEEE Internation Conference for Machine Learning Application - ICMLA)
+- Towards Efficient Convolutional Neural Architecture Design (my Dissertation, currently in print)
+
+## Examples
+
+### PyTorch
+
+### Custom
 
 ## Contributors ✨
 
