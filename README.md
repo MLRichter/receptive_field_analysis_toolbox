@@ -44,6 +44,14 @@ Install this via pip (or your favourite package manager):
 Receptive Field Analysis (RFA) is simple yet effective way to optimize the efficiency of any neural architecture without
 training it.
 
+## Usage
+
+### Examples
+
+#### PyTorch
+
+#### Custom
+
 ### A quick primer on the Receptive Field
 
 To understand how it works, we first need to understand what a receptive field is, and it affects what the network is doing.
@@ -101,7 +109,8 @@ Of course, being able to predict why and which layer will become dead weight dur
 we can now adjust the design of the architecture to fit our input resolution better.
 
 Let's take for example the good old AlexNet architecture from 2012, which is a very simple CNN-model.
-Let's assume we want to train Cifar10 on AlexNet, which has a 32 pixel input resolution.
+Let's assume we want to train Cifar10 on AlexNet, which has a 32 pixel input resolution, which is lower than the 224
+pixel design resolution of the network.
 When we apply Receptive receptive field analysis, wen can see that most convolutional layer will in fact not contribute
 to the inference process (unproductive layers marked red, probable unproductive layers marked orange):
 ![rf_stides.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/alexnet.PNG?raw=true)
@@ -121,12 +130,6 @@ resulting in better predictive performance.
 
 If you want to see a deeper dive into these optimization strategies using receptive field analysis,
 I recommend you reading [Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training](https://arxiv.org/abs/2106.12307)
-
-## Examples
-
-### PyTorch
-
-### Custom
 
 ## Contributors ✨
 
