@@ -150,7 +150,7 @@ visualize_architecture(
 ```
 
 This will produce the following graph:
-![simple_conv.PNG](./images/simple_conv.PNG)
+![simple_conv.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/simple_conv.png)
 Note that the output layer is marked as a critical layer that is maybe unproductive. This is because dense layers
 have technically an infinite receptive field size and therefore using more than a single dense layer in your output
 head is generally not a good idea.

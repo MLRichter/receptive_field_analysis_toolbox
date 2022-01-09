@@ -5,13 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21d2183c-f311-425d-a7b9-10154f7dfb14" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/rfa_toolbox/vis_script.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rfa_toolbox/architectures/resnet.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/architectures/resnet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rfa_toolbox/architectures/vgg.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/architectures/vgg.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/ingest_architecture.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/ingest_architecture.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rfa_toolbox/graphs.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/graphs.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -253,12 +248,12 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.main" />
       <item itemvalue="Python.ingest_architecture" />
+      <item itemvalue="Python.main" />
       <item itemvalue="Python.pytorch_viz_test" />
-      <item itemvalue="Python.vizualize" />
       <item itemvalue="Python.vis_script" />
       <item itemvalue="Python.vis_script_resnet" />
+      <item itemvalue="Python.vizualize" />
       <item itemvalue="Python tests.pytest2" />
       <item itemvalue="Python tests.pytest" />
     </list>
@@ -301,7 +296,7 @@
       <workItem from="1641471318119" duration="6514000" />
       <workItem from="1641500789501" duration="1439000" />
       <workItem from="1641504438661" duration="3497000" />
-      <workItem from="1641541341896" duration="15921000" />
+      <workItem from="1641541341896" duration="17078000" />
     </task>
     <task id="LOCAL-00001" summary="Initial structure for the network graph, also some initial work on the domain-protocols">
       <created>1639149152838</created>
@@ -385,7 +380,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/rfa_toolbox/graphs.py</url>
-          <line>340</line>
+          <line>344</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -418,7 +413,7 @@
     <SUITE FILE_PATH="coverage/rfa_toolbox$vis_script_resnet.coverage" NAME="vis_script_resnet Coverage Results" MODIFIED="1641749073323" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$vizualize.coverage" NAME="vizualize Coverage Results" MODIFIED="1640559706688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
     <SUITE FILE_PATH="coverage/rfa_toolbox$ingest_architecture.coverage" NAME="ingest_architecture Coverage Results" MODIFIED="1641762062854" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch" />
-    <SUITE FILE_PATH="coverage/rfa_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1641762792595" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/rfa_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1641763025447" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1641415934758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_graph_components_TestReceptiveFieldsOfImportantArchitectures_test_compute_border_for_resnet18.coverage" NAME="pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet18 Coverage Results" MODIFIED="1640096177299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
     <SUITE FILE_PATH="coverage/rfa_toolbox$vis_script.coverage" NAME="vis_script Coverage Results" MODIFIED="1641726177767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
