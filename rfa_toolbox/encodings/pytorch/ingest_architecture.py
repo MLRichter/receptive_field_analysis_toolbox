@@ -11,8 +11,6 @@ except ImportError:
     pass
 from rfa_toolbox.encodings.pytorch.intermediate_graph import Digraph
 
-# This code was adapted from this blog article:
-# https://lernapparat.de/visualize-pytorch-models/
 def make_graph(
     mod,
     classes_to_visit=None,
@@ -23,6 +21,9 @@ def make_graph(
     parent_dot=None,
     ref_mod=None,
 ):
+    """This code was adapted from this blog article: 
+    lernapparat.de/visualize-pytorch-models
+    """
     preds = {}
 
     def find_name(i, self_input, suffix=None):
