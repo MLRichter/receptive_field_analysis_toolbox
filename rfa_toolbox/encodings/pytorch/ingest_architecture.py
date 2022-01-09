@@ -283,16 +283,13 @@ def create_graph_from_model(
     Returns:
         The EnrichedNetworkNodeGraph
     """
-    tm = torch.jit.trace(m, (torch.randn(*input_res),))
-    return make_graph(tm, ref_mod=model)
+    tm = torch.jit.trace(model, (torch.randn(*input_res),))
+    return make_graph(tm, ref_mod=model).to_graph()
 
 
 if __name__ == "__main__":
-    model = torchvision.models.alexnet
-    m = model()
-    tm = torch.jit.trace(m, [torch.randn(1, 3, 399, 399)])
-    d = make_graph(tm, ref_mod=m)
-    output_node = d.to_graph()
-    visualize_architecture(
-        output_node, f"{model.__name__}_32_pixel", input_res=32
-    ).render(f"{model.__name__}_32_pixel")
+    model = torchvision.models.alexnet()
+    graph = create_graph_from_model(model)
+    visualize_architecture(graph, "alexnet_32_pixel", input_res=32).render(
+        "alexnet_32_pixel"
+    )

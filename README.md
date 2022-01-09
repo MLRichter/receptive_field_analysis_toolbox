@@ -46,11 +46,114 @@ training it.
 
 ## Usage
 
+This library allows you to look for certain inefficiencies withing your convolutional neural network setup without
+ever training the model.
+You can do this simply by importing your architecture into the format of RFA-Toolbox and then use the in-build functions
+to visualize your architecture using GraphViz.
+Unproductive (i.e. useless) layers marked in red and layers that run into a risk
+of being unproductive marked in orange.
+This is especially useful if you plan to train your model on resolutions that are substantially lower than the
+design-resolution of most models.
+As an alternative, you can also use the graph from RFA-Toolbox directly to automatically detect and remove
+unproductive layers within your NAS-system without the need for any visualization.
+
 ### Examples
+
+There are multiple ways to import your model into RFA-Toolbox for analysis, with additional ways being added in future
+releases.
 
 #### PyTorch
 
+The simplest way of importing model is by directly extracting the compute-graph of your model from the PyTorch model
+itself.
+Here is a simple example:
+
+```python
+import torchvision
+from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture
+model = torchvision.models.alexnet()
+graph = create_graph_from_pytorch_model(model)
+visualize_architecture(
+    graph, f"alexnet_32_pixel", input_res=32
+).render(f"alexnet_32_pixel")
+```
+
+This will create a graph of your model and visualize it using GraphViz and color all layers that are predicted to be
+unproductive for an input resolution of 32x32 pixels:
+![rf_stides.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/alexnet.PNG?raw=true)
+
+Keep in mind that the Graph is reverse-engineerd from the PyTorch JIT-compiler, therefore no looping-logic is
+allowed within the forward pass of the model.
+
 #### Custom
+
+If you are not able to automatically import your model from PyTorch or you just want some visualization, you can
+also directly implement the model with the propriatary-Graph-format of RFA-Toolbox.
+This is similar to coding a compute-graph in a declarative style like in TensorFlow 1.x.
+
+```python
+from rfa_toolbox import visualize_architecture
+from rfa_toolbox.graphs import EnrichedNetworkNode, LayerDefinition
+
+
+conv1 = EnrichedNetworkNode(
+    name="Conv1",
+    layer_info=LayerDefinition(
+        name="Conv3x3",
+        kernel_size=3, stride_size=1,
+        filters=64
+    ),
+    predecessors=[]
+)
+conv2 = EnrichedNetworkNode(
+    name="Conv2",
+    layer_info=LayerDefinition(
+        name="Conv3x3",
+        kernel_size=3, stride_size=1,
+        filters=128
+    ),
+    predecessors=[conv1]
+)
+
+conv3 = EnrichedNetworkNode(
+    name="Conv3",
+    layer_info=LayerDefinition(
+        name="Conv3x3",
+        kernel_size=3, stride_size=1,
+        filters=256
+    ),
+    predecessors=[conv1]
+)
+
+conv4 = EnrichedNetworkNode(
+    name="Conv4",
+    layer_info=LayerDefinition(
+        name="Conv3x3",
+        kernel_size=3, stride_size=1,
+        filters=256
+    ),
+    predecessors=[conv2, conv3]
+)
+
+out = EnrichedNetworkNode(
+    name="Softmax",
+    layer_info=LayerDefinition(
+        name="Fully Connected",
+        units=1000
+    ),
+    predecessors=[conv4]
+)
+visualize_architecture(
+    out, f"example_model", input_res=32
+).render(f"example_model")
+
+```
+
+This will produce the following graph:
+![simple_conv.PNG](./images/simple_conv.PNG)
+Note that the output layer is marked as a critical layer that is maybe unproductive. This is because dense layers
+have technically an infinite receptive field size and therefore using more than a single dense layer in your output
+head is generally not a good idea.
 
 ### A quick primer on the Receptive Field
 

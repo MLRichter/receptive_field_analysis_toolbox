@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21d2183c-f311-425d-a7b9-10154f7dfb14" name="Changes" comment="added tests" />
+    <list default="true" id="21d2183c-f311-425d-a7b9-10154f7dfb14" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/rfa_toolbox/vis_script.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/architectures/resnet.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/architectures/resnet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/architectures/vgg.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/architectures/vgg.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/ingest_architecture.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/ingest_architecture.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rfa_toolbox/graphs.py" beforeDir="false" afterPath="$PROJECT_DIR$/rfa_toolbox/graphs.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -49,7 +57,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../delve" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/rfa_toolbox" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -60,13 +68,14 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\van30\Documents\rfa_toolbox\rfa_toolbox" />
       <recent name="C:\Users\matrichter\Documents\receptive_field_analysis_toolbox\rfa_toolbox" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\van30\Documents\rfa_toolbox\rfa_toolbox" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.ingest_architecture">
+  <component name="RunManager" selected="Python tests.pytest2">
     <configuration name="ingest_architecture" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="rfa_toolbox" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -133,8 +142,8 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="pytorch_viz_test2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="receptive_field_analysis_toolbox" />
+    <configuration name="vis_script" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="rfa_toolbox" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -146,7 +155,29 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rfa_toolbox/pytorch_viz_test2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rfa_toolbox/vis_script.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="vis_script_resnet" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="rfa_toolbox" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/rfa_toolbox" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rfa_toolbox/vis_script_resnet.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -169,28 +200,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rfa_toolbox/vizualize.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="witness_hook_test_script" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="receptive_field_analysis_toolbox" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/rfa_toolbox" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\matrichter\Documents\receptive_field_analysis_toolbox\rfa_toolbox\witness_hook_test_script.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -244,22 +253,22 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.ingest_architecture" />
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.pytorch_viz_test2" />
+      <item itemvalue="Python.ingest_architecture" />
       <item itemvalue="Python.pytorch_viz_test" />
       <item itemvalue="Python.vizualize" />
-      <item itemvalue="Python.witness_hook_test_script" />
+      <item itemvalue="Python.vis_script" />
+      <item itemvalue="Python.vis_script_resnet" />
       <item itemvalue="Python tests.pytest2" />
       <item itemvalue="Python tests.pytest" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.ingest_architecture" />
+        <item itemvalue="Python.vis_script_resnet" />
+        <item itemvalue="Python.vis_script" />
         <item itemvalue="Python.vizualize" />
         <item itemvalue="Python.pytorch_viz_test" />
-        <item itemvalue="Python.pytorch_viz_test2" />
-        <item itemvalue="Python.witness_hook_test_script" />
       </list>
     </recent_temporary>
   </component>
@@ -291,7 +300,8 @@
       <workItem from="1641287205120" duration="6243000" />
       <workItem from="1641471318119" duration="6514000" />
       <workItem from="1641500789501" duration="1439000" />
-      <workItem from="1641504438661" duration="3172000" />
+      <workItem from="1641504438661" duration="3497000" />
+      <workItem from="1641541341896" duration="15921000" />
     </task>
     <task id="LOCAL-00001" summary="Initial structure for the network graph, also some initial work on the domain-protocols">
       <created>1639149152838</created>
@@ -352,7 +362,8 @@
     <MESSAGE value="removed comitlint" />
     <MESSAGE value="Changes" />
     <MESSAGE value="added tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="added tests" />
+    <MESSAGE value="16-pixel optimized ResNet variants" />
+    <option name="LAST_COMMIT_MESSAGE" value="16-pixel optimized ResNet variants" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -387,6 +398,11 @@
           <line>285</line>
           <option name="timeStamp" value="33" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/rfa_toolbox/encodings/pytorch/ingest_architecture.py</url>
+          <line>290</line>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -399,11 +415,13 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/rfa_toolbox$main.coverage" NAME="main Coverage Results" MODIFIED="1639129405341" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
+    <SUITE FILE_PATH="coverage/rfa_toolbox$vis_script_resnet.coverage" NAME="vis_script_resnet Coverage Results" MODIFIED="1641749073323" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$vizualize.coverage" NAME="vizualize Coverage Results" MODIFIED="1640559706688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
-    <SUITE FILE_PATH="coverage/rfa_toolbox$ingest_architecture.coverage" NAME="ingest_architecture Coverage Results" MODIFIED="1641504626634" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch" />
-    <SUITE FILE_PATH="coverage/rfa_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1641503929537" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/rfa_toolbox$ingest_architecture.coverage" NAME="ingest_architecture Coverage Results" MODIFIED="1641762062854" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox/encodings/pytorch" />
+    <SUITE FILE_PATH="coverage/rfa_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1641762792595" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest2.coverage" NAME="pytest2 Coverage Results" MODIFIED="1641415934758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_graph_components_TestReceptiveFieldsOfImportantArchitectures_test_compute_border_for_resnet18.coverage" NAME="pytest for test_graph_components.TestReceptiveFieldsOfImportantArchitectures.test_compute_border_for_resnet18 Coverage Results" MODIFIED="1640096177299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
+    <SUITE FILE_PATH="coverage/rfa_toolbox$vis_script.coverage" NAME="vis_script Coverage Results" MODIFIED="1641726177767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytorch_viz_test2.coverage" NAME="pytorch_viz_test2 Coverage Results" MODIFIED="1640452451147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$pytest_for_test_dynamic_graph_TestEnrichedNetworkNode_test_resnet36.coverage" NAME="pytest for test_dynamic_graph.TestEnrichedNetworkNode.test_resnet36 Coverage Results" MODIFIED="1640166036616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/test_graph" />
     <SUITE FILE_PATH="coverage/receptive_field_analysis_toolbox$witness_hook_test_script.coverage" NAME="witness_hook_test_script Coverage Results" MODIFIED="1640451933610" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rfa_toolbox" />

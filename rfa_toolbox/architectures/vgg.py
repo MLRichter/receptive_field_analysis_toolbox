@@ -1,13 +1,15 @@
+from typing import Optional
+
 from rfa_toolbox.graphs import EnrichedNetworkNode, LayerDefinition
 
 
 def conv_batch_norm_relu(
-    predecessor: EnrichedNetworkNode, idx: int
+    predecessor: EnrichedNetworkNode, idx: int, filters: Optional[int] = None
 ) -> EnrichedNetworkNode:
     return EnrichedNetworkNode(
         name=f"{idx}-Conv3x3-BatchNorm-ReLU",
         layer_info=LayerDefinition(
-            name="Conv3x3-BatchNorm-ReLU", kernel_size=3, stride_size=1
+            name="Conv3x3-BatchNorm-ReLU", kernel_size=3, stride_size=1, filters=filters
         ),
         predecessors=[predecessor],
     )

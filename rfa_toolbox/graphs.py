@@ -93,8 +93,12 @@ class LayerDefinition(Layer):
     """
 
     name: str
-    kernel_size: Optional[int] = attrib(converter=lambda x: np.inf if x is None else x)
-    stride_size: Optional[int] = attrib(converter=lambda x: 1 if x is None else x)
+    kernel_size: Optional[int] = attrib(
+        converter=lambda x: np.inf if x is None else x, default=None
+    )
+    stride_size: Optional[int] = attrib(
+        converter=lambda x: 1 if x is None else x, default=None
+    )
     filters: Optional[int] = None
     units: Optional[int] = None
 

@@ -59,6 +59,24 @@ def stem() -> EnrichedNetworkNode:
     return pool
 
 
+def small_stem() -> EnrichedNetworkNode:
+    conv = EnrichedNetworkNode(
+        name="StemConv",
+        layer_info=LayerDefinition(name="Conv3x3", kernel_size=3, stride_size=1),
+        predecessors=[],
+    )
+    return conv
+
+
+def mediun_stem() -> EnrichedNetworkNode:
+    conv = EnrichedNetworkNode(
+        name="StemConv",
+        layer_info=LayerDefinition(name="Conv3x3", kernel_size=3, stride_size=2),
+        predecessors=[],
+    )
+    return conv
+
+
 def residual_block(
     input_node: EnrichedNetworkNode, idx: int, i: int, strides: int = 1
 ) -> EnrichedNetworkNode:
@@ -133,8 +151,9 @@ def stage(
 def resnet(
     stage_config: List[int],
     block: Callable[[EnrichedNetworkNode, int, int], EnrichedNetworkNode],
+    stem_factory=stem,
 ) -> EnrichedNetworkNode:
-    stem_out = stem()
+    stem_out = stem_factory()
     c_block = stem_out
     for i, c_stage in enumerate(stage_config):
         c_block = stage(
