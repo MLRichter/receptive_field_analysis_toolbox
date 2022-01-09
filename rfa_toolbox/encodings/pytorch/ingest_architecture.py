@@ -11,7 +11,8 @@ except ImportError:
     pass
 from rfa_toolbox.encodings.pytorch.intermediate_graph import Digraph
 
-
+# This code was adapted from this blog article:
+# https://lernapparat.de/visualize-pytorch-models/
 def make_graph(
     mod,
     classes_to_visit=None,
