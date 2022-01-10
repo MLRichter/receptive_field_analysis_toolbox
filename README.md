@@ -41,7 +41,7 @@ Install this via pip:
 
 ## What is Receptive Field Analysis?
 
-Receptive Field Analysis (RFA) is simple yet effective way to optimize the efficiency of any neural architecture without
+Receptive Field Analysis (RFA) is a simple yet effective way to optimize the efficiency of any neural architecture without
 training it.
 
 ## Usage
@@ -149,21 +149,17 @@ This will produce the following graph:
 
 ![simple_conv.png](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/simple_conv.png?raw=true)
 
-Note that the output layer is marked as a critical layer that is maybe unproductive. This is because dense layers
-have technically an infinite receptive field size and therefore using more than a single dense layer in your output
-head is generally not a good idea.
-
 ### A quick primer on the Receptive Field
 
-To understand how it works, we first need to understand what a receptive field is, and it's effect on what the network is learning to detect.
+To understand how RFA works, we first need to understand what a receptive field is, and it's effect on what the network is learning to detect.
 Every layer in a (convolutional) neural network has a receptive field. It can be considered the "field of view" of this layer.
 In more precise terms, we define a receptive field as the area influencing the output of a single position of the
 convolutional kernel.
 Here is a simple, 1-dimensional example:
 ![rf.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/rf.PNG?raw=true)
-As you can see, the first layer of this simple architecture can only ever "see" the information the input pixels directly
+The first layer of this simple architecture can only ever "see" the information the input pixels directly
 under it's kernel, in this scenario 3 pixels.
-Another observation we can make from this example is that the receptive field size is expanding from layer to layer
+Another observation we can make from this example is that the receptive field size is expanding from layer to layer.
 This is happening, because the consecutive layers also have kernel sizes greater than 1 pixel, which means that
 they combine multiple adjacent positions on the feature map into a single position in their output.
 In other words, every consecutive layer adds additional context to each feature map position by expanding the receptive field.
@@ -215,6 +211,7 @@ Depending on the requirements, we may choose to emphasize efficiency by primaril
 option is to focus on predictive performance by making the unproductive layers productive again.
 
 We now illustrate how you may choose to optimize an architecture on a simple example:
+
 Let's take the ResNet architecture, which is a very popular CNN-model.
 We want to train ResNet18 on ResizedImageNet16, which has a 16 pixel input resolution.
 When we apply Receptive Field Analysis, we can see that most convolutional layers will in fact not contribute
@@ -259,8 +256,8 @@ We can exploit this by simply removing the MaxPooling layer, which is the second
 architecture.
 We also reduce the kernel size of the first layer to 3x3 from 7x7, and it's stride size to 1.
 This drastically reduces the receptive field sizes of the entire architecture, making most layers productive again.
-We address the remaining unproductive layers to by removing the final downsampling layers and distributing the building
-blocks as evenly as possible among the three remaining stages between the remaining downsampling layers.
+We address the remaining unproductive layers to by removing the final downsampling layer and distributing the building
+blocks as evenly as possible among the three stages between the remaining downsampling layers.
 
 The resulting architecture now looks like this:
 
@@ -269,7 +266,7 @@ The resulting architecture now looks like this:
 The architecture now no longer has unproductive layers in their building blocks and only 2 critical layers.
 This improved architecture also achieves 34% Top1-Accuracy in ResizedImageNet16 instead of the 17% of the original architecture.
 However, this improvement comes at a price, since the removed downsampling layers have a negative impact on the computations
-required to process an image, which increase by roughly a factor of 8.
+required to process an image, which increases by roughly a factor of 8.
 
 In any way, RFAToolbox allows you to optimize your convolutional neural network architectures
 for efficiency, performance or a sweetspot between the two without the need for long-running trial-and-error sessions.
