@@ -208,20 +208,20 @@ we can now adjust the design of the architecture to fit our input resolution bet
 
 Let's take for example the ResNet architecture, which is a very popular CNN-model.
 We want to train ResNet18 on ResizedImageNet16, which has a 16 pixel input resolution.
-When we apply Receptive Field Analysis, we can see that most convolutional layer will in fact not contribute
+When we apply Receptive Field Analysis, we can see that most convolutional layers will in fact not contribute
 to the inference process (unproductive layers marked red, probable unproductive layers marked orange):
 
 ![resnet18.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/resnet18.png?raw=true)
 
-We can clearly see that most of the network will not contribute anything useful to the quality of the output, since
-their receptive field sizes war way to large.
+We can clearly see that most of the network's layers will not contribute anything useful to the quality of the output, since
+their receptive field sizes are too large.
 
 From here on we have multiple ways of optimizing the setup.
 Of course, we can simply increase the resolution, to involve more layers in the inference process, but that is usually
 very expensive from a computational point of view.
 In the first scenario, we are not interested in increasing the predictive performance of the model, we simply want to save
 computational resources. We reduce the kernel size of the
-first layer to $3 \times 3$ from $7 \times 7$.
+first layer to 3x3 from 7x7.
 This change allows the first three building blocks to contribute more to
 the quality of the prediction, since no layer is predicted to be unproductive.
 We then simply replace the remaining building blocks with a simple output head.
@@ -235,19 +235,20 @@ after each building block.
 Also note that fully connected layers are always marked as critical or unproductive, since they
 technically have an infinite receptive field size.
 
-The resulting architecture roughly achieves slightly better predictive performance as
+The resulting architecture achieves slightly better predictive performance as
 the original architecture, but with substantially lower computational cost.
-In this case we save approx. 80% of the computational cost and improve the predictive performance.
+In this case we save approx. 80% of the computational cost and improve the predictive performance slightly
 from 17% to 18%.
 
 In another scenario we may not be satisfied with the predictive performance.
-In other word, we want to turn all unproductive layers into productive layers.
+In other words, we want to make use of the underutilized parameters of the network
+by turning all unproductive layers into productive layers.
 We achieve this by changing their receptive field sizes.
 The biggest lever when it comes to changing the receptive field size is always the quantity of downsampling layers.
 Downsampling layers have a multiplicative effect on the growth of the receptive field for all consecutive layers.
 We can exploit this by simply removing the MaxPooling layer, which is the second layer of the original
 architecture.
-We also reduce the kernel size of the first layer to $3 \times 3$ from $7 \times 7$ and it's stride size to 1.
+We also reduce the kernel size of the first layer to 3x3 from 7x7, and it's stride size to 1.
 This drastically reduces the receptive field sizes of the entire architecture, making most layers productive again.
 We address the remaining unproductive layers to by removing the final downsampling layers and distributing the building
 blocks as evenly as possible among the three remaining stages between the remaining downsampling layers.
