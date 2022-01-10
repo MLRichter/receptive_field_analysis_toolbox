@@ -206,10 +206,9 @@ and when this is no longer possible, the layer is not able to contribute to the 
 Of course, being able to predict why and which layer will become dead weight during training is highly useful, since
 we can now adjust the design of the architecture to fit our input resolution better.
 
-Let's take for example the good old AlexNet architecture from 2012, which is a very simple CNN-model.
-Let's assume we want to train Cifar10 on AlexNet, which has a 32 pixel input resolution, which is lower than the 224
-pixel design resolution of the network.
-When we apply Receptive receptive field analysis, wen can see that most convolutional layer will in fact not contribute
+Let's take for example the ResNet architecture, which is a very popular CNN-model.
+We want to train ResNet18 on ResizedImageNet16, which has a 16 pixel input resolution.
+When we apply Receptive Field Analysis, we can see that most convolutional layer will in fact not contribute
 to the inference process (unproductive layers marked red, probable unproductive layers marked orange):
 ![resnet18.PNG](./images/resnet18.png)
 
@@ -219,16 +218,45 @@ their receptive field sizes war way to large.
 From here on we have multiple ways of optimizing the setup.
 Of course, we can simply increase the resolution, to involve more layers in the inference process, but that is usually
 very expensive from a computational point of view.
-If we are satisfied with the performance of the model, we may simply replace all unproductive layers with a simple output
-head and save a lot of computation time.
+In the first scenario, we are not interested in increasing the predictive performance of the model, we simply want to save
+computational resources. We reduce the kernel size of the
+first layer to $3 \times 3$ from $7 \times 7$.
+This change allows the first three building blocks to contribute more to
+the quality of the prediction, since no layer is predicted to be unproductive.
+We then simply replace the remaining building blocks with a simple output head.
+This new architecture then looks like this:
 ![resnet18.PNG](./images/resnet18eff.png)
-On the other hand we could fiddle around with he downsampling layers and kernel sizes of the convolutional layers down,
-such that only the final 1 or 2 layers have a receptive field that can grasp the entire image.
-This is likely to be the more computational expensive choice, but it utilize the parameters in the model better, likely
-resulting in better predictive performance.
+Note that all previously unproductive layers are now either removed or only marked as "critical", which
+is generally not a big problem, since the receptive field size is "reset" by the receptive field size
+after each building block.
+Also note that fully connected layers are always marked as critical or unproductive, since they
+technically have an infinite receptive field size.
+
+The resulting architecture roughly achieves slightly better predictive performance as
+the original architecture, but with substantially lower computational cost.
+In this case we save approx. 80% of the computational cost and improve the predictive performance.
+from 17% to 18%.
+
+In another scenario we may not be satisfied with the predictive performance.
+In other word, we want to turn all unproductive layers into productive layers.
+We achieve this by changing their receptive field sizes.
+The biggest lever when it comes to changing the receptive field size is always the quantity of downsampling layers.
+Downsampling layers have a multiplicative effect on the growth of the receptive field for all consecutive layers.
+We can exploit this by simply removing the MaxPooling layer, which is the second layer of the original
+architecture.
+We also reduce the kernel size of the first layer to $3 \times 3$ from $7 \times 7$ and it's stride size to 1.
+This drastically reduces the receptive field sizes of the entire architecture, making most layers productive again.
+We address the remaining unproductive layers to by removing the final downsampling layers and distributing the building
+blocks as evenly as possible among the three remaining stages between the remaining downsampling layers.
+
+The resulting architecture now looks like this:
+
 ![resnet18.PNG](./images/resnet18perf.png)
-If you want to see a deeper dive into these optimization strategies using receptive field analysis,
-I recommend you reading [Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training](https://arxiv.org/abs/2106.12307)
+
+The architecture now has no unproductive layers in their building blocks and only 2 critical layers.
+This improved architecture also achieves 34% Top1-Accuracy in ResizedImageNet16 instead of the 17% of the original architecture.
+However, this improvement comes at a price, since the removed downsampling layers have a negative impact on the computations
+required to process an image, which increase by roughly a factor of 8.
 
 ## Contributors ✨
 
