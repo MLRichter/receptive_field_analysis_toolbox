@@ -168,7 +168,7 @@ This ultimately allows networks to go from detecting small and simple patterns t
 The effective size of the kernel is not the only factor influence the growth of the receptive field size.
 Another important factor is the stride size:
 ![rf_stides.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/rf_strides.PNG?raw=true)
-The stride size is the size of the step between the individual kernel position. Commonly, every possible
+The stride size is the size of the step between the individual kernel positions. Commonly, every possible
 position is evaluated, which is not affecting the receptive field size in any way.
 When the stride size is greater than one however valid positions of the kernel are skipped, which reduces
 the size of the feature map. Since now information on the feature map is now condensed on fewer feature map positions,
@@ -182,17 +182,16 @@ At this point you may be wondering why the receptive field of all things is usef
 architecture.
 The short answer to this is: because it influences where the network can process patterns of a certain size.
 Simply speaking each convolutional layer is only able to detect patterns of a certain size because of its receptive field.
-Interestingly this also means that there is an upper limited to the usefulness of expanding the receptive field.
+Interestingly this also means that there is an upper limit to the usefulness of expanding the receptive field.
 At the latest, this is the case when the receptive field of a layer is BIGGER than the input image, since no novel
 context can be added at this point.
 For convolutional layers this is a problem, because layers past this "Border Layer" now lack the primary mechenism convolutional layers
 use to improve the intermediate representation of the data, making these layers unproductive.
-If you are interested in the details of this phenomenon I recommend that you read these papers that investigate this phenomenon
-in greater detail:
+If you are interested in the details of this phenomenon I recommend that you read these:
 
 - [(Input) Size Matters for Convolutional Neural Network Classifier](https://link.springer.com/chapter/10.1007/978-3-030-86340-1_11)
 - [Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training](https://arxiv.org/abs/2106.12307)
-  (published at the 20th IEEE Internation Conference for Machine Learning Application - ICMLA)
+  (published at the 20th IEEE International Conference for Machine Learning Application - ICMLA)
 
 ### Optimizing Architectures using Receptive Field Analysis
 
