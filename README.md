@@ -205,6 +205,8 @@ and when this is no longer possible, the layer is not able to contribute to the 
 
 Of course, being able to predict why and which layer will become dead weight during training is highly useful, since
 we can now adjust the design of the architecture to fit our input resolution better.
+Depending on the requirements, we may choose to emphasize efficiency by primarily removing unproductive layers
+or predictive performance by making the unproductive layers productive again.
 
 Let's take for example the ResNet architecture, which is a very popular CNN-model.
 We want to train ResNet18 on ResizedImageNet16, which has a 16 pixel input resolution.
