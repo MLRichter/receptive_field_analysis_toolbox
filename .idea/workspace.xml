@@ -249,8 +249,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.main" />
       <item itemvalue="Python.ingest_architecture" />
+      <item itemvalue="Python.main" />
       <item itemvalue="Python.pytorch_viz_test" />
       <item itemvalue="Python.vis_script" />
       <item itemvalue="Python.vis_script_resnet" />

@@ -210,6 +210,7 @@ Let's take for example the ResNet architecture, which is a very popular CNN-mode
 We want to train ResNet18 on ResizedImageNet16, which has a 16 pixel input resolution.
 When we apply Receptive Field Analysis, we can see that most convolutional layer will in fact not contribute
 to the inference process (unproductive layers marked red, probable unproductive layers marked orange):
+
 ![resnet18.PNG](./images/resnet18.png)
 
 We can clearly see that most of the network will not contribute anything useful to the quality of the output, since
@@ -225,7 +226,9 @@ This change allows the first three building blocks to contribute more to
 the quality of the prediction, since no layer is predicted to be unproductive.
 We then simply replace the remaining building blocks with a simple output head.
 This new architecture then looks like this:
+
 ![resnet18.PNG](./images/resnet18eff.png)
+
 Note that all previously unproductive layers are now either removed or only marked as "critical", which
 is generally not a big problem, since the receptive field size is "reset" by the receptive field size
 after each building block.
