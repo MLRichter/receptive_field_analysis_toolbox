@@ -31,11 +31,11 @@
 </p>
 
 This is RFA-Toolbox, a simple and easy-to-use library that allows you to optimize your neural network architectures
-using receptive field analysis (RFA) and graph visualizations of your architecture.
+using receptive field analysis (RFA) and create graph visualizations of your architecture.
 
 ## Installation
 
-Install this via pip (or your favourite package manager):
+Install this via pip:
 
 `pip install rfa_toolbox`
 
@@ -50,12 +50,9 @@ This library allows you to look for certain inefficiencies withing your convolut
 ever training the model.
 You can do this simply by importing your architecture into the format of RFA-Toolbox and then use the in-build functions
 to visualize your architecture using GraphViz.
-Unproductive (i.e. useless) layers marked in red and layers that run into a risk
-of being unproductive marked in orange.
 This is especially useful if you plan to train your model on resolutions that are substantially lower than the
 design-resolution of most models.
-As an alternative, you can also use the graph from RFA-Toolbox directly to automatically detect and remove
-unproductive layers within your NAS-system without the need for any visualization.
+As an alternative, you can also use the graph from RFA-Toolbox to hook RFA-toolbox more directly into your program.
 
 ### Examples
 
@@ -64,8 +61,7 @@ releases.
 
 #### PyTorch
 
-The simplest way of importing model is by directly extracting the compute-graph of your model from the PyTorch model
-itself.
+The simplest way of importing a model is by directly extracting the compute-graph from the PyTorch-implementation of your model.
 Here is a simple example:
 
 ```python
@@ -159,20 +155,17 @@ head is generally not a good idea.
 
 ### A quick primer on the Receptive Field
 
-To understand how it works, we first need to understand what a receptive field is, and it affects what the network is doing.
+To understand how it works, we first need to understand what a receptive field is, and it's effect on what the network is learning to detect.
 Every layer in a (convolutional) neural network has a receptive field. It can be considered the "field of view" of this layer.
 In more precise terms, we define a receptive field as the area influencing the output of a single position of the
 convolutional kernel.
 Here is a simple, 1-dimensional example:
 ![rf.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/rf.PNG?raw=true)
-As you can see, the first layer of this simple architecture can only evaluate the information the input pixels directly
-under his kernel, which has a size of three pixels. Of course, in most convolutional neural architectures, this kernel
-would be a square area, since most CNN-models process images.
-Another observation we can make from this example is that the receptive field size is actually expanding from layer
-to layer.
+As you can see, the first layer of this simple architecture can only ever "see" the information the input pixels directly
+under it's kernel, in this scenario 3 pixels.
+Another observation we can make from this example is that the receptive field size is expanding from layer to layer
 This is happening, because the consecutive layers also have kernel sizes greater than 1 pixel, which means that
-they combine multiple adjacent positions on the feature map into a single position in their output, expanding the receptive
-field of the previous layer in the process.
+they combine multiple adjacent positions on the feature map into a single position in their output.
 In other words, every consecutive layer adds additional context to each feature map position by expanding the receptive field.
 This ultimately allows networks to go from detecting small and simple patterns to big and very complicated ones.
 
@@ -192,12 +185,12 @@ are used.
 At this point you may be wondering why the receptive field of all things is useful for optimizing an
 architecture.
 The short answer to this is: because it influences where the network can process patterns of a certain size.
-Simply speaking each convolutional layer is only able to detect a certain size of pattern because of its receptive field size.
+Simply speaking each convolutional layer is only able to detect pattern of a certain size because of its receptive field.
 Interestingly this also means that there is an upper limited to the usefulness of expanding the receptive field.
 At the latest, this is the case when the receptive field of a layer is BIGGER than the input image, since no novel
-context be added at this point.
-For convolutional layers this is in fact a big issue, because layers pas this "Border Layer" are unproductive and
-do not contribute anymore to the inference process.
+context can be added at this point.
+For convolutional layers this is a problem, because layers past this "Border Layer" now lack the primary mechenism convolutional layer 
+typically use to improve the intermediate representation of the data, making these layers unproductive.
 If you are interested in the details of this phenomenon I recommend that you read these papers that investigate this phenomenon
 in greater detail:
 
