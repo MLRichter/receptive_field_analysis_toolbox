@@ -211,7 +211,7 @@ We want to train ResNet18 on ResizedImageNet16, which has a 16 pixel input resol
 When we apply Receptive Field Analysis, we can see that most convolutional layer will in fact not contribute
 to the inference process (unproductive layers marked red, probable unproductive layers marked orange):
 
-![resnet18.PNG](./images/resnet18.png)
+![resnet18.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/resnet18.png?raw=true)
 
 We can clearly see that most of the network will not contribute anything useful to the quality of the output, since
 their receptive field sizes war way to large.
@@ -227,7 +227,7 @@ the quality of the prediction, since no layer is predicted to be unproductive.
 We then simply replace the remaining building blocks with a simple output head.
 This new architecture then looks like this:
 
-![resnet18.PNG](./images/resnet18eff.png)
+![resnet18eff.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/resnet18eff.png?raw=true)
 
 Note that all previously unproductive layers are now either removed or only marked as "critical", which
 is generally not a big problem, since the receptive field size is "reset" by the receptive field size
@@ -254,26 +254,15 @@ blocks as evenly as possible among the three remaining stages between the remain
 
 The resulting architecture now looks like this:
 
-![resnet18.PNG](./images/resnet18perf.png)
+![resnet18perf.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/resnet18perf.png?raw=true)
 
-The architecture now has no unproductive layers in their building blocks and only 2 critical layers.
+The architecture now no longer has unproductive layers in their building blocks and only 2 critical layers.
 This improved architecture also achieves 34% Top1-Accuracy in ResizedImageNet16 instead of the 17% of the original architecture.
 However, this improvement comes at a price, since the removed downsampling layers have a negative impact on the computations
 required to process an image, which increase by roughly a factor of 8.
 
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+In any way, RFAToolbox allows you to optimize your convolutional neural network architectures
+for efficiency, performance or a sweetspot between the two without the need for long-running trial-and-error sessions.
 
 ## Credits
 
