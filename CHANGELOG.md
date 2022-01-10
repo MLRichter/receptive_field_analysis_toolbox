@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.1 (2022-01-10)
+### Fix
+* Initial_release ([`3dec91f`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/3dec91f04683a0389442adc2bf5bbe8cc709783b))
+* Initial_release ([`537fe60`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/537fe6067940b5fb4121c5286076243e4ac482cf))
+
 ## v0.1.1 (2022-01-10)
 ### Fix
 * Initial_release ([`537fe60`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/537fe6067940b5fb4121c5286076243e4ac482cf))
