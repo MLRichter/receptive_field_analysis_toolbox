@@ -204,8 +204,8 @@ So far, we learned that the expansion of the receptive field is the primary mech
 the intermediate solution utilized by convolutional layers.
 At the point where this is no longer possible, layers are not able to contribute to the quality of the output of the model
 and become unproductive.
-We refer to these layers as unproductive layers and layers who advance the receptive field sizes beyond the input resolution
-as critical layers.
+We refer to these layers as unproductive layers. Layers who advance the receptive field sizes beyond the input resolution
+are referred to as critical layers.
 Critical layers are not necessarily unproductive, since they are still able to incorporate some novel context into the data,
 depending on how large the receptive field size of the input is.
 
