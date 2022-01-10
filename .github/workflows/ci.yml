@@ -1,7 +1,6 @@
 name: CI
 
 on:
-  release:
   push:
     branches:
       - main

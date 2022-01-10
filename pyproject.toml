@@ -61,6 +61,7 @@ version_variable = "rfa_toolbox/__init__.py:__version__"
 build_command = "pip install poetry && poetry build"
 upload_to_PyPI = true
 upload_to_release = true
+retry = true
 
 [tool.pytest.ini_options]
 addopts = "-v -Wdefault --cov=rfa_toolbox"
