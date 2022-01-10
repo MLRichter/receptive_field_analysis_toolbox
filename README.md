@@ -189,7 +189,7 @@ Simply speaking each convolutional layer is only able to detect pattern of a cer
 Interestingly this also means that there is an upper limited to the usefulness of expanding the receptive field.
 At the latest, this is the case when the receptive field of a layer is BIGGER than the input image, since no novel
 context can be added at this point.
-For convolutional layers this is a problem, because layers past this "Border Layer" now lack the primary mechenism convolutional layer 
+For convolutional layers this is a problem, because layers past this "Border Layer" now lack the primary mechenism convolutional layer
 typically use to improve the intermediate representation of the data, making these layers unproductive.
 If you are interested in the details of this phenomenon I recommend that you read these papers that investigate this phenomenon
 in greater detail:
@@ -221,11 +221,12 @@ Of course, we can simply increase the resolution, to involve more layers in the 
 very expensive from a computational point of view.
 If we are satisfied with the performance of the model, we may simply replace all unproductive layers with a simple output
 head and save a lot of computation time.
+![resnet18.PNG](./images/resnet18eff.png)
 On the other hand we could fiddle around with he downsampling layers and kernel sizes of the convolutional layers down,
 such that only the final 1 or 2 layers have a receptive field that can grasp the entire image.
 This is likely to be the more computational expensive choice, but it utilize the parameters in the model better, likely
 resulting in better predictive performance.
-
+![resnet18.PNG](./images/resnet18perf.png)
 If you want to see a deeper dive into these optimization strategies using receptive field analysis,
 I recommend you reading [Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training](https://arxiv.org/abs/2106.12307)
 
