@@ -185,12 +185,12 @@ are used.
 At this point you may be wondering why the receptive field of all things is useful for optimizing an
 architecture.
 The short answer to this is: because it influences where the network can process patterns of a certain size.
-Simply speaking each convolutional layer is only able to detect pattern of a certain size because of its receptive field.
+Simply speaking each convolutional layer is only able to detect patterns of a certain size because of its receptive field.
 Interestingly this also means that there is an upper limited to the usefulness of expanding the receptive field.
 At the latest, this is the case when the receptive field of a layer is BIGGER than the input image, since no novel
 context can be added at this point.
-For convolutional layers this is a problem, because layers past this "Border Layer" now lack the primary mechenism convolutional layer
-typically use to improve the intermediate representation of the data, making these layers unproductive.
+For convolutional layers this is a problem, because layers past this "Border Layer" now lack the primary mechenism convolutional layers
+use to improve the intermediate representation of the data, making these layers unproductive.
 If you are interested in the details of this phenomenon I recommend that you read these papers that investigate this phenomenon
 in greater detail:
 
@@ -198,13 +198,13 @@ in greater detail:
 - [Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training](https://arxiv.org/abs/2106.12307)
   (published at the 20th IEEE Internation Conference for Machine Learning Application - ICMLA)
 
-### Optimizing Architecture using Receptive Field Analysis
+### Optimizing Architectures using Receptive Field Analysis
 
 So far, we learned that the expansion of the receptive field is the primary mechanism for improving
 the intermediate solution utilized by convolutional layers.
 At the point where this is no longer possible, layers are not able to contribute to the quality of the output of the model
 and become unproductive.
-We refer to these layers as unpromising layers and layers who advance the receptive field sizes beyond the input resolution
+We refer to these layers as unproductive layers and layers who advance the receptive field sizes beyond the input resolution
 as critical layers.
 Critical layers are not necessarily unproductive, since they are still able to incorporate some novel context into the data,
 depending on how large the receptive field size of the input is.
@@ -212,9 +212,10 @@ depending on how large the receptive field size of the input is.
 Of course, being able to predict why and which layer will become dead weight during training is highly useful, since
 we can now adjust the design of the architecture to fit our input resolution better without spending time on training models.
 Depending on the requirements, we may choose to emphasize efficiency by primarily removing unproductive layers. Another
-option is to focus predictive performance by making the unproductive layers productive again.
+option is to focus on predictive performance by making the unproductive layers productive again.
 
-Let's take for example the ResNet architecture, which is a very popular CNN-model.
+We now illustrate how you may choose to optimize an architecture on a simple example:
+Let's take the ResNet architecture, which is a very popular CNN-model.
 We want to train ResNet18 on ResizedImageNet16, which has a 16 pixel input resolution.
 When we apply Receptive Field Analysis, we can see that most convolutional layers will in fact not contribute
 to the inference process (unproductive layers marked red, probable unproductive layers marked orange):
