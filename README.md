@@ -218,7 +218,7 @@ Let's assume we want to train Cifar10 on AlexNet, which has a 32 pixel input res
 pixel design resolution of the network.
 When we apply Receptive receptive field analysis, wen can see that most convolutional layer will in fact not contribute
 to the inference process (unproductive layers marked red, probable unproductive layers marked orange):
-![rf_stides.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/alexnet.PNG?raw=true)
+![resnet18.PNG](./images/resnet18.png)
 
 We can clearly see that most of the network will not contribute anything useful to the quality of the output, since
 their receptive field sizes war way to large.
