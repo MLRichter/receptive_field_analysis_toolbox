@@ -1,4 +1,4 @@
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 # flake8: noqa: F401
 from rfa_toolbox.encodings.pytorch.ingest_architecture import (
     create_graph_from_model as create_graph_from_pytorch_model,
