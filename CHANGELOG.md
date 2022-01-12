@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.1.0 (2022-01-12)
+### Feature
+* Receptive Field sizes now are also allowed to be tuples ([`809b9bd`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/809b9bda9455726f41ca6351e68474a3e900cee8))
+
 ## v1.0.4 (2022-01-12)
 ### Fix
 * Little README.md clarification ([`bb68404`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/bb68404d3998629157fdf1dc7b02c449603f09dd))
