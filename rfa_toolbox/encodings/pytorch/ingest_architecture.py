@@ -292,8 +292,6 @@ def create_graph_from_model(
 
 
 if __name__ == "__main__":
-    model = torchvision.models.alexnet()
+    model = torchvision.models.inception_v3()
     graph = create_graph_from_model(model)
-    visualize_architecture(graph, "alexnet_32_pixel", input_res=32).render(
-        "alexnet_32_pixel"
-    )
+    visualize_architecture(graph, "inceptionv3", input_res=32).view()

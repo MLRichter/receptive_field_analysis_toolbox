@@ -51,7 +51,9 @@ ever training the model.
 You can do this simply by importing your architecture into the format of RFA-Toolbox and then use the in-build functions
 to visualize your architecture using GraphViz.
 The visualization will automatically mark layers predicted to be unproductive red and critical layers, that are potentially unproductive orange.
-This is especially useful if you plan to train your model on resolutions that are substantially lower than the
+In edge case scenarios, where the receptive field expands of the boundaries of the image on some but not all tensor-axis, the layer will be marked yellow,
+since such a layer is probably not operating and maximum efficiency.
+Being able to detect these types of inefficiencies is especially useful if you plan to train your model on resolutions that are substantially lower than the
 design-resolution of most models.
 As an alternative, you can also use the graph from RFA-Toolbox to hook RFA-toolbox more directly into your program.
 
@@ -142,7 +144,7 @@ out = EnrichedNetworkNode(
 )
 visualize_architecture(
     out, f"example_model", input_res=32
-).render(f"example_model")
+).view()
 
 ```
 

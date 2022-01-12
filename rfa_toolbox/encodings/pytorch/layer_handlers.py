@@ -1,3 +1,6 @@
+from collections import Sequence
+
+import numpy as np
 import torch
 from attr import attrs
 
@@ -50,17 +53,24 @@ class Conv2d(LayerInfoHandler):
         conv_layer = obtain_module_with_resolvable_string(resolvable_string, model)
         kernel_size = (
             conv_layer.kernel_size
-            if isinstance(conv_layer.kernel_size, int)
-            else conv_layer.kernel_size[0]
+            # if isinstance(conv_layer.kernel_size, int)
+            # else conv_layer.kernel_size[0]
         )
         stride_size = (
             conv_layer.stride
-            if isinstance(conv_layer.stride, int)
-            else conv_layer.stride[0]
+            # if isinstance(conv_layer.stride, int)
+            # else conv_layer.stride[0]
         )
         filters = conv_layer.out_channels
+        if not isinstance(kernel_size, Sequence) and not isinstance(
+            kernel_size, np.ndarray
+        ):
+            kernel_size_name = f"{kernel_size}x{kernel_size}"
+        else:
+            kernel_size_name = "x".join([str(k) for k in kernel_size])
+        final_name = f"{name} {kernel_size_name} / {stride_size}"
         return LayerDefinition(
-            name=f"{name} {kernel_size}x{kernel_size}",
+            name=final_name,  # f"{name} {kernel_size}x{kernel_size}",
             kernel_size=kernel_size,
             stride_size=stride_size,
             filters=filters,
@@ -90,18 +100,18 @@ class AnyPool(Conv2d):
         self, model: torch.nn.Module, resolvable_string: str, name: str
     ) -> LayerDefinition:
         conv_layer = obtain_module_with_resolvable_string(resolvable_string, model)
-        kernel_size = (
-            conv_layer.kernel_size
-            if isinstance(conv_layer.kernel_size, int)
-            else conv_layer.kernel_size[0]
-        )
-        stride_size = (
-            conv_layer.stride
-            if isinstance(conv_layer.stride, int)
-            else conv_layer.stride[0]
-        )
+        kernel_size = conv_layer.kernel_size
+
+        stride_size = conv_layer.stride
+        if not isinstance(kernel_size, Sequence) and not isinstance(
+            kernel_size, np.ndarray
+        ):
+            kernel_size_name = f"{kernel_size}x{kernel_size}"
+        else:
+            kernel_size_name = "x".join([str(k) for k in kernel_size])
+        final_name = f"{name} {kernel_size_name} / {stride_size}"
         return LayerDefinition(
-            name=f"{name} {kernel_size}x{kernel_size}",
+            name=final_name,  # f"{name} {kernel_size}x{kernel_size}",
             kernel_size=kernel_size,
             stride_size=stride_size,
         )

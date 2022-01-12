@@ -1,4 +1,5 @@
 import graphviz
+import numpy as np
 
 from rfa_toolbox.graphs import EnrichedNetworkNode
 
@@ -42,8 +43,16 @@ def visualize_node(
     color = "white"
     if node.is_border(input_resolution=input_res):
         color = "red"
-    elif node.receptive_field_min > input_res and color_critical:
+    elif (
+        np.all(np.asarray(node.receptive_field_min) > np.asarray(input_res))
+        and color_critical
+    ):
         color = "orange"
+    elif (
+        np.any(np.asarray(node.receptive_field_min) > np.asarray(input_res))
+        and color_critical
+    ):
+        color = "yellow"
     l_name = node.layer_info.name
     rf_info = "\\n" + f"r={node.receptive_field_min}"
     filters = f"\\n{node.layer_info.filters} filters"
