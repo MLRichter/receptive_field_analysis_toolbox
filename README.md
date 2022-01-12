@@ -72,7 +72,7 @@ model = torchvision.models.alexnet()
 graph = create_graph_from_pytorch_model(model)
 visualize_architecture(
     graph, f"alexnet_32_pixel", input_res=32
-).render(f"alexnet_32_pixel")
+).view()
 ```
 
 This will create a graph of your model and visualize it using GraphViz and color all layers that are predicted to be
