@@ -51,6 +51,31 @@ class TestLayerDefinition:
             with pytest.raises(ValueError):
                 LayerDefinition("test", kernel, strides)
 
+    def test_set_tuple_kernel_size(self):
+        layer = LayerDefinition("test", (3, 4), 1)
+        assert layer.kernel_size == (3, 4)
+
+    def test_set_tuple_stride_size(self):
+        layer = LayerDefinition("test", 3, (4, 5))
+        assert layer.stride_size == (4, 5)
+
+    def test_set_tuple_kernel_and_stride_size(self):
+        layer = LayerDefinition("test", (3, 4), (4, 5))
+        assert layer.stride_size == (4, 5)
+        assert layer.kernel_size == (3, 4)
+
+    def test_tuples_must_be_the_same_size(self):
+        for i in range(500):
+            strides = np.random.randint(0, 100)
+            kernel = np.random.randint(-0, 100)
+            kernel_shape = np.random.randint(75, 100)
+            stride_shape = np.random.randint(1, 50)
+
+            kernel_tuple = [kernel for _ in range(kernel_shape)]
+            stride_tuple = [strides for _ in range(stride_shape)]
+            with pytest.raises(ValueError):
+                LayerDefinition("test", kernel_tuple, stride_tuple)
+
 
 class TestEnrichedNetworkNode:
     def test_simple_sequential(self):
@@ -399,3 +424,148 @@ class TestReceptiveFieldsOfImportantArchitectures:
         rf = {node.name: node.receptive_field_max for node in rf_nodes}
         print(rf_nodes[0])
         assert rf["Stage3-Block1-Addition"] == 435
+
+
+class TestReceptiveFieldSizesForArchitecturesWithTupleKernel:
+    def test_creating_graph_with_tuple_kernels(self):
+        conv1 = EnrichedNetworkNode(
+            name="Conv1",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(3, 3), stride_size=1, filters=64
+            ),
+            predecessors=[],
+        )
+        conv2 = EnrichedNetworkNode(
+            name="Conv2",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(3, 3), stride_size=1, filters=128
+            ),
+            predecessors=[conv1],
+        )
+
+        conv3 = EnrichedNetworkNode(
+            name="Conv3",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(5, 5), stride_size=1, filters=256
+            ),
+            predecessors=[conv1],
+        )
+
+        conv4 = EnrichedNetworkNode(
+            name="Conv4",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(3, 3), stride_size=1, filters=256
+            ),
+            predecessors=[conv2, conv3],
+        )
+
+        out = EnrichedNetworkNode(
+            name="Softmax",
+            layer_info=LayerDefinition(name="Fully Connected", units=1000),
+            predecessors=[conv4],
+        )
+        print(conv1)
+        print(conv2)
+        print(conv3)
+        print(conv4)
+        assert conv1.receptive_field_min == (3, 3)
+        assert conv1.receptive_field_max == (3, 3)
+        assert conv2.receptive_field_min == (5, 5)
+        assert conv2.receptive_field_max == (5, 5)
+        assert conv3.receptive_field_min == (7, 7)
+        assert conv3.receptive_field_max == (7, 7)
+        assert conv4.receptive_field_min == (7, 7)
+        assert conv4.receptive_field_max == (9, 9)
+        assert out.receptive_field_min == np.inf
+        assert out.receptive_field_max == np.inf
+
+    def test_creating_graph_with_tuple_kernels_and_strides(self):
+        conv1 = EnrichedNetworkNode(
+            name="Conv1",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(3, 3), stride_size=(1, 2), filters=64
+            ),
+            predecessors=[],
+        )
+        conv2 = EnrichedNetworkNode(
+            name="Conv2",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(3, 3), stride_size=(1, 1), filters=128
+            ),
+            predecessors=[conv1],
+        )
+
+        conv3 = EnrichedNetworkNode(
+            name="Conv3",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(5, 5), stride_size=(1, 1), filters=256
+            ),
+            predecessors=[conv1],
+        )
+
+        conv4 = EnrichedNetworkNode(
+            name="Conv4",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(3, 3), stride_size=(1, 1), filters=256
+            ),
+            predecessors=[conv2, conv3],
+        )
+
+        out = EnrichedNetworkNode(
+            name="Softmax",
+            layer_info=LayerDefinition(name="Fully Connected", units=1000),
+            predecessors=[conv4],
+        )
+        assert conv1.receptive_field_min == (3, 3)
+        assert conv1.receptive_field_max == (3, 3)
+        assert conv2.receptive_field_min == (5, 7)
+        assert conv2.receptive_field_max == (5, 7)
+        assert conv3.receptive_field_min == (7, 11)
+        assert conv3.receptive_field_max == (7, 11)
+        assert conv4.receptive_field_min == (7, 11)
+        assert conv4.receptive_field_max == (9, 15)
+        assert out.receptive_field_min == np.inf
+        assert out.receptive_field_max == np.inf
+
+    def test_find_border_layer_into_tuple_based_model(self):
+        conv1 = EnrichedNetworkNode(
+            name="Conv1",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(3, 3), stride_size=(1, 2), filters=64
+            ),
+            predecessors=[],
+        )
+        conv2 = EnrichedNetworkNode(
+            name="Conv2",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(3, 3), stride_size=(1, 1), filters=128
+            ),
+            predecessors=[conv1],
+        )
+
+        conv3 = EnrichedNetworkNode(
+            name="Conv3",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(5, 5), stride_size=(1, 1), filters=256
+            ),
+            predecessors=[conv1],
+        )
+
+        conv4 = EnrichedNetworkNode(
+            name="Conv4",
+            layer_info=LayerDefinition(
+                name="Conv3x3", kernel_size=(3, 3), stride_size=(1, 1), filters=256
+            ),
+            predecessors=[conv2, conv3],
+        )
+
+        _ = EnrichedNetworkNode(
+            name="Softmax",
+            layer_info=LayerDefinition(name="Fully Connected", units=1000),
+            predecessors=[conv4],
+        )
+
+        assert not conv4.is_border(32)
+        assert not conv4.is_border((32, 32))
+        assert conv4.is_border(2)
+        assert conv4.is_border((2, 2))
