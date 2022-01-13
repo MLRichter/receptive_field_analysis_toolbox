@@ -173,3 +173,7 @@ if __name__ == "__main__":
     m = vgg19_perf2
 
     dot = visualize_architecture(m(), "vgg19_perf", input_res=16).view()
+
+    from keras.applications.vgg19 import VGG19
+
+    VGG19(weights=None, input_shape=(224, 224, 3), include_top=True).to_json()
