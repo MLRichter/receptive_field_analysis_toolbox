@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.1 (2022-01-14)
+### Fix
+* Fixed repository and documentation links ([`1759780`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/175978062acc536328ef59ab5f9d21a99828f3eb))
+
 ## v1.2.0 (2022-01-14)
 ### Feature
 * Tensorflow support, also toch.functional has now reduced support due to some hard-to-trace edges ([`7ddfa0d`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/7ddfa0d83212ef5b0936ec93f13ade1e2518cb3c))
