@@ -15,7 +15,7 @@ try:
     from rfa_toolbox.encodings.tensorflow_keras.ingest_architecture import (
         create_graph_from_model as create_graph_from_tensorflow_model,
     )
-except ValueError:
+except ImportError:
 
     def create_graph_from_tensorflow_model(*args, **kwargs):
         raise ImportError("This function is not available, tensorflow not installed")
