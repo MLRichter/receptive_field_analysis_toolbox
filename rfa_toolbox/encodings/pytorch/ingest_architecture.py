@@ -292,6 +292,6 @@ def create_graph_from_model(
 
 
 if __name__ == "__main__":
-    model = torchvision.models.inception_v3()
+    model = torchvision.models.googlenet()
     graph = create_graph_from_model(model)
     visualize_architecture(graph, "inceptionv3", input_res=32).view()

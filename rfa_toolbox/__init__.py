@@ -12,7 +12,7 @@ except ImportError:
 
 try:
     # flake8: noqa: F401
-    from rfa_toolbox.encodings.tensorflow.ingest_architecture import (
+    from rfa_toolbox.encodings.tensorflow_keras.ingest_architecture import (
         create_graph_from_model as create_graph_from_tensorflow_model,
     )
 except ImportError:

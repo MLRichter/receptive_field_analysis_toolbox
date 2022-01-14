@@ -10,6 +10,7 @@ from rfa_toolbox.encodings.pytorch.layer_handlers import (
     AnyConv,
     AnyHandler,
     AnyPool,
+    FunctionalKernelHandler,
     LinearHandler,
 )
 from rfa_toolbox.encodings.pytorch.substitutors import (
@@ -19,41 +20,19 @@ from rfa_toolbox.encodings.pytorch.substitutors import (
 )
 from rfa_toolbox.graphs import EnrichedNetworkNode, LayerDefinition
 
-
-def standard_resolving_strategy():
-    """The standard strategy of handling different types of layers.
-    The List of LayerHandler can handle the following types of Layers:
-        * Convolutional Layer Modules from torch.nn
-        * Pooling Layer Modules from torch.nn
-        * Adaptive Pooling Modules from torch.nn
-        * Linear Layer Modules from torch.nn
-    Any other layer will be treated as a parameterless layer that
-    does not alter the receptive field of previous layers.
-
-    Returns:
-        A list of LayerHandler-instances
-
-    """
-    return [AnyConv(), AnyPool(), AnyAdaptivePool(), LinearHandler(), AnyHandler()]
-
-
-def standard_substitutions_strategy():
-    """This function returns a list of standard substitutor-instances, that make the
-    graph-representations a bit cleaner.
-    More precisly the follwong nodes are removed from the graph:
-        * Nodes that mark the "input" of a module that contains other modules.
-        * Nodes that mark the "ouput" of a module that contains other modules.
-    These nodes are generally parameterless and have not functionality
-    beyond marking the start and end of a module within the graph.
-    Since this makes the graphs look more complex for reason purely
-    caused by the technical details of PyTorch-model,
-    these nodes are removed.
-
-    Returns:
-        A list of LayerSubsitutor-object instances.
-
-    """
-    return [input_substitutor(), output_substitutor(), numeric_substitutor()]
+RESOLVING_STRATEGY = [
+    AnyConv(),
+    AnyPool(),
+    AnyAdaptivePool(),
+    LinearHandler(),
+    FunctionalKernelHandler(),
+    AnyHandler(),
+]
+SUBSTITUTION_STRATEGY = [
+    numeric_substitutor(),
+    input_substitutor(),
+    output_substitutor(),
+]
 
 
 @attrs(auto_attribs=True, slots=True)
@@ -74,10 +53,10 @@ class Digraph:
     raw_nodes: Dict[str, Tuple[str, str]] = attrib(factory=dict)
     layer_definitions: Dict[str, LayerDefinition] = attrib(factory=dict)
     layer_info_handlers: List[LayerInfoHandler] = attrib(
-        factory=standard_resolving_strategy
+        factory=lambda: RESOLVING_STRATEGY
     )
     layer_substitutors: List[NodeSubstitutor] = attrib(
-        factory=standard_substitutions_strategy
+        factory=lambda: SUBSTITUTION_STRATEGY
     )
 
     def _find_predecessors(self, name: str) -> List[str]:

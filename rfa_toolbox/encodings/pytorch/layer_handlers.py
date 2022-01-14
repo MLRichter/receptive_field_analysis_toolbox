@@ -1,3 +1,4 @@
+import warnings
 from collections import Sequence
 
 import numpy as np
@@ -122,7 +123,7 @@ class AnyAdaptivePool(Conv2d):
     """Extract information from adaptive pooling layers."""
 
     def can_handle(self, name: str) -> bool:
-        return "Pool" in name and "adaptive" in name
+        return "pool" in name.lower() and "adaptive" in name.lower()
 
     def __call__(
         self, model: torch.nn.Module, resolvable_string: str, name: str
@@ -154,6 +155,67 @@ class LinearHandler(LayerInfoHandler):
             kernel_size=kernel_size,
             stride_size=stride_size,
             units=features,
+        )
+
+
+@attrs(auto_attribs=True, frozen=False, slots=True)
+class FunctionalKernelHandler(LayerInfoHandler):
+    """This handler is explicitly build for functional pooling layers.
+    It will default to some often used kernel and stride size but will also produce
+    a warning, since the correct sizes of kernel and strides cannot be extracted.
+    Therefore this handler is more for aiding in the developer in not falling for
+    faulty visualizations.
+    """
+
+    coerce: bool = False
+    default_kernel_size: int = 3
+    default_stride_size: int = 2
+
+    def can_handle(self, name: str) -> bool:
+        return "pool" in name.split(".")[-1] or "conv" in name.split(".")[-1]
+
+    def __call__(
+        self, model: torch.nn.Module, resolvable_string: str, name: str
+    ) -> LayerDefinition:
+        if not self.coerce:
+            raise RuntimeError(
+                "Using the functional API of PyTorch is not "
+                "directly supported by this library."
+                "Usage of torch.function may corrupt the "
+                "reconstruction of the network topology."
+                "If you want to continue anyway use the "
+                "following code snipped before calling RFA-toolbox:\n"
+                "import rfa_toolbox.encodings.pytorch"
+                ".ingest_architecture.RESOLVING_STRATEGY"
+                "rfa_toolbox.encodings.pytorch"
+                ".ingest_architecture.RESOLVING_STRATEGY[-2]"
+                ".coerce = True"
+            )
+        if "(" in resolvable_string and ")" in name:
+            # print(result)
+            result = name.split("(")[-1].replace(")", "")
+        else:
+            result = f"{name.split('.')[-1]}"
+
+        warnings.warn(
+            "Detected a call of a kernel based layer from "
+            f"the functional library of PyTorch: {name}!"
+            " The kernel and stride size of this layer "
+            "cannot be correctly extracted, "
+            f"defaulting to kernel_size: {self.default_kernel_size} and "
+            f"stride_size: {self.default_stride_size}."
+            " Please avoid functional calls from kernel-based "
+            "operations, they may also corrupt the"
+            "compute graph use the corresponding modules from torch.nn instead!"
+        )
+        return LayerDefinition(
+            name=result
+            + (
+                f" {self.default_kernel_size}x{self.default_kernel_size} / "
+                f"{self.default_stride_size} \n(functional, values assumed)"
+            ),
+            kernel_size=self.default_kernel_size,
+            stride_size=self.default_stride_size,
         )
 
 

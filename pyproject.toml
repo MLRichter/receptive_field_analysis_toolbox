@@ -42,6 +42,9 @@ docs = [
     "sphinx",
     "sphinx-rtd-theme",
 ]
+torch = "*"
+torchvision = "*"
+tensorflow = "*"
 
 [tool.poetry.dev-dependencies]
 black = "^21.11b1"
@@ -51,8 +54,6 @@ pytest = "^6.1.2"
 pytest-cov = "^3.0.0"
 pyupgrade = "^2.29.1"
 tox = "^3.20.1"
-torch = "*"
-torchvision = "*"
 
 [tool.semantic_release]
 branch = "main"
