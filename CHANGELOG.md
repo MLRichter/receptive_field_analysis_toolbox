@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.2 (2022-01-14)
+### Fix
+* Hotfix for a cyclic import in the keras-encoder, also added some minor documentation ([`d5eb995`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/d5eb995f6c25c28ee189a106bde2121896eaf16b))
+* Hotfix for a cyclic import in the keras-encoder, also added some minor documentation ([`e8100fd`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/e8100fd927975d825793060b6810fdfaf4df2891))
+
 ## v1.2.1 (2022-01-14)
 ### Fix
 * Fixed repository and documentation links ([`1759780`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/175978062acc536328ef59ab5f9d21a99828f3eb))

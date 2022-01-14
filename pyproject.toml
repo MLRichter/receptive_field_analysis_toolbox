@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rfa_toolbox"
-version = "1.2.1"
+version = "1.2.2"
 description = "A toolbox for analyzing the receptive field expansion in neural networks."
 authors = ["Mats L. Richter <matrichter@uni-osnabrueck.de>"]
 license = "MIT"
