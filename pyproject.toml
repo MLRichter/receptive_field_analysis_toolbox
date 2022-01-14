@@ -5,8 +5,8 @@ description = "A toolbox for analyzing the receptive field expansion in neural n
 authors = ["Mats L. Richter <matrichter@uni-osnabrueck.de>"]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/MLRichter/rfa_toolbox"
-documentation = "https://rfa_toolbox.readthedocs.io"
+repository = "https://github.com/MLRichter/receptive_field_analysis_toolbox"
+documentation = "https://receptive_field_analysis_toolbox.readthedocs.io"
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
