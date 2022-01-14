@@ -40,16 +40,7 @@ class LayerInfoHandler(Protocol):
 @attrs(frozen=True, slots=True, auto_attribs=True)
 class KernelBasedHandler(LayerInfoHandler):
     def can_handle(self, node: Dict[str, Any]) -> bool:
-        """Checks if this handler can process the
-        node in the compute graph of the model.
-
-        Args:
-            node: the node in question
-
-        Returns:
-            True if the node can be processed into a
-            valid LayerDefinition by this handler.
-        """
+        """Handles only layers featuring a kernel_size and filters"""
         return "kernel_size" in node["config"] and "filters" in node["config"]
 
     def __call__(self, node: Dict[str, Any]) -> LayerDefinition:
@@ -71,16 +62,7 @@ class KernelBasedHandler(LayerInfoHandler):
 @attrs(frozen=True, slots=True, auto_attribs=True)
 class PoolingBasedHandler(LayerInfoHandler):
     def can_handle(self, node: Dict[str, Any]) -> bool:
-        """Checks if this handler can process the
-        node in the compute graph of the model.
-
-        Args:
-            node: the node in question
-
-        Returns:
-            True if the node can be processed into a
-            valid LayerDefinition by this handler.
-        """
+        """Handles only layers featuring a pool_size"""
         return "pool_size" in node["config"]
 
     def __call__(self, node: Dict[str, Any]) -> LayerDefinition:
@@ -101,16 +83,7 @@ class PoolingBasedHandler(LayerInfoHandler):
 @attrs(frozen=True, slots=True, auto_attribs=True)
 class DenseHandler(LayerInfoHandler):
     def can_handle(self, node: Dict[str, Any]) -> bool:
-        """Checks if this handler can process the
-        node in the compute graph of the model.
-
-        Args:
-            node: the node in question
-
-        Returns:
-            True if the node can be processed into a
-            valid LayerDefinition by this handler.
-        """
+        """Handles only layers feature units as attribute"""
         return "units" in node["config"]
 
     def __call__(self, node: Dict[str, Any]) -> LayerDefinition:
@@ -123,16 +96,7 @@ class DenseHandler(LayerInfoHandler):
 @attrs(frozen=True, slots=True, auto_attribs=True)
 class InputHandler(LayerInfoHandler):
     def can_handle(self, node: Dict[str, Any]) -> bool:
-        """Checks if this handler can process the
-        node in the compute graph of the model.
-
-        Args:
-            node: the node in question
-
-        Returns:
-            True if the node can be processed into a
-            valid LayerDefinition by this handler.
-        """
+        """This is strictly meant for handling input nodes"""
         return node["class_name"] == "InputLayer"
 
     def __call__(self, node: Dict[str, Any]) -> LayerDefinition:
@@ -144,16 +108,7 @@ class InputHandler(LayerInfoHandler):
 @attrs(frozen=True, slots=True, auto_attribs=True)
 class AnyHandler(LayerInfoHandler):
     def can_handle(self, node: Dict[str, Any]) -> bool:
-        """Checks if this handler can process the
-        node in the compute graph of the model.
-
-        Args:
-            node: the node in question
-
-        Returns:
-            True if the node can be processed into a
-            valid LayerDefinition by this handler.
-        """
+        """This is a catch-all handler"""
         return True
 
     def __call__(self, node: Dict[str, Any]) -> LayerDefinition:
