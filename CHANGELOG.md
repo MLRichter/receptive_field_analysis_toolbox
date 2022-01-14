@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.0 (2022-01-14)
+### Feature
+* Tensorflow support, also toch.functional has now reduced support due to some hard-to-trace edges ([`7ddfa0d`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/7ddfa0d83212ef5b0936ec93f13ade1e2518cb3c))
+* Tensorflow support, also toch.functional has now reduced support due to some hard-to-trace edges ([`b3ed0e0`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/b3ed0e0e2b5baf6dff25c6176bb35ed40fab74cc))
+* Tensorflow support, also toch.functional has now reduced support due to some hard-to-trace edges ([`f340bf6`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/f340bf660a39a8eb31d2a9a2a3d897eb1d4b5677))
+* Tensorflow support, also toch.functional has now reduced support due to some hard-to-trace edges ([`6895bfb`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/6895bfb4d6453ddacb7fb00cac300943885c1fe3))
+
 ## v1.1.0 (2022-01-12)
 ### Feature
 * Receptive Field sizes now are also allowed to be tuples ([`809b9bd`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/809b9bda9455726f41ca6351e68474a3e900cee8))
