@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.3 (2022-01-14)
+### Fix
+* Removed unnecessary file ([`6957dcf`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/6957dcfae045e6e6e6011c34429912013aa2706b))
+* Library is now working without tensorflow ([`588c2d1`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/588c2d18a9c57f0a09d9e157d96a76aa8adb6389))
+
 ## v1.2.2 (2022-01-14)
 ### Fix
 * Hotfix for a cyclic import in the keras-encoder, also added some minor documentation ([`d5eb995`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/d5eb995f6c25c28ee189a106bde2121896eaf16b))
