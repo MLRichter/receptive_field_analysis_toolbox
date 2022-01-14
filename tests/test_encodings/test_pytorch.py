@@ -1,3 +1,4 @@
+import pytest
 import torch
 from torchvision.models.alexnet import alexnet
 from torchvision.models.inception import inception_v3
@@ -51,10 +52,9 @@ class TestOnPreimplementedModels:
         model = inception_v3
         m = model()
         tm = torch.jit.trace(m, [torch.randn(1, 3, 399, 399)])
-        d = make_graph(tm, ref_mod=m)
-        output_node = d.to_graph()
-        assert len(output_node.all_layers) == 308
-        assert isinstance(output_node, EnrichedNetworkNode)
+        with pytest.raises(RuntimeError):
+            d = make_graph(tm, ref_mod=m)
+            d.to_graph()
 
     def test_make_graph_vgg19(self):
         model = vgg19

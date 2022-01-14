@@ -33,8 +33,6 @@ numpy = "^1.21.4"
 attrs = "^21.2.0"
 tqdm = "^4.62.3"
 graphviz = "^0.19.1"
-torch = "*"
-torchvision = "*"
 
 [tool.poetry.extras]
 docs = [
@@ -53,6 +51,7 @@ pyupgrade = "^2.29.1"
 tox = "^3.20.1"
 torch = "*"
 torchvision = "*"
+tensorflow = "*"
 
 [tool.semantic_release]
 branch = "main"
