@@ -29,9 +29,6 @@ python = ">=3.7,<3.11"
 Sphinx = {version = "^4.0.0", optional = true}
 sphinx-rtd-theme = {version = "^1.0.0", optional = true}
 myst-parser = {version = "^0.16.0", optional = true}
-torch = {version = "*", optional = true}
-torchvision = {version = "*", optional = true}
-tensorflow = {version = "*", optional = true}
 numpy = "^1.21.4"
 attrs = "^21.2.0"
 tqdm = "^4.62.3"
@@ -52,6 +49,9 @@ pytest = "^6.1.2"
 pytest-cov = "^3.0.0"
 pyupgrade = "^2.29.1"
 tox = "^3.20.1"
+torch = "*"
+torchvision = "*"
+tensorflow = "*"
 
 [tool.semantic_release]
 branch = "main"
