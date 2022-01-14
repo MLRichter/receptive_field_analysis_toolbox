@@ -29,12 +29,13 @@ python = ">=3.7,<3.11"
 Sphinx = {version = "^4.0.0", optional = true}
 sphinx-rtd-theme = {version = "^1.0.0", optional = true}
 myst-parser = {version = "^0.16.0", optional = true}
+torch = {version = "*", optional = true}
+torchvision = {version = "*", optional = true}
+tensorflow = {version = "*", optional = true}
 numpy = "^1.21.4"
 attrs = "^21.2.0"
 tqdm = "^4.62.3"
 graphviz = "^0.19.1"
-torch = "*"
-torchvision = "*"
 
 [tool.poetry.extras]
 docs = [
@@ -42,9 +43,6 @@ docs = [
     "sphinx",
     "sphinx-rtd-theme",
 ]
-torch = "*"
-torchvision = "*"
-tensorflow = "*"
 
 [tool.poetry.dev-dependencies]
 black = "^21.11b1"
