@@ -170,10 +170,14 @@ def vgg19_perf2() -> EnrichedNetworkNode:
 
 
 if __name__ == "__main__":
-    m = vgg19_perf2
+    # m = vgg19_perf2
 
-    dot = visualize_architecture(m(), "vgg19_perf", input_res=16).view()
+    # dot = visualize_architecture(m(), "vgg19_perf", input_res=16).view()
 
     from keras.applications.vgg19 import VGG19
 
-    VGG19(weights=None, input_shape=(224, 224, 3), include_top=True).to_json()
+    from rfa_toolbox import create_graph_from_tensorflow_model
+
+    model = VGG19(include_top=True, weights=None)
+    graph: EnrichedNetworkNode = create_graph_from_tensorflow_model(model)
+    visualize_architecture(graph, "VGG16", input_res=32).view()

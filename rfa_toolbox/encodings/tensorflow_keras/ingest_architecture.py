@@ -3,7 +3,6 @@ from typing import Any, Dict, List
 
 from tensorflow.keras.models import Model
 
-from rfa_toolbox import visualize_architecture
 from rfa_toolbox.encodings.tensorflow_keras.layer_handlers import (
     AnyHandler,
     DenseHandler,
@@ -138,12 +137,3 @@ def create_graph_from_model(model: Model) -> EnrichedNetworkNode:
     """
     model_dict = keras_model_to_dict(model)
     return model_dict_to_enriched_graph(model_dict)
-
-
-if __name__ == "__main__":
-    from tensorflow.keras.applications.inception_resnet_v2 import InceptionResNetV2
-
-    graph: EnrichedNetworkNode = create_graph_from_model(
-        InceptionResNetV2(weights=None)
-    )
-    visualize_architecture(graph, "InceptionResNetV2", input_res=32).view()

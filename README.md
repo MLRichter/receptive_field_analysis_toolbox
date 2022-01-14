@@ -83,6 +83,31 @@ unproductive for an input resolution of 32x32 pixels:
 
 Keep in mind that the Graph is reverse-engineerd from the PyTorch JIT-compiler, therefore no looping-logic is
 allowed within the forward pass of the model.
+Also, the use of the functional-library for stateful-operations like pooling or convolutional layers is discouraged,
+since it can cause malformed graphs during the reverse engineering of the compute graph.
+
+#### Tensorflow / Keras
+
+Similar to the PyTorch-import, models can be imported from TensorFlow as well.
+
+The code below will create a graph of VGG16 and visualize it using GraphViz and color all layers that are predicted to be
+unproductive for an input resolution of 32x32 pixels. This is analog to the PyTorch-variant depicted above:
+
+```python
+
+from keras.applications.vgg19 import VGG19
+from rfa_toolbox import create_graph_from_tensorflow_model
+
+model = VGG19(include_top=True, weights=None)
+graph: EnrichedNetworkNode = create_graph_from_tensorflow_model(model)
+visualize_architecture(graph, "VGG16", input_res=32).view()
+
+```
+
+This will create the following visualization:
+![vgg16.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/vgg16.PNG?raw=true)
+
+Currently, only the use of the keras.Model object is supported.
 
 #### Custom
 
