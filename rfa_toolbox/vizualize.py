@@ -24,6 +24,7 @@ def visualize_node(
     input_res: int,
     color_border: bool,
     color_critical: bool,
+    include_rf_info: bool = True,
 ) -> None:
     """Create a node in a graphviz-graph based on an EnrichedNetworkNode instance.
     Also creates all edges that lead from predecessor nodes to this node.
@@ -35,26 +36,33 @@ def visualize_node(
                             coloring critical and border layers
         color_border:       The color used for marking border layer
         color_critical:     The color used for marking critical layers
+        include_rf_info:    If True the receptive field information is
+                            included in the node description
 
     Returns:
         Nothing.
 
     """
     color = "white"
-    if node.is_border(input_resolution=input_res):
+    if node.is_border(input_resolution=input_res) and color_border:
         color = "red"
     elif (
         np.all(np.asarray(node.receptive_field_min) > np.asarray(input_res))
         and color_critical
+        and not node.is_border(input_resolution=input_res)
     ):
         color = "orange"
     elif (
         np.any(np.asarray(node.receptive_field_min) > np.asarray(input_res))
         and color_critical
+        and not node.is_border(input_resolution=input_res)
     ):
         color = "yellow"
     l_name = node.layer_info.name
-    rf_info = "\\n" + f"r={node.receptive_field_min}"
+    rf_info = (
+        "\\n" + f"r(min)={node.receptive_field_min}, r(max)={node.receptive_field_max}"
+    )
+
     filters = f"\\n{node.layer_info.filters} filters"
     units = f"\\n{node.layer_info.units} units"
 
@@ -63,7 +71,8 @@ def visualize_node(
         label += filters
     elif node.layer_info.units is not None:
         label += units
-    label += rf_info
+    if include_rf_info:
+        label += rf_info
 
     dot.node(
         f"{node.name}-{id(node)}",
@@ -81,6 +90,7 @@ def visualize_architecture(
     input_res: int = 224,
     color_critical: bool = True,
     color_border: bool = True,
+    include_rf_info: bool = True,
 ) -> graphviz.Digraph:
     """Visualize an architecture using graphviz
     and mark critical and border layers in the graph visualization.
@@ -95,6 +105,8 @@ def visualize_architecture(
                         critical and border layers)
         color_critical: if True the critical layers are colored orange, True by default.
         color_border:   if True the border layers are colored red, True by default.
+        include_rf_info: if True the receptive field information is included in the node
+                        description
 
     Returns:
         A graphviz.Digraph object that can visualize the network architecture.
@@ -111,6 +123,7 @@ def visualize_architecture(
             input_res=input_res,
             color_border=color_border,
             color_critical=color_critical,
+            include_rf_info=include_rf_info,
         )
     return f
 
