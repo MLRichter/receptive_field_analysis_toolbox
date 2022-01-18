@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.4 (2022-01-18)
+### Fix
+* Color options now work as intended and minimum and maximum receptive field size are now depicted. Receptive field plotting in the graph can be disabled. ([`26f9ab8`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/26f9ab8f17683cfda49127ae46ecef4826ba6b23))
+
 ## v1.2.3 (2022-01-14)
 ### Fix
 * Removed unnecessary file ([`6957dcf`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/6957dcfae045e6e6e6011c34429912013aa2706b))
