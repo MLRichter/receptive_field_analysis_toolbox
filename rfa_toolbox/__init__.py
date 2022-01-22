@@ -22,4 +22,7 @@ except ImportError:
 
 
 # flake8: noqa: F401
+from rfa_toolbox.utils.graph_utils import input_resolution_range
+
+# flake8: noqa: F401
 from rfa_toolbox.vizualize import visualize_architecture
