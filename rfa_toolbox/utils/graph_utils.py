@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Sequence, Tuple, Union
 
 import numpy as np
 
@@ -107,3 +107,51 @@ def filters_non_convolutional_node(
         and stride size of 1.
     """
     return [node for node in nodes if node.layer_info.kernel_size != np.inf]
+
+
+def input_resolution_range(
+    graph: EnrichedNetworkNode, cardinality: int = 2
+) -> Tuple[Tuple[int, ...], Tuple[int, ...]]:
+    """Obtain the smallest and largest feasible input resolution.
+    The smallest feasible input resolution is defined as the input smallest input
+    resolution with no unproductive convolutional layers.
+    The largest feasible input resolution is defined as the input
+    resolution with at least one convolutional layer with a maximum
+    receptive field large enough to grasp the entire image.
+    These can be considered upper and lower bound for potential input resolutions.
+    Everything smaller than the provided input resolution will result
+    in unproductive layers, any resolution larger than the large feasible
+    input resolution will result in potential patterns being undetectable due to
+    a to small receptive field size.
+
+    Args:
+        graph: The neural network
+        cardinality: The tensor shape, which is 2D by default.
+
+    Returns:
+        Smallest and largest feasable input resolution.
+    """
+    all_nodes = obtain_all_nodes(graph)
+    all_nodes = filters_non_convolutional_node(all_nodes)
+    rf_min = [x.receptive_field_min for x in all_nodes]
+    rf_max = [x.receptive_field_max for x in all_nodes]
+
+    def find_max(rf: List[Union[Tuple[int, int], int]], axis: int = 0) -> int:
+        """Find the maximum value of a list of tuples or integers.
+
+        Args:
+            rf:    a list of tuples or integers
+            axis:  the axis along which the maximum shall be found
+
+        Returns:
+            The maximum value of the list.
+        """
+        rf_no_tuples = [
+            x[axis] if isinstance(x, Sequence) or isinstance(x, np.ndarray) else x
+            for x in rf
+        ]
+        return max(rf_no_tuples)
+
+    r_max = tuple(find_max(rf_max, i) for i in range(cardinality))
+    r_min = tuple(find_max(rf_min, i) for i in range(cardinality))
+    return r_min, r_max
