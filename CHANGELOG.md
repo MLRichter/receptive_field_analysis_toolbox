@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.0 (2022-01-22)
+### Feature
+* Added functionality to obatain minimum and maximum feasible input resolution ([`29d9af4`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/29d9af4a5fb236d01daa5309daf00e531f3291b2))
+* Added functionality to obatain minimum and maximum feasible input resolution ([`dfbc914`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/dfbc914c2d01daf582409f4b27fccb5a4acfbe51))
+
 ## v1.2.4 (2022-01-18)
 ### Fix
 * Color options now work as intended and minimum and maximum receptive field size are now depicted. Receptive field plotting in the graph can be disabled. ([`26f9ab8`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/26f9ab8f17683cfda49127ae46ecef4826ba6b23))
