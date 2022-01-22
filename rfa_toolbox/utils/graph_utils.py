@@ -136,7 +136,7 @@ def input_resolution_range(
     rf_min = [x.receptive_field_min for x in all_nodes]
     rf_max = [x.receptive_field_max for x in all_nodes]
 
-    def find_max(rf: List[Union[Tuple[int, int], int]], axis: int = 0) -> int:
+    def find_max(rf: List[Union[Tuple[int, ...], int]], axis: int = 0) -> int:
         """Find the maximum value of a list of tuples or integers.
 
         Args:
