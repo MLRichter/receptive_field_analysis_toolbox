@@ -31,7 +31,10 @@ def make_graph(
     def find_name(i, self_input, suffix=None):
         if i == self_input:
             return suffix
-        cur = i.node().s("name")
+        try:
+            cur = i.node().s("name")
+        except RuntimeError:
+            return suffix + "-unknownType"
         if suffix is not None:
             cur = cur + "." + suffix
             # print(cur)
