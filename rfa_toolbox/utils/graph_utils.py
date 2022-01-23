@@ -118,8 +118,37 @@ def filters_non_convolutional_node(
     return result
 
 
+def filters_non_infinite_rf_sizes(
+    rf_sizes: List[Union[Tuple[int, ...], int]],
+) -> List[Union[Tuple[int, ...], int]]:
+    """Filter all components that are not part of the feature extractor.
+
+    Args:
+        nodes: the list of noodes that shall be filtered.
+
+    Returns:
+        A list of all layers that are part of the feature extractor.
+        This is decided by the kernel size, which is non-infinite
+        for layers that are part of the feature extractor.
+        Please note that layers like Dropout, BatchNormalization,
+        which are agnostic towards the input shape,
+        are treated like a convolutional layer with a kernel
+        and stride size of 1.
+    """
+    result = []
+    for rf_size in rf_sizes:
+        if isinstance(rf_size, Sequence) or isinstance(rf_size, tuple):
+            if not np.any(np.isinf(rf_size)):
+                result.append(rf_size)
+        elif rf_size != np.inf:
+            result.append(rf_size)
+    return result
+
+
 def input_resolution_range(
-    graph: EnrichedNetworkNode, cardinality: int = 2
+    graph: EnrichedNetworkNode,
+    filter_all_inf_rf: bool = False,
+    cardinality: int = 2,
 ) -> Tuple[Tuple[int, ...], Tuple[int, ...]]:
     """Obtain the smallest and largest feasible input resolution.
     The smallest feasible input resolution is defined as the input smallest input
@@ -135,15 +164,40 @@ def input_resolution_range(
 
     Args:
         graph: The neural network
+        filter_all_inf_rf:  filters ALL infinite receptive field sizes before
+                            computing the result, this may come in handy
+                            if you want to ignore the influence
+                            of attention mechanisms like SE-modules,
+                            which technically adds a global context to the image
+                            (increasing the maximum receptive field
+                            size to infinity in the process).
+                            However this can be somewhat
+                            misleading, since these types of modules are not realy
+                            build to extract features from the image.
+                            This functionality is disabled by default.
         cardinality: The tensor shape, which is 2D by default.
 
     Returns:
-        Smallest and largest feasable input resolution.
+        Smallest and largest feasible input resolution.
     """
     all_nodes = obtain_all_nodes(graph)
     all_nodes = filters_non_convolutional_node(all_nodes)
-    rf_min = [x.receptive_field_min for x in all_nodes]
-    rf_max = [x.receptive_field_max for x in all_nodes]
+    if not filter_all_inf_rf:
+        rf_min = [x.receptive_field_min for x in all_nodes]
+        rf_max = [x.receptive_field_max for x in all_nodes]
+    else:
+        rf_min = [
+            x._apply_function_on_receptive_field_sizes(
+                lambda x: min(filters_non_infinite_rf_sizes(x), default=0)
+            )
+            for x in all_nodes
+        ]
+        rf_max = [
+            x._apply_function_on_receptive_field_sizes(
+                lambda x: max(filters_non_infinite_rf_sizes(x), default=0)
+            )
+            for x in all_nodes
+        ]
 
     def find_max(rf: List[Union[Tuple[int, ...], int]], axis: int = 0) -> int:
         """Find the maximum value of a list of tuples or integers.
