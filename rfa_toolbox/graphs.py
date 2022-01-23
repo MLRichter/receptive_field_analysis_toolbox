@@ -228,7 +228,7 @@ def compute_receptive_field_sizes(
 class EnrichedNetworkNode(Node):
     """The EnrichedNetworkNode is the core component of a network graph in this framework.
     Any node af a network can be used as a handle for the entire graph.
-    A neural network is exspected to have exactly one input and arbitrary
+    A neural network is expected to have exactly one input and arbitrary
     many outputs. Networks with multiple inputs may cause inconsistencies.
 
     Args:

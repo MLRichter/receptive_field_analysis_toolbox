@@ -177,6 +177,28 @@ This will produce the following graph:
 
 ![simple_conv.png](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/simple_conv.png?raw=true)
 
+#### Finding the feasible input range of a neural network
+
+With RFA-Toolbox you can also easily determine in which range your input resolution should be in order to allow
+the network to use all parameters to solve the problem, which is the most efficient way to operate the model.
+
+```python
+
+import torchvision
+from rfa_toolbox import create_graph_from_pytorch_model, input_resolution_range
+model = torchvision.models.resnet50()
+graph = create_graph_from_pytorch_model(model)
+# set filter_all_inf_rf to True, if your model contains Squeeze-And-Excitation-Modules
+min_res, max_res = input_resolution_range(graph, filter_all_inf_rf=False) # (75, 75), (427, 427)
+print("Mininum Resolution:", min_res, "Maximum Resolution:", max_res)
+```
+
+Every resolution below the minimum resolution will result in unproductive layers in the network, due to oversized
+receptive field sizes (see next section for details).
+Every resolution above the maximum resolution exceeds the maximum receptive field size of any non-fully-connected
+layer in the model, which means that potentially patterns exist in the input that the network cannot extract with
+its feature-extractor.
+
 ### A quick primer on the Receptive Field
 
 To understand how RFA works, we first need to understand what a receptive field is, and it's effect on what the network is learning to detect.
