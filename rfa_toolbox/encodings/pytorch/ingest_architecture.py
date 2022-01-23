@@ -37,7 +37,6 @@ def make_graph(
             return suffix + "-unknownType"
         if suffix is not None:
             cur = cur + "." + suffix
-            # print(cur)
         of = next(i.node().inputs())
         return find_name(of, self_input, suffix=cur)
 
