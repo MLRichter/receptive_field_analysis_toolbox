@@ -208,7 +208,7 @@ convolutional kernel.
 Here is a simple, 1-dimensional example:
 ![rf.PNG](https://github.com/MLRichter/receptive_field_analysis_toolbox/blob/main/images/rf.PNG?raw=true)
 The first layer of this simple architecture can only ever "see" the information the input pixels directly
-under it's kernel, in this scenario 3 pixels.
+under its kernel, in this scenario 3 pixels.
 Another observation we can make from this example is that the receptive field size is expanding from layer to layer.
 This is happening, because the consecutive layers also have kernel sizes greater than 1 pixel, which means that
 they combine multiple adjacent positions on the feature map into a single position in their output.
