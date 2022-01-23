@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.1 (2022-01-23)
+### Fix
+* Dense layer filtering now works properly ([`d79c882`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/d79c8821e97f6a1b5f229e0ae9c308224d306c78))
+
 ## v1.3.0 (2022-01-22)
 ### Feature
 * Added functionality to obatain minimum and maximum feasible input resolution ([`29d9af4`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/29d9af4a5fb236d01daa5309daf00e531f3291b2))
