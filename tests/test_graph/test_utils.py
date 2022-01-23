@@ -1,6 +1,8 @@
 import numpy as np
 import pytest
+import torchvision
 
+from rfa_toolbox import create_graph_from_pytorch_model
 from rfa_toolbox.architectures.resnet import resnet18, resnet101
 from rfa_toolbox.architectures.vgg import vgg16
 from rfa_toolbox.graphs import EnrichedNetworkNode, LayerDefinition
@@ -324,7 +326,9 @@ class TestFindInputResolutionRange:
     def test_with_higher_degree_tensor(self, sequential_network):
         for i in range(10):
             cardinality = np.random.randint(1, 1000)
-            r_min, r_max = input_resolution_range(sequential_network, cardinality)
+            r_min, r_max = input_resolution_range(
+                sequential_network, cardinality=cardinality
+            )
             assert len(r_max) == cardinality
             assert len(r_min) == cardinality
 
@@ -348,3 +352,29 @@ class TestFindInputResolutionRange:
         assert len(r_min) == 2
         assert r_min == (13, 25)
         assert r_max == (13, 25)
+
+    def test_with_non_square_receptive_field_sizes_without_se(
+        self, sequential_network_non_square
+    ):
+        model = torchvision.models.resnet50()
+        graph = create_graph_from_pytorch_model(model)
+        min_res, max_res = input_resolution_range(
+            graph, filter_all_inf_rf=False
+        )  # (75, 75), (427, 427)
+        assert len(min_res) == 2
+        assert len(max_res) == 2
+        assert min_res == (75, 75)
+        assert max_res == (427, 427)
+
+    def test_with_non_square_receptive_field_sizes_wit_se(
+        self, sequential_network_non_square
+    ):
+        model = torchvision.models.efficientnet_b0()
+        graph = create_graph_from_pytorch_model(model)
+        min_res, max_res = input_resolution_range(
+            graph, filter_all_inf_rf=True
+        )  # (75, 75), (427, 427)
+        assert len(min_res) == 2
+        assert len(max_res) == 2
+        assert min_res == (299, 299)
+        assert max_res == (851, 851)
