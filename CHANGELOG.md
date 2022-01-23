@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.2 (2022-01-23)
+### Fix
+* Added another filter option ([`8d81d41`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/8d81d417b4b661a9d576783ec8dd73bc244f0edd))
+* Added another filter option ([`d216681`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/d216681ee8a40a3a66db34141efb6c201d7c645f))
+
 ## v1.3.1 (2022-01-23)
 ### Fix
 * Dense layer filtering now works properly ([`d79c882`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/d79c8821e97f6a1b5f229e0ae9c308224d306c78))

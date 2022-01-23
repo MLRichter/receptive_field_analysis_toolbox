@@ -1,4 +1,4 @@
-__version__ = "1.3.1"
+__version__ = "1.3.2"
 try:
     # flake8: noqa: F401
     from rfa_toolbox.encodings.pytorch.ingest_architecture import (
