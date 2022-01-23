@@ -185,11 +185,10 @@ class FunctionalKernelHandler(LayerInfoHandler):
                 "reconstruction of the network topology."
                 "If you want to continue anyway use the "
                 "following code snipped before calling RFA-toolbox:\n"
-                "import rfa_toolbox.encodings.pytorch"
-                ".intermediate_graph\n"
-                "rfa_toolbox.encodings.pytorch"
-                ".intermediate_graph.RESOLVING_STRATEGY[-2]"
-                ".coerce = True\n\n You can also modify the same handler to"
+                "from rfa_toolbox.encodings.pytorch"
+                " import toggle_coerce_torch_functional\n"
+                "toggle_coerce_torch_functional(True)"
+                "\n\n You can also modify the same handler to"
                 "adjust a correct kernel and stride sizes"
             )
         if "(" in resolvable_string and ")" in name:
