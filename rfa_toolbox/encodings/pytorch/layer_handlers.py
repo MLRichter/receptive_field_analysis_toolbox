@@ -168,8 +168,8 @@ class FunctionalKernelHandler(LayerInfoHandler):
     """
 
     coerce: bool = False
-    default_kernel_size: int = 3
-    default_stride_size: int = 2
+    default_kernel_size: int = 1
+    default_stride_size: int = 1
 
     def can_handle(self, name: str) -> bool:
         return "pool" in name.split(".")[-1] or "conv" in name.split(".")[-1]

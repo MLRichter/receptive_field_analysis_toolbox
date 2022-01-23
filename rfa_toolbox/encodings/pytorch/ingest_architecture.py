@@ -34,6 +34,8 @@ def make_graph(
         try:
             cur = i.node().s("name")
         except RuntimeError:
+            print(i.node)
+            print(i.node.s())
             return suffix + "-unknownType"
         if suffix is not None:
             cur = cur + "." + suffix
