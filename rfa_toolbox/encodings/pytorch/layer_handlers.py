@@ -186,10 +186,11 @@ class FunctionalKernelHandler(LayerInfoHandler):
                 "If you want to continue anyway use the "
                 "following code snipped before calling RFA-toolbox:\n"
                 "import rfa_toolbox.encodings.pytorch"
-                ".ingest_architecture.RESOLVING_STRATEGY"
+                ".intermediate_graph\n"
                 "rfa_toolbox.encodings.pytorch"
-                ".ingest_architecture.RESOLVING_STRATEGY[-2]"
-                ".coerce = True"
+                ".intermediate_graph.RESOLVING_STRATEGY[-2]"
+                ".coerce = True\n\n You can also modify the same handler to"
+                "adjust a correct kernel and stride sizes"
             )
         if "(" in resolvable_string and ")" in name:
             # print(result)
