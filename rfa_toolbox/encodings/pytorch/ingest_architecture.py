@@ -4,11 +4,9 @@ from rfa_toolbox.graphs import EnrichedNetworkNode
 
 try:
     import torch
-    import torchvision
-
-    from rfa_toolbox.vizualize import visualize_architecture
 except ImportError:
     pass
+
 from rfa_toolbox.encodings.pytorch.intermediate_graph import Digraph
 
 
@@ -31,10 +29,12 @@ def make_graph(
     def find_name(i, self_input, suffix=None):
         if i == self_input:
             return suffix
-        cur = i.node().s("name")
+        try:
+            cur = i.node().s("name")
+        except RuntimeError:
+            return suffix + "-unknownType"
         if suffix is not None:
             cur = cur + "." + suffix
-            # print(cur)
         of = next(i.node().inputs())
         return find_name(of, self_input, suffix=cur)
 
@@ -289,9 +289,3 @@ def create_graph_from_model(
     """
     tm = torch.jit.trace(model, (torch.randn(*input_res),))
     return make_graph(tm, ref_mod=model).to_graph()
-
-
-if __name__ == "__main__":
-    model = torchvision.models.googlenet()
-    graph = create_graph_from_model(model)
-    visualize_architecture(graph, "inceptionv3", input_res=32).view()

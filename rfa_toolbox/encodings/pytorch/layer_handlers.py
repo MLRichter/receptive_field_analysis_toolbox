@@ -168,8 +168,8 @@ class FunctionalKernelHandler(LayerInfoHandler):
     """
 
     coerce: bool = False
-    default_kernel_size: int = 3
-    default_stride_size: int = 2
+    default_kernel_size: int = 1
+    default_stride_size: int = 1
 
     def can_handle(self, name: str) -> bool:
         return "pool" in name.split(".")[-1] or "conv" in name.split(".")[-1]
@@ -185,11 +185,11 @@ class FunctionalKernelHandler(LayerInfoHandler):
                 "reconstruction of the network topology."
                 "If you want to continue anyway use the "
                 "following code snipped before calling RFA-toolbox:\n"
-                "import rfa_toolbox.encodings.pytorch"
-                ".ingest_architecture.RESOLVING_STRATEGY"
-                "rfa_toolbox.encodings.pytorch"
-                ".ingest_architecture.RESOLVING_STRATEGY[-2]"
-                ".coerce = True"
+                "from rfa_toolbox.encodings.pytorch"
+                " import toggle_coerce_torch_functional\n"
+                "toggle_coerce_torch_functional(True)"
+                "\n\n You can also modify the same handler to"
+                "adjust a correct kernel and stride sizes"
             )
         if "(" in resolvable_string and ")" in name:
             # print(result)
