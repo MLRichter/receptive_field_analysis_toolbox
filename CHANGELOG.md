@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.3 (2022-01-24)
+### Fix
+* Removed some rogue print statements ([`1d771cb`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/1d771cb07162f889f1921e98e22ae90d05556360))
+* Quality of life for coercing torch.nn.functional problems ([`950a698`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/950a698276377a2431ec14e192fbc2c60efd5210))
+* Quality of life for coercing torch.nn.functional problems ([`af18e5e`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/af18e5e2f3ae7394297293ee3fbf5fffed4a17bb))
+* Added handling for unknown layers ([`bb6fe08`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/bb6fe085c68df1f3d08ae5fff07a650f97230f22))
+* Added handling for unknown layers ([`03f4c3a`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/03f4c3a7cfd492e928f8ded8fcace5300eb74c62))
+
 ## v1.3.2 (2022-01-23)
 ### Fix
 * Added another filter option ([`8d81d41`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/8d81d417b4b661a9d576783ec8dd73bc244f0edd))
