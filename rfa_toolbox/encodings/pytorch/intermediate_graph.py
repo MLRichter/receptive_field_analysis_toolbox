@@ -1,3 +1,4 @@
+import warnings
 from typing import Dict, List, Optional, Tuple
 
 import torch
@@ -118,7 +119,13 @@ class Digraph:
     def subgraph(self, name: str) -> GraphVizDigraph:
         """This is a dummy function to mimic the behavior
         of a digraph-object from Graphviz with no functionality."""
-        pass
+        return self
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return
 
     def _is_resolvable(
         self, predecessors: List[str], resolved_nodes: Dict[str, EnrichedNetworkNode]
@@ -149,6 +156,18 @@ class Digraph:
                     continue
         return
 
+    def _check_for_lone_node(self, resolved_nodes: Dict[str, EnrichedNetworkNode]):
+        for name, node in resolved_nodes.items():
+            if len(node.predecessors) == 0 and len(node.succecessors) == 0:
+                warnings.warn(
+                    f"Found a node with no predecessors and no successors: "
+                    f"'{node.layer_info.name}',"
+                    f" this may be caused by some control-flow in "
+                    f" this node disabling any processing"
+                    f" within the node.",
+                    UserWarning,
+                )
+
     def to_graph(self) -> EnrichedNetworkNode:
         """Transforms the graph stored in the Digraph-Instance into
         a graph consisting of EnrichedNetworkNode-objects.
@@ -178,6 +197,7 @@ class Digraph:
                 resolvable_node_name,
             )
             resolved_nodes[resolvable_node_name] = resolved_node
+        self._check_for_lone_node(resolved_nodes)
         self._substitute(resolved_node)
         return resolved_node
 
