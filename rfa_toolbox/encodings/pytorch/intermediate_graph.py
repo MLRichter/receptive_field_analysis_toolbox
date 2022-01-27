@@ -160,10 +160,11 @@ class Digraph:
         for name, node in resolved_nodes.items():
             if len(node.predecessors) == 0 and len(node.succecessors) == 0:
                 warnings.warn(
-                    f"Found a node with no predecessors and no successors: {name},"
-                    f"this may be caused by some control-flow in "
-                    f"this node disabling any processing"
-                    f"within the node."
+                    f"Found a node with no predecessors and no successors: "
+                    f"'{node.layer_info.name}',"
+                    f" this may be caused by some control-flow in "
+                    f" this node disabling any processing"
+                    f" within the node."
                 )
 
     def to_graph(self) -> EnrichedNetworkNode:
