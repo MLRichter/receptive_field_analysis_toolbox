@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.4 (2022-01-27)
+### Fix
+* Added the ability to handle custom layers ([`b7cb73e`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/b7cb73e1b30d8a78dd720ab6391f2341322957f2))
+* Added the ability to handle custom layers ([`58fd401`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/58fd4014dcd074aab78d72223a4bcfd36517cf73))
+* Added the ability to handle custom layers ([`d8f8f6b`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/d8f8f6b1449920fede9245a9da976dc9bd450deb))
+* Added the ability to handle custom layers ([`f3321b8`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/f3321b8aa54789dbe329995798fbfe31c123f1b4))
+* Added the ability to handle custom layers ([`1a8a3db`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/1a8a3dbb5f4c452e6831bf038b5e6f6d9b1bdf9e))
+
 ## v1.3.3 (2022-01-24)
 ### Fix
 * Removed some rogue print statements ([`1d771cb`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/1d771cb07162f889f1921e98e22ae90d05556360))
