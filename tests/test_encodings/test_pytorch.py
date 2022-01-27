@@ -8,7 +8,20 @@ from torchvision.models.vgg import vgg19
 
 from rfa_toolbox.encodings.pytorch import toggle_coerce_torch_functional
 from rfa_toolbox.encodings.pytorch.ingest_architecture import make_graph
-from rfa_toolbox.graphs import EnrichedNetworkNode
+from rfa_toolbox.encodings.pytorch.intermediate_graph import Digraph
+from rfa_toolbox.graphs import EnrichedNetworkNode, LayerDefinition
+
+
+class TestIntermediateGraph:
+    def test_check_for_lone_node(self):
+        nodes = {
+            "node": EnrichedNetworkNode(
+                name="node", layer_info=LayerDefinition(name="conv"), predecessors=[]
+            )
+        }
+        dot = Digraph(None)
+        with pytest.warns(UserWarning):
+            dot._check_for_lone_node(nodes)
 
 
 class TestOnPreimplementedModels:

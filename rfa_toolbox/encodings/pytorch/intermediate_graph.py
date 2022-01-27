@@ -164,7 +164,8 @@ class Digraph:
                     f"'{node.layer_info.name}',"
                     f" this may be caused by some control-flow in "
                     f" this node disabling any processing"
-                    f" within the node."
+                    f" within the node.",
+                    UserWarning,
                 )
 
     def to_graph(self) -> EnrichedNetworkNode:
