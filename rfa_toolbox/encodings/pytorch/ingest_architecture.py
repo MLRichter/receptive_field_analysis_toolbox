@@ -30,7 +30,7 @@ def _check_black_list(submodule_type, fq_submodule_name, classes_to_not_visit):
         classes_to_not_visit is not None
         and (
             submodule_type not in classes_to_not_visit
-            or fq_submodule_name not in classes_to_not_visit
+            and fq_submodule_name not in classes_to_not_visit
         )
     )
 
