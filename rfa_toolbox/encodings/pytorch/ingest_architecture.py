@@ -229,7 +229,7 @@ def make_graph(
                 "aten::stack",
                 "aten::reshape",
                 "aten::split_with_sizes",
-                "aten::cat",
+                # "aten::cat",
                 "aten::expand",
                 "aten::expand_as",
                 "aten::_shape_as_tensor",

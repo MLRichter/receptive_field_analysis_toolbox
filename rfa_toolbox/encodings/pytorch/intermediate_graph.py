@@ -118,7 +118,13 @@ class Digraph:
     def subgraph(self, name: str) -> GraphVizDigraph:
         """This is a dummy function to mimic the behavior
         of a digraph-object from Graphviz with no functionality."""
-        pass
+        return self
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return
 
     def _is_resolvable(
         self, predecessors: List[str], resolved_nodes: Dict[str, EnrichedNetworkNode]
