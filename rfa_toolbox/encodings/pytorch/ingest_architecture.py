@@ -10,6 +10,31 @@ except ImportError:
 from rfa_toolbox.encodings.pytorch.intermediate_graph import Digraph
 
 
+def _check_white_list(submodule_type, fq_submodule_name, classes_to_visit):
+    return (
+        classes_to_visit is None
+        and (
+            not fq_submodule_name.startswith("torch.nn")
+            or fq_submodule_name.startswith("torch.nn.modules.container")
+        )
+    ) or (
+        classes_to_visit is not None
+        and (
+            submodule_type in classes_to_visit or fq_submodule_name in classes_to_visit
+        )
+    )
+
+
+def _check_black_list(submodule_type, fq_submodule_name, classes_to_not_visit):
+    return (classes_to_not_visit is None) or (
+        classes_to_not_visit is not None
+        and (
+            submodule_type not in classes_to_not_visit
+            or fq_submodule_name not in classes_to_not_visit
+        )
+    )
+
+
 def make_graph(
     mod,
     classes_to_visit=None,
@@ -145,32 +170,6 @@ def make_graph(
                 if elem.isnumeric():
                     elem = "[" + elem + "]."
                 pr += elem
-
-            def _check_white_list(submodule_type, fq_submodule_name, classes_to_visit):
-                return (
-                    classes_to_visit is None
-                    and (
-                        not fq_submodule_name.startswith("torch.nn")
-                        or fq_submodule_name.startswith("torch.nn.modules.container")
-                    )
-                ) or (
-                    classes_to_visit is not None
-                    and (
-                        submodule_type in classes_to_visit
-                        or fq_submodule_name in classes_to_visit
-                    )
-                )
-
-            def _check_black_list(
-                submodule_type, fq_submodule_name, classes_to_not_visit
-            ):
-                return (classes_to_not_visit is None) or (
-                    classes_to_not_visit is not None
-                    and (
-                        submodule_type not in classes_to_not_visit
-                        or fq_submodule_name not in classes_to_not_visit
-                    )
-                )
 
             if classes_found is not None:
                 classes_found.add(fq_submodule_name)
