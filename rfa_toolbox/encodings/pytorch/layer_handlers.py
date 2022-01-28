@@ -1,4 +1,5 @@
 from collections import Sequence
+from typing import Callable
 
 import numpy as np
 import torch
@@ -131,6 +132,33 @@ class AnyAdaptivePool(Conv2d):
         stride_size = 1
         return LayerDefinition(
             name=name, kernel_size=kernel_size, stride_size=stride_size
+        )
+
+
+@attrs(auto_attribs=True, frozen=True, slots=True)
+class GenericLayerTypeHandler(LayerInfoHandler):
+    """Extracts information from linear (fully connected) layers."""
+
+    class_name: str
+    name_provider: Callable[[torch.nn.Module, str], str]
+    kernel_size_provider: Callable[[torch.nn.Module], int]
+    stride_size_provider: Callable[[torch.nn.Module], int]
+    filters_provider: Callable[[torch.nn.Module], int]
+    units_provider: Callable[[torch.nn.Module], int]
+
+    def can_handle(self, name: str) -> bool:
+        return self.class_name in name
+
+    def __call__(
+        self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
+    ) -> LayerDefinition:
+        layer = obtain_module_with_resolvable_string(resolvable_string, model)
+        return LayerDefinition(
+            name=self.name_provider(layer, self.class_name),
+            kernel_size=self.kernel_size_provider(layer),
+            stride_size=self.stride_size_provider(layer),
+            units=self.units_provider(layer),
+            filters=self.filters_provider(layer),
         )
 
 

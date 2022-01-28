@@ -78,3 +78,62 @@ class TestOnPreimplementedModels:
         output_node = d.to_graph()
         assert len(output_node.all_layers) == 46
         assert isinstance(output_node, EnrichedNetworkNode)
+
+
+class SomeModule(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.k_size = 3
+        self.s_size = 1
+        self.conv1 = torch.nn.Conv2d(
+            64, 64, kernel_size=self.k_size, stride=self.s_size, padding=1, bias=False
+        )
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = torch.nn.functional.max_pool2d(
+            x, kernel_size=self.k_size * 2, stride=self.s_size * 2, padding=2
+        )
+        return x
+
+
+class TestUtils:
+    def test_adding_a_handler(self):
+        m = torch.nn.Sequential(
+            torch.nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
+            torch.nn.ReLU(),
+            SomeModule(),
+            torch.nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
+            torch.nn.ReLU(),
+        )
+
+        from rfa_toolbox import create_graph_from_pytorch_model
+        from rfa_toolbox.encodings.pytorch import add_custom_layer_handler
+
+        def kernel_size(module):
+            x1 = module.k_size
+            k_size2 = module.k_size * 2
+            x2 = k_size2 - 1
+            return x1 + x2
+
+        def stride_size(module):
+            return getattr(module, "s_size", 1) * 2
+
+        def name_handler(module, name):
+            k_size = kernel_size(module)
+            s_size = stride_size(module)
+            return f"{name} {k_size}x{k_size} / {s_size}"
+
+        add_custom_layer_handler(
+            class_name="SomeModule",
+            name_handler=name_handler,
+            kernel_size_provider=kernel_size,
+            stride_size_provider=stride_size,
+        )
+        gr = create_graph_from_pytorch_model(m, custom_layers=["SomeModule"])
+        layer = [
+            layer for layer in gr.all_layers if "SomeModule" in layer.layer_info.name
+        ][0]
+        assert layer.layer_info.kernel_size == 8
+        assert layer.layer_info.stride_size == 2
+        assert layer.layer_info.name == f"SomeModule {8}x{8} / {2}"

@@ -114,7 +114,7 @@ def make_graph(
         try:
             cur = i.node().s("name")
         except RuntimeError:
-            return suffix + "-unknownType"
+            return suffix + "-unknownType" if suffix is not None else "unknownType"
         if suffix is not None:
             cur = cur + "." + suffix
         of = next(i.node().inputs())
