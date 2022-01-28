@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.4.0 (2022-01-28)
+### Feature
+* Added compatibility for PyTorch functional ([`8e68160`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/8e68160824baa3ec6f9052c2135038424d4b9230))
+
 ## v1.3.4 (2022-01-27)
 ### Fix
 * Added the ability to handle custom layers ([`b7cb73e`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/b7cb73e1b30d8a78dd720ab6391f2341322957f2))
