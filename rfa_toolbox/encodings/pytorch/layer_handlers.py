@@ -147,7 +147,7 @@ class GenericLayerTypeHandler(LayerInfoHandler):
     units_provider: Callable[[torch.nn.Module], int]
 
     def can_handle(self, name: str) -> bool:
-        return name == self.class_name
+        return self.class_name in name
 
     def __call__(
         self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs

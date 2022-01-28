@@ -1,5 +1,5 @@
 import warnings
-from collections import Callable
+from typing import Callable
 
 import torch
 
@@ -55,7 +55,6 @@ def add_custom_layer_handler(
         filters_provider:       function that returns the number of filters of the layer
         units_provider:         function that returns the number of units of the layer
     """
-    class_name = class_name.lower()
     handler = GenericLayerTypeHandler(
         class_name=class_name,
         name_provider=name_handler,
