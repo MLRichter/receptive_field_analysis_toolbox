@@ -6,7 +6,6 @@ from torchvision.models.mnasnet import mnasnet1_3
 from torchvision.models.resnet import resnet18, resnet152
 from torchvision.models.vgg import vgg19
 
-from rfa_toolbox.encodings.pytorch import toggle_coerce_torch_functional
 from rfa_toolbox.encodings.pytorch.ingest_architecture import make_graph
 from rfa_toolbox.encodings.pytorch.intermediate_graph import Digraph
 from rfa_toolbox.graphs import EnrichedNetworkNode, LayerDefinition
@@ -62,21 +61,14 @@ class TestOnPreimplementedModels:
         assert len(output_node.all_layers) == 515
         assert isinstance(output_node, EnrichedNetworkNode)
 
-    def test_make_graph_inception_v3(self):
+    def test_inceptionv3(self):
         model = inception_v3
         m = model()
-        tm = torch.jit.trace(m, [torch.randn(1, 3, 399, 399)])
-        with pytest.raises(RuntimeError):
-            d = make_graph(tm, ref_mod=m)
-            d.to_graph()
-
-    def test_inceptionv3_no_raise(self):
-        model = inception_v3
-        m = model()
-        toggle_coerce_torch_functional(True)
         tm = torch.jit.trace(m, [torch.randn(1, 3, 399, 399)])
         d = make_graph(tm, ref_mod=m)
-        d.to_graph()
+        output_node = d.to_graph()
+        assert len(output_node.all_layers) == 319
+        assert isinstance(output_node, EnrichedNetworkNode)
 
     def test_make_graph_vgg19(self):
         model = vgg19

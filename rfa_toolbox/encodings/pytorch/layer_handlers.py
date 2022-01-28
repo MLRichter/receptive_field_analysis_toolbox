@@ -1,4 +1,3 @@
-import warnings
 from collections import Sequence
 
 import numpy as np
@@ -49,7 +48,7 @@ class Conv2d(LayerInfoHandler):
             return False
 
     def __call__(
-        self, model: torch.nn.Module, resolvable_string: str, name: str
+        self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
     ) -> LayerDefinition:
         conv_layer = obtain_module_with_resolvable_string(resolvable_string, model)
         kernel_size = (
@@ -98,7 +97,7 @@ class AnyPool(Conv2d):
         return "Pool" in working_name and "Adaptive" not in working_name
 
     def __call__(
-        self, model: torch.nn.Module, resolvable_string: str, name: str
+        self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
     ) -> LayerDefinition:
         conv_layer = obtain_module_with_resolvable_string(resolvable_string, model)
         kernel_size = conv_layer.kernel_size
@@ -126,7 +125,7 @@ class AnyAdaptivePool(Conv2d):
         return "pool" in name.lower() and "adaptive" in name.lower()
 
     def __call__(
-        self, model: torch.nn.Module, resolvable_string: str, name: str
+        self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
     ) -> LayerDefinition:
         kernel_size = None
         stride_size = 1
@@ -143,7 +142,7 @@ class LinearHandler(LayerInfoHandler):
         return "Linear" in name
 
     def __call__(
-        self, model: torch.nn.Module, resolvable_string: str, name: str
+        self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
     ) -> LayerDefinition:
         kernel_size = None
         stride_size = 1
@@ -168,54 +167,37 @@ class FunctionalKernelHandler(LayerInfoHandler):
     """
 
     coerce: bool = False
-    default_kernel_size: int = 1
-    default_stride_size: int = 1
 
     def can_handle(self, name: str) -> bool:
         return "pool" in name.split(".")[-1] or "conv" in name.split(".")[-1]
 
     def __call__(
-        self, model: torch.nn.Module, resolvable_string: str, name: str
+        self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
     ) -> LayerDefinition:
-        if not self.coerce:
-            raise RuntimeError(
-                "Using the functional API of PyTorch is not "
-                "directly supported by this library."
-                "Usage of torch.function may corrupt the "
-                "reconstruction of the network topology."
-                "If you want to continue anyway use the "
-                "following code snipped before calling RFA-toolbox:\n"
-                "from rfa_toolbox.encodings.pytorch"
-                " import toggle_coerce_torch_functional\n"
-                "toggle_coerce_torch_functional(True)"
-                "\n\n You can also modify the same handler to"
-                "adjust a correct kernel and stride sizes"
-            )
+
         if "(" in resolvable_string and ")" in name:
-            # print(result)
             result = name.split("(")[-1].replace(")", "")
         else:
             result = f"{name.split('.')[-1]}"
 
-        warnings.warn(
-            "Detected a call of a kernel based layer from "
-            f"the functional library of PyTorch: {name}!"
-            " The kernel and stride size of this layer "
-            "cannot be correctly extracted, "
-            f"defaulting to kernel_size: {self.default_kernel_size} and "
-            f"stride_size: {self.default_stride_size}."
-            " Please avoid functional calls from kernel-based "
-            "operations, they may also corrupt the"
-            "compute graph use the corresponding modules from torch.nn instead!"
+        kernel_size = kwargs["kernel_size"]
+        stride_size = kwargs["stride_size"]
+
+        if not isinstance(kernel_size, Sequence) and not isinstance(
+            kernel_size, np.ndarray
+        ):
+            kernel_size_name = f"{kernel_size}x{kernel_size}"
+        else:
+            kernel_size_name = "x".join([str(k) for k in kernel_size])
+        final_name = (
+            f"{result} {kernel_size_name} / "
+            f"{stride_size if isinstance(stride_size, int) else tuple(stride_size)}"
         )
+
         return LayerDefinition(
-            name=result
-            + (
-                f" {self.default_kernel_size}x{self.default_kernel_size} / "
-                f"{self.default_stride_size} \n(functional, values assumed)"
-            ),
-            kernel_size=self.default_kernel_size,
-            stride_size=self.default_stride_size,
+            name=final_name,
+            kernel_size=kernel_size,
+            stride_size=stride_size,
         )
 
 
@@ -234,12 +216,11 @@ class AnyHandler(LayerInfoHandler):
         return True
 
     def __call__(
-        self, model: torch.nn.Module, resolvable_string: str, name: str
+        self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
     ) -> LayerDefinition:
         kernel_size = 1
         stride_size = 1
         if "(" in resolvable_string and ")" in name:
-            # print(result)
             result = name.split("(")[-1].replace(")", "")
         else:
             result = f"{name.split('.')[-1]}"

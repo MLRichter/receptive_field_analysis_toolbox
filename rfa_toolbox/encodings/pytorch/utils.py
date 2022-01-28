@@ -1,4 +1,4 @@
-import rfa_toolbox.encodings.pytorch.intermediate_graph as ig
+import warnings
 
 
 def toggle_coerce_torch_functional(
@@ -24,6 +24,8 @@ def toggle_coerce_torch_functional(
                         the receptive field expansion.
         handler_idx:    index of the handler in the list of handlers
     """
-    ig.RESOLVING_STRATEGY[handler_idx].coerce = coerce
-    ig.RESOLVING_STRATEGY[handler_idx].kernel_size = kernel_size
-    ig.RESOLVING_STRATEGY[handler_idx].stride_size = stride_size
+    warnings.warn(
+        "This function is deprecated and is no longer needed, "
+        "you may remove it from your code",
+        DeprecationWarning,
+    )
