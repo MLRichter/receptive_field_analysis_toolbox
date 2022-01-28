@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 from rfa_toolbox.graphs import EnrichedNetworkNode
 
@@ -33,6 +33,62 @@ def _check_black_list(submodule_type, fq_submodule_name, classes_to_not_visit):
             and fq_submodule_name not in classes_to_not_visit
         )
     )
+
+
+def _obtain_variable_names(graph: torch._C.Graph) -> Dict[str, str]:
+    result = {}
+    for node in graph.nodes():
+        x, y = str(node).split(" : ")
+        key, value = x, y
+        result[key] = value
+    return result
+
+
+def _obtain_node_key(node: str) -> str:
+    return str(node).split(" : ")[0]
+
+
+def _obtain_variable_from_node_string_atten(
+    line: str, graph_row_dict: Dict[str, str]
+) -> List[str]:
+    row = graph_row_dict[line]
+    layer_call = row.split("aten::")[-1]
+    variable_pruned_left = layer_call.split("(")[1]
+    variable_pruned_right = variable_pruned_left.split("),")[0]
+    variable_name = variable_pruned_right.split(",")
+    return [x.replace(" ", "") for x in variable_name]
+
+
+def _resolve_variable(
+    variable: str, graph_row_dict: Dict[str, str]
+) -> Union[List[int], int]:
+    if "prim::ListConstruct" in variable:
+        variable_pruned_left = variable.split("prim::ListConstruct(")[1]
+        variable_pruned_right = variable_pruned_left.split("),")[0]
+        variable_name = variable_pruned_right.split(",")
+        result = [
+            _resolve_variable(graph_row_dict[x.replace(" ", "")], graph_row_dict)
+            for x in variable_name
+        ]
+    elif "prim::Constant" in variable and "prim::Constant()" not in variable:
+        variable_pruned_left = variable.split("prim::Constant[value=")[1]
+        variable_pruned_right = variable_pruned_left.split("]")[0]
+        variable = int(variable_pruned_right)
+        result = variable
+    else:
+        result = None
+    return result
+
+
+def _resolve_variables(variables: List[str], graph_row_dict: Dict[str, str]):
+    result = []
+    for var in variables:
+        if var in graph_row_dict:
+            var_val = _resolve_variable(graph_row_dict[var], graph_row_dict)
+            result.append(var_val)
+        else:
+            result.append(None)
+    return result
 
 
 def make_graph(
@@ -129,6 +185,8 @@ def make_graph(
             return any([is_relevant_type(tt) for tt in t.elements()])
         return False
 
+    variable_names = _obtain_variable_names(graph=gr)
+
     for n in gr.nodes():
         # this seems to be uninteresting for resnet-style models
         only_first_ops = {"aten::expand_as"}
@@ -219,6 +277,24 @@ def make_graph(
             name = prefix + "." + n.output().debugName()
             label = funcname
             dot.node(name, label=label, shape="box")
+            for i in relevant_inputs:
+                pr, op = preds[i]
+                make_edges(pr, prefix + i.debugName(), name, op)
+            for o in n.outputs():
+                preds[o] = {name}, set()
+        elif "aten::" in n.kind() and "pool" in n.kind() and "adaptive" not in n.kind():
+            name = prefix + "." + n.output().debugName()
+            label = n.kind().split("::")[-1]
+            key = _obtain_node_key(str(n))
+            vars = _obtain_variable_from_node_string_atten(key, variable_names)
+            resolved = _resolve_variables(vars, variable_names)
+            dot.node(
+                name,
+                label=label,
+                shape="box",
+                kernel_size=resolved[1],
+                stride_size=resolved[2],
+            )
             for i in relevant_inputs:
                 pr, op = preds[i]
                 make_edges(pr, prefix + i.debugName(), name, op)

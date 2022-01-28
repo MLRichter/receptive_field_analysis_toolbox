@@ -1,5 +1,5 @@
 import warnings
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 import torch
 from attr import attrib, attrs
@@ -63,13 +63,22 @@ class Digraph:
     def _find_predecessors(self, name: str) -> List[str]:
         return [e[0] for e in self.edge_collection if e[1] == name]
 
-    def _get_layer_definition(self, label: str) -> LayerDefinition:
+    def _get_layer_definition(
+        self,
+        label: str,
+        kernel_size: Optional[Union[Tuple[int, ...], int]] = None,
+        stride_size: Optional[Union[Tuple[int, ...], int]] = None,
+    ) -> LayerDefinition:
         resolvable = self._get_resolvable(label)
         name = self._get_name(label)
         for handler in self.layer_info_handlers:
             if handler.can_handle(label):
                 return handler(
-                    model=self.ref_mod, resolvable_string=resolvable, name=name
+                    model=self.ref_mod,
+                    resolvable_string=resolvable,
+                    name=name,
+                    kernel_size=kernel_size,
+                    stride_size=stride_size,
                 )
         raise ValueError(f"Did not find a way to handle the following layer: {name}")
 
@@ -98,6 +107,10 @@ class Digraph:
         label: Optional[str] = None,
         shape: str = "box",
         style: Optional[str] = None,
+        kernel_size: Optional[Union[Tuple[int, ...], int]] = None,
+        stride_size: Optional[Union[Tuple[int, ...], int]] = None,
+        units: Optional[int] = None,
+        filters: Optional[int] = None,
     ) -> None:
         """Creates a node in the digraph-instance.
 
@@ -113,7 +126,9 @@ class Digraph:
             Nothing.
         """
         label = name if label is None else label
-        layer_definition = self._get_layer_definition(label)
+        layer_definition = self._get_layer_definition(
+            label, kernel_size=kernel_size, stride_size=stride_size
+        )
         self.layer_definitions[name] = layer_definition
 
     def subgraph(self, name: str) -> GraphVizDigraph:
