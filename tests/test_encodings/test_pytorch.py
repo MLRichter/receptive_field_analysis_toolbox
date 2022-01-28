@@ -108,7 +108,7 @@ class TestUtils:
         )
 
         from rfa_toolbox import create_graph_from_pytorch_model
-        from rfa_toolbox.encodings.pytorch.utils import add_custom_layer_handler
+        from rfa_toolbox.encodings.pytorch import add_custom_layer_handler
 
         def kernel_size(module):
             x1 = module.k_size
