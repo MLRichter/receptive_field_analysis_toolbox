@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v1.4.1 (2022-01-28)
+### Fix
+* Added a simple way to add additional handlers ([`8f2cefd`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/8f2cefdb4fde7f4d18e601de91516e852b7c8885))
+* Added a simple way to add additional handlers ([`d968884`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/d968884c922106fdb9ff143acdd1cc7b04e55b69))
+* Added a simple way to add additional handlers ([`8b09f43`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/8b09f43dbf6b79e7f2f41df3614686caed45e015))
+* Added a simple way to add additional handlers ([`8d0112d`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/8d0112d362cf3719adf6022c95b2cfe4a336f9c0))
+
 ## v1.4.0 (2022-01-28)
 ### Feature
 * Added compatibility for PyTorch functional ([`8e68160`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/8e68160824baa3ec6f9052c2135038424d4b9230))
