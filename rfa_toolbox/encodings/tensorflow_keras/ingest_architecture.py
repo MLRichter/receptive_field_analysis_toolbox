@@ -1,5 +1,5 @@
 from json import loads
-from typing import Any, Dict, List
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 from tensorflow.keras.models import Model
 
@@ -10,7 +10,12 @@ from rfa_toolbox.encodings.tensorflow_keras.layer_handlers import (
     KernelBasedHandler,
     PoolingBasedHandler,
 )
-from rfa_toolbox.graphs import EnrichedNetworkNode, LayerDefinition
+from rfa_toolbox.graphs import (
+    KNOWN_FILTER_MAPPING,
+    EnrichedNetworkNode,
+    LayerDefinition,
+    ReceptiveFieldInfo,
+)
 
 PARSERS = [
     InputHandler(),
@@ -63,7 +68,11 @@ def obtain_layer_definition(node_dict: Dict[str, Any]) -> LayerDefinition:
 
 
 def create_node_from_dict(
-    node_dict: Dict[str, Any], processed_nodes: Dict[str, EnrichedNetworkNode]
+    node_dict: Dict[str, Any],
+    processed_nodes: Dict[str, EnrichedNetworkNode],
+    filter_rf: Callable[
+        [Tuple[ReceptiveFieldInfo, ...]], Tuple[ReceptiveFieldInfo, ...]
+    ],
 ) -> EnrichedNetworkNode:
     """Create the node-representation of a layer.
     Args:
@@ -72,6 +81,7 @@ def create_node_from_dict(
         processed_nodes:    a dictionary, which maps already processed nodes
                             to their EnrichedNetworkNode-instances, used for
                             obtaining predecessors
+        filter_rf:          a function, which filters the receptive fields
     """
     predecessors = (
         []
@@ -83,11 +93,19 @@ def create_node_from_dict(
     )
     layer_info: LayerDefinition = obtain_layer_definition(node_dict)
     return EnrichedNetworkNode(
-        name=node_dict["name"], layer_info=layer_info, predecessors=predecessors
+        name=node_dict["name"],
+        layer_info=layer_info,
+        predecessors=predecessors,
+        receptive_field_info_filter=filter_rf,
     )
 
 
-def create_graph(layers: List[Dict[str, Any]]) -> EnrichedNetworkNode:
+def create_graph(
+    layers: List[Dict[str, Any]],
+    filter_rf: Callable[
+        [Tuple[ReceptiveFieldInfo, ...]], Tuple[ReceptiveFieldInfo, ...]
+    ],
+) -> EnrichedNetworkNode:
     """Create a graph of the model from a list of layers"""
     processed_nodes: Dict[str, EnrichedNetworkNode] = {}
     working_layers: List[Dict[str, Any]] = layers[:]
@@ -96,7 +114,9 @@ def create_graph(layers: List[Dict[str, Any]]) -> EnrichedNetworkNode:
             working_layers, processed_nodes
         )
         node = create_node_from_dict(
-            node_dict=processable_node_dict, processed_nodes=processed_nodes
+            node_dict=processable_node_dict,
+            processed_nodes=processed_nodes,
+            filter_rf=filter_rf,
         )
         processed_nodes[node.name] = node
         working_layers.remove(processable_node_dict)
@@ -105,12 +125,19 @@ def create_graph(layers: List[Dict[str, Any]]) -> EnrichedNetworkNode:
     raise ValueError(f"Some nodes were left unprocessed: {working_layers}")
 
 
-def model_dict_to_enriched_graph(model_dict: Dict[str, Any]) -> EnrichedNetworkNode:
+def model_dict_to_enriched_graph(
+    model_dict: Dict[str, Any],
+    filter_rf: Callable[
+        [Tuple[ReceptiveFieldInfo, ...]], Tuple[ReceptiveFieldInfo, ...]
+    ],
+) -> EnrichedNetworkNode:
     """Turn a dictionary extracted from the json-representation of a Keras
     model into the rfa-toolbox specific graph representation.
 
     Args:
-     model_dict: the json-representation of the model
+        model_dict: the json-representation of the model
+        filter_rf:  a function, which filters the receptive fields in the input of a
+                    layer.
 
     Returns:
          a node of the graph
@@ -121,7 +148,7 @@ def model_dict_to_enriched_graph(model_dict: Dict[str, Any]) -> EnrichedNetworkN
     if "layers" not in layer_config:
         raise AttributeError("Model-json export has no layers")
     layers = layer_config["layers"]
-    graph: EnrichedNetworkNode = create_graph(layers)
+    graph: EnrichedNetworkNode = create_graph(layers, filter_rf)
     return graph
 
 
@@ -130,10 +157,26 @@ def keras_model_to_dict(model: Model) -> Dict[str, Any]:
     return loads(model.to_json())
 
 
-def create_graph_from_model(model: Model) -> EnrichedNetworkNode:
+def create_graph_from_model(
+    model: Model,
+    filter_rf: Optional[
+        Union[
+            Callable[[Tuple[ReceptiveFieldInfo, ...]], Tuple[ReceptiveFieldInfo, ...]],
+            str,
+        ]
+    ] = None,
+) -> EnrichedNetworkNode:
     """Create a graph model from tensorflow
     Args:
         model: the model, thus must be a Keras-model.
+        filter_rf: a function, which filters the receptive fields, which should be
+                considered for computing minimum and maximum receptive field sizes.
+                By default, not filtering is done.
     """
     model_dict = keras_model_to_dict(model)
-    return model_dict_to_enriched_graph(model_dict)
+    callable_filter = (
+        filter_rf
+        if (not isinstance(filter_rf, str) and filter_rf is not None)
+        else KNOWN_FILTER_MAPPING[filter_rf]
+    )
+    return model_dict_to_enriched_graph(model_dict, filter_rf=callable_filter)

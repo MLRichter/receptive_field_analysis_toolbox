@@ -1,11 +1,16 @@
+from typing import Sequence
+
+import numpy as np
 import pytest
 import torch
+from torchvision.models import efficientnet_b0
 from torchvision.models.alexnet import alexnet
 from torchvision.models.inception import inception_v3
 from torchvision.models.mnasnet import mnasnet1_3
 from torchvision.models.resnet import resnet18, resnet152
 from torchvision.models.vgg import vgg19
 
+from rfa_toolbox import create_graph_from_pytorch_model
 from rfa_toolbox.encodings.pytorch.ingest_architecture import make_graph
 from rfa_toolbox.encodings.pytorch.intermediate_graph import Digraph
 from rfa_toolbox.graphs import EnrichedNetworkNode, LayerDefinition
@@ -78,6 +83,37 @@ class TestOnPreimplementedModels:
         output_node = d.to_graph()
         assert len(output_node.all_layers) == 46
         assert isinstance(output_node, EnrichedNetworkNode)
+
+    def test_make_graph_efficientnetb0_with_inf_filter(self):
+        model = efficientnet_b0
+        m = model()
+        graph = create_graph_from_pytorch_model(m, filter_rf="inf")
+        infs = 0
+        for node in graph.all_layers:
+            for rf in node.receptive_field_sizes:
+                if isinstance(rf, Sequence):
+                    if rf == np.inf or (isinstance(rf, Sequence) and np.inf in rf):
+                        infs += 1
+        graph = create_graph_from_pytorch_model(m, filter_rf=None)
+        infs_nf = 0
+        for node in graph.all_layers:
+            for rf in node.receptive_field_sizes:
+                if isinstance(rf, Sequence):
+                    if rf == np.inf or (isinstance(rf, Sequence) and np.inf in rf):
+                        infs_nf += 1
+        assert infs_nf > infs
+        assert infs_nf == 661
+        assert infs == 64
+
+    def test_make_graph_efficientnetb0_custom_func(self):
+        def func(x):
+            return x
+
+        model = efficientnet_b0
+        m = model()
+        graph = create_graph_from_pytorch_model(m, filter_rf=func)
+        for node in graph.all_layers:
+            assert node.receptive_field_info_filter == func
 
 
 class SomeModule(torch.nn.Module):

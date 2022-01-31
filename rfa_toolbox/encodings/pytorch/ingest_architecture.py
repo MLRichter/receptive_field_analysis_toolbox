@@ -1,6 +1,10 @@
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Callable, Dict, List, Optional, Tuple, Union
 
-from rfa_toolbox.graphs import EnrichedNetworkNode
+from rfa_toolbox.graphs import (
+    KNOWN_FILTER_MAPPING,
+    EnrichedNetworkNode,
+    ReceptiveFieldInfo,
+)
 
 try:
     import torch
@@ -101,6 +105,7 @@ def make_graph(
     parent_dot=None,
     ref_mod=None,
     classes_to_not_visit=None,
+    filter_rf=KNOWN_FILTER_MAPPING[None],
 ):
     """
     This code was adapted from this blog article:
@@ -131,6 +136,7 @@ def make_graph(
             ref_mod=ref_mod,
             format="svg",
             graph_attr={"label": self_type, "labelloc": "t"},
+            filter_rf=filter_rf,
         )
         # dot.attr('node', shape='box')
 
@@ -254,6 +260,7 @@ def make_graph(
                         classes_to_visit=classes_to_visit,
                         classes_found=classes_found,
                         classes_to_not_visit=classes_to_not_visit,
+                        filter_rf=filter_rf,
                     )
                     # creating a mapping from the c-values
                     # to the output of the respective subgraph
@@ -368,6 +375,12 @@ def make_graph(
 
 def create_graph_from_model(
     model: torch.nn.Module,
+    filter_rf: Optional[
+        Union[
+            Callable[[Tuple[ReceptiveFieldInfo, ...]], Tuple[ReceptiveFieldInfo, ...]],
+            str,
+        ]
+    ] = None,
     input_res: Tuple[int, int, int, int] = (1, 3, 399, 399),
     custom_layers: Optional[List[str]] = None,
 ) -> EnrichedNetworkNode:
@@ -375,13 +388,15 @@ def create_graph_from_model(
 
     Args:
         model:          a PyTorch-Model.
+        filter_rf:      a function that filters receptive field sizes.
+                        Disabled by default.
         input_res:      input-tuple shape that can be processed by the model.
                         Needs to be a 4-Tuple of shape (batch_size,
                         color_channels, height, width) for CNNs.
                         Needs to be a 2-Tuple of shape (batch_size,
                         num_features) for fully connected networks.
         custom_layers:  Class-names of custom layers, like DropPath
-        or Involutions, which are not part of
+                        or Involutions, which are not part of
                         torch.nn. Keep in mind that unknown layers
                         will defaulted to have no effect on the
                         receptive field size. You may need to
@@ -390,5 +405,12 @@ def create_graph_from_model(
     Returns:
         The EnrichedNetworkNodeGraph
     """
+    filter_func = (
+        filter_rf
+        if (not isinstance(filter_rf, str) and filter_rf is not None)
+        else KNOWN_FILTER_MAPPING[filter_rf]
+    )
     tm = torch.jit.trace(model, (torch.randn(*input_res),))
-    return make_graph(tm, ref_mod=model, classes_to_not_visit=custom_layers).to_graph()
+    return make_graph(
+        tm, filter_rf=filter_func, ref_mod=model, classes_to_not_visit=custom_layers
+    ).to_graph()

@@ -1,11 +1,17 @@
 import json
+from collections import Sequence
 
 import numpy as np
 import pytest
 
 from rfa_toolbox.architectures.resnet import resnet18, resnet36, resnet50, resnet101
 from rfa_toolbox.architectures.vgg import vgg11, vgg13, vgg16, vgg19
-from rfa_toolbox.graphs import EnrichedNetworkNode, LayerDefinition
+from rfa_toolbox.graphs import (
+    KNOWN_FILTER_MAPPING,
+    EnrichedNetworkNode,
+    LayerDefinition,
+    noop_filter,
+)
 from rfa_toolbox.utils.graph_utils import obtain_all_nodes
 
 
@@ -569,3 +575,325 @@ class TestReceptiveFieldSizesForArchitecturesWithTupleKernel:
         assert not conv4.is_border((32, 32))
         assert conv4.is_border(2)
         assert conv4.is_border((2, 2))
+
+
+@pytest.fixture()
+def list_of_predecessors_noop():
+    l0 = EnrichedNetworkNode(
+        name="Conv0",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=1,
+            stride_size=1,
+            filters=64,
+        ),
+        predecessors=[],
+        receptive_field_info_filter=KNOWN_FILTER_MAPPING[None],
+    )
+
+    l1 = EnrichedNetworkNode(
+        name="Conv1",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=(3, 3),
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=noop_filter,
+    )
+
+    l2 = EnrichedNetworkNode(
+        name="Conv2",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=3,
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=noop_filter,
+    )
+
+    l3 = EnrichedNetworkNode(
+        name="Conv3",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=3,
+            stride_size=1,
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=noop_filter,
+    )
+
+    l4 = EnrichedNetworkNode(
+        name="Conv4",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=(np.inf, 3),
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=noop_filter,
+    )
+
+    l5 = EnrichedNetworkNode(
+        name="Conv5",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=(np.inf, np.inf),
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=noop_filter,
+    )
+
+    l6 = EnrichedNetworkNode(
+        name="Conv6",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=np.inf,
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=noop_filter,
+    )
+
+    return [l1, l2, l3, l4, l5, l6]
+
+
+@pytest.fixture()
+def model_with_scalar_noop_infinity_predecessors(list_of_predecessors_noop):
+    return EnrichedNetworkNode(
+        name="Conv7",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=(1, 1),
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=list_of_predecessors_noop,
+        receptive_field_info_filter=noop_filter,
+    )
+
+
+@pytest.fixture()
+def list_of_predecessors_inf_filter():
+    l0 = EnrichedNetworkNode(
+        name="Conv0",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=1,
+            stride_size=1,
+            filters=64,
+        ),
+        predecessors=[],
+        receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+    )
+
+    l1 = EnrichedNetworkNode(
+        name="Conv1",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=(3, 3),
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+    )
+
+    l2 = EnrichedNetworkNode(
+        name="Conv2",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=3,
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+    )
+
+    l3 = EnrichedNetworkNode(
+        name="Conv3",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=3,
+            stride_size=1,
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+    )
+
+    l4 = EnrichedNetworkNode(
+        name="Conv4",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=(np.inf, 3),
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+    )
+
+    l5 = EnrichedNetworkNode(
+        name="Conv5",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=(np.inf, np.inf),
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+    )
+
+    l6 = EnrichedNetworkNode(
+        name="Conv6",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=np.inf,
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=[l0],
+        receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+    )
+
+    return [l1, l2, l3, l4, l5, l6]
+
+
+@pytest.fixture()
+def model_with_scalar_inf_filter_infinity_predecessors(list_of_predecessors_inf_filter):
+    return EnrichedNetworkNode(
+        name="Conv7",
+        layer_info=LayerDefinition(
+            name="Conv3x3",
+            kernel_size=(1, 1),
+            stride_size=(1, 1),
+            filters=64,
+        ),
+        predecessors=list_of_predecessors_inf_filter,
+        receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+    )
+
+
+class TestFiltering:
+    def test_noop_filter_does_nothing(
+        self, model_with_scalar_noop_infinity_predecessors
+    ):
+        node = model_with_scalar_noop_infinity_predecessors
+        print(node.receptive_field_info)
+        print(node.all_layers)
+        assert len(node.all_layers) - 2 == len(node.receptive_field_sizes)
+
+    def test_inf_filters_scalar_infinities(self, list_of_predecessors_noop):
+        r = EnrichedNetworkNode(
+            name="Conv7",
+            layer_info=LayerDefinition(
+                name="Conv3x3",
+                kernel_size=1,
+                stride_size=1,
+                filters=64,
+            ),
+            predecessors=list_of_predecessors_noop,
+            receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+        )
+        for rf in r.receptive_field_sizes:
+            assert rf != np.inf
+
+    def test_inf_filters_tuple_infinities(self, list_of_predecessors_noop):
+        r = EnrichedNetworkNode(
+            name="Conv7",
+            layer_info=LayerDefinition(
+                name="Conv3x3",
+                kernel_size=1,
+                stride_size=1,
+                filters=64,
+            ),
+            predecessors=list_of_predecessors_noop,
+            receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+        )
+        for rf in r.receptive_field_sizes:
+            if isinstance(rf, Sequence):
+                assert rf != (np.inf, np.inf)
+
+    def test_inf_filters_partial_infinity_tuples(self, list_of_predecessors_noop):
+        r = EnrichedNetworkNode(
+            name="Conv7",
+            layer_info=LayerDefinition(
+                name="Conv3x3",
+                kernel_size=1,
+                stride_size=1,
+                filters=64,
+            ),
+            predecessors=list_of_predecessors_noop,
+            receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+        )
+        for rf in r.receptive_field_sizes:
+            if isinstance(rf, Sequence):
+                assert rf != (np.inf, 3)
+
+    def test_inf_behaves_like_noop_if_everything_is_filtered(
+        self, list_of_predecessors_noop
+    ):
+        node = EnrichedNetworkNode(
+            name="Conv7",
+            layer_info=LayerDefinition(
+                name="Conv3x3",
+                kernel_size=1,
+                stride_size=1,
+                filters=64,
+            ),
+            predecessors=[
+                list_of_predecessors_noop[3],
+                list_of_predecessors_noop[4],
+                list_of_predecessors_noop[5],
+            ],
+            receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+        )
+        assert len(node.receptive_field_info) == 3
+
+    def test_inf_filter_on_full_network_noop(self, list_of_predecessors_inf_filter):
+        node = EnrichedNetworkNode(
+            name="Conv7",
+            layer_info=LayerDefinition(
+                name="Conv3x3",
+                kernel_size=1,
+                stride_size=1,
+                filters=64,
+            ),
+            predecessors=[
+                list_of_predecessors_inf_filter[3],
+                list_of_predecessors_inf_filter[4],
+                list_of_predecessors_inf_filter[5],
+            ],
+            receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+        )
+        assert len(node.receptive_field_info) == 3
+
+    def test_inf_filter_on_full_network(self, list_of_predecessors_inf_filter):
+        node = EnrichedNetworkNode(
+            name="Conv7",
+            layer_info=LayerDefinition(
+                name="Conv3x3",
+                kernel_size=1,
+                stride_size=1,
+                filters=64,
+            ),
+            predecessors=list_of_predecessors_inf_filter,
+            receptive_field_info_filter=KNOWN_FILTER_MAPPING["inf"],
+        )
+        assert len(node.receptive_field_info) == 3
+        for rf in node.receptive_field_sizes:
+            if isinstance(rf, Sequence):
+                assert rf != (np.inf, 3)
+                assert rf != (np.inf, np.inf)
+            assert rf != np.inf
