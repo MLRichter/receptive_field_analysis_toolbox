@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.4.2 (2022-01-31)
+### Fix
+* Added the ability to customize filtering ([`ce3aeb4`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/ce3aeb4c00c0abef3277f9b5839163874d355778))
+
 ## v1.4.1 (2022-01-28)
 ### Fix
 * Added a simple way to add additional handlers ([`8f2cefd`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/8f2cefdb4fde7f4d18e601de91516e852b7c8885))
