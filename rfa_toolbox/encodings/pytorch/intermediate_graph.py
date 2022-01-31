@@ -1,5 +1,5 @@
 import warnings
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Callable, Dict, List, Optional, Tuple, Union
 
 import torch
 from attr import attrib, attrs
@@ -19,7 +19,12 @@ from rfa_toolbox.encodings.pytorch.substitutors import (
     numeric_substitutor,
     output_substitutor,
 )
-from rfa_toolbox.graphs import EnrichedNetworkNode, LayerDefinition
+from rfa_toolbox.graphs import (
+    KNOWN_FILTER_MAPPING,
+    EnrichedNetworkNode,
+    LayerDefinition,
+    ReceptiveFieldInfo,
+)
 
 RESOLVING_STRATEGY = [
     AnyConv(),
@@ -59,6 +64,9 @@ class Digraph:
     layer_substitutors: List[NodeSubstitutor] = attrib(
         factory=lambda: SUBSTITUTION_STRATEGY
     )
+    filter_rf: Callable[
+        [Tuple[ReceptiveFieldInfo, ...]], Tuple[ReceptiveFieldInfo, ...]
+    ] = KNOWN_FILTER_MAPPING[None]
 
     def _find_predecessors(self, name: str) -> List[str]:
         return [e[0] for e in self.edge_collection if e[1] == name]
@@ -250,5 +258,6 @@ class Digraph:
             name=name,
             layer_info=layer_def,
             predecessors=pred_nodes,
+            receptive_field_info_filter=self.filter_rf,
         )
         return node

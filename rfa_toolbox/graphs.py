@@ -68,9 +68,32 @@ def naive_minmax_filter(
 
 
 def noop_filter(
-    info: Tuple["ReceptiveFieldInfo"],
-) -> Tuple["ReceptiveFieldInfo"]:
+    info: Tuple["ReceptiveFieldInfo", ...],
+) -> Tuple["ReceptiveFieldInfo", ...]:
     return info
+
+
+def filter_all_rf_info_with_infinite_receptive_field(
+    info: Tuple["ReceptiveFieldInfo", ...],
+) -> Tuple["ReceptiveFieldInfo", ...]:
+    result = list()
+    for rf_info in info:
+        if isinstance(rf_info.receptive_field, Sequence):
+            if not np.isinf(rf_info.receptive_field).any():
+                result.append(rf_info)
+        else:
+            if not np.isinf(rf_info.receptive_field):
+                result.append(rf_info)
+    if result:
+        return tuple(result)
+    else:
+        return info
+
+
+KNOWN_FILTER_MAPPING = {
+    "inf": filter_all_rf_info_with_infinite_receptive_field,
+    None: noop_filter,
+}
 
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
@@ -267,7 +290,7 @@ class EnrichedNetworkNode(Node):
     receptive_field_max: int = attrib(init=False)
 
     receptive_field_info_filter: Callable[
-        [Tuple[ReceptiveFieldInfo]], Tuple[ReceptiveFieldInfo]
+        [Tuple[ReceptiveFieldInfo, ...]], Tuple[ReceptiveFieldInfo, ...]
     ] = noop_filter
     all_layers: List["EnrichedNetworkNode"] = attrib(init=False)
 
