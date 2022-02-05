@@ -145,29 +145,6 @@ def filters_non_infinite_rf_sizes(
     return result
 
 
-def _x1_larger_x2(
-    x1: Union[Tuple[int, ...], int], x2: Union[Tuple[int, ...], int]
-) -> bool:
-    """Compare two receptive field sizes.
-
-    Args:
-        x1: the first receptive field size
-        x2: the second receptive field size
-
-    Returns:
-        True if the first receptive field size is smaller than the second.
-    """
-    if (
-        isinstance(x1, Sequence)
-        or isinstance(x1, np.ndarray)
-        or isinstance(x2, Sequence)
-        or isinstance(x2, np.ndarray)
-    ):
-        return all(np.asarray(x1) < np.asarray(x2))
-    else:
-        return x1 < x2
-
-
 def input_resolution_range(
     graph: EnrichedNetworkNode,
     filter_all_inf_rf: bool = False,
