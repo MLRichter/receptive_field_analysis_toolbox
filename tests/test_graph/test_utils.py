@@ -358,9 +358,7 @@ class TestFindInputResolutionRange:
     ):
         model = torchvision.models.resnet50()
         graph = create_graph_from_pytorch_model(model)
-        min_res, max_res = input_resolution_range(
-            graph, filter_all_inf_rf=False
-        )  # (75, 75), (427, 427)
+        min_res, max_res = input_resolution_range(graph)  # (75, 75), (427, 427)
         assert len(min_res) == 2
         assert len(max_res) == 2
         assert min_res == (75, 75)

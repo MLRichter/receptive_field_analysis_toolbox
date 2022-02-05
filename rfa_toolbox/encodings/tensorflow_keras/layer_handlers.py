@@ -41,7 +41,7 @@ class LayerInfoHandler(Protocol):
 class KernelBasedHandler(LayerInfoHandler):
     def can_handle(self, node: Dict[str, Any]) -> bool:
         """Handles only layers featuring a kernel_size and filters"""
-        return "kernel_size" in node["config"] and "filters" in node["config"]
+        return "kernel_size" in node["config"]
 
     def __call__(self, node: Dict[str, Any]) -> LayerDefinition:
         """Transform the json-representation
@@ -51,11 +51,12 @@ class KernelBasedHandler(LayerInfoHandler):
             f"{'x'.join(str(x) for x in node['config']['kernel_size'])} "
             f"/ {node['config']['strides']}"
         )
+        filters = None if "filters" not in node["config"] else node["config"]["filters"]
         return LayerDefinition(
             name=name,
             kernel_size=node["config"]["kernel_size"],
             stride_size=node["config"]["strides"],
-            filters=node["config"]["filters"],
+            filters=filters,
         )
 
 
@@ -91,6 +92,19 @@ class DenseHandler(LayerInfoHandler):
         of a compute node in the tensorflow-graph"""
         name = node["class_name"]
         return LayerDefinition(name=name, units=node["config"]["units"])
+
+
+@attrs(frozen=True, slots=True, auto_attribs=True)
+class GlobalPoolingHandler(LayerInfoHandler):
+    def can_handle(self, node: Dict[str, Any]) -> bool:
+        """Handles only layers feature units as attribute"""
+        return "Global" in node["class_name"] and "Pooling" in node["class_name"]
+
+    def __call__(self, node: Dict[str, Any]) -> LayerDefinition:
+        """Transform the json-representation
+        of a compute node in the tensorflow-graph"""
+        name = node["class_name"]
+        return LayerDefinition(name=name)
 
 
 @attrs(frozen=True, slots=True, auto_attribs=True)

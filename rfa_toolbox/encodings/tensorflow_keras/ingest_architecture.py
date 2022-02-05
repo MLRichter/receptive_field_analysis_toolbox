@@ -6,6 +6,7 @@ from tensorflow.keras.models import Model
 from rfa_toolbox.encodings.tensorflow_keras.layer_handlers import (
     AnyHandler,
     DenseHandler,
+    GlobalPoolingHandler,
     InputHandler,
     KernelBasedHandler,
     PoolingBasedHandler,
@@ -22,6 +23,7 @@ PARSERS = [
     KernelBasedHandler(),
     PoolingBasedHandler(),
     DenseHandler(),
+    GlobalPoolingHandler(),
     AnyHandler(),
 ]
 

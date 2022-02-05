@@ -25,6 +25,7 @@ def visualize_node(
     color_border: bool,
     color_critical: bool,
     include_rf_info: bool = True,
+    filter_kernel_size_1: bool = False,
 ) -> None:
     """Create a node in a graphviz-graph based on an EnrichedNetworkNode instance.
     Also creates all edges that lead from predecessor nodes to this node.
@@ -44,18 +45,27 @@ def visualize_node(
 
     """
     color = "white"
-    if node.is_border(input_resolution=input_res) and color_border:
+    if (
+        node.is_border(
+            input_resolution=input_res, filter_kernel_size_1=filter_kernel_size_1
+        )
+        and color_border
+    ):
         color = "red"
     elif (
         np.all(np.asarray(node.receptive_field_min) > np.asarray(input_res))
         and color_critical
-        and not node.is_border(input_resolution=input_res)
+        and not node.is_border(
+            input_resolution=input_res, filter_kernel_size_1=filter_kernel_size_1
+        )
     ):
         color = "orange"
     elif (
         np.any(np.asarray(node.receptive_field_min) > np.asarray(input_res))
         and color_critical
-        and not node.is_border(input_resolution=input_res)
+        and not node.is_border(
+            input_resolution=input_res, filter_kernel_size_1=filter_kernel_size_1
+        )
     ):
         color = "yellow"
     l_name = node.layer_info.name
@@ -91,6 +101,7 @@ def visualize_architecture(
     color_critical: bool = True,
     color_border: bool = True,
     include_rf_info: bool = True,
+    filter_kernel_size_1: bool = False,
 ) -> graphviz.Digraph:
     """Visualize an architecture using graphviz
     and mark critical and border layers in the graph visualization.
@@ -124,6 +135,7 @@ def visualize_architecture(
             color_border=color_border,
             color_critical=color_critical,
             include_rf_info=include_rf_info,
+            filter_kernel_size_1=filter_kernel_size_1,
         )
     return f
 

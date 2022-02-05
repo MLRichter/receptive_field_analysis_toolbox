@@ -439,6 +439,7 @@ class EnrichedNetworkNode(Node):
         receptive_field_provider: Callable[
             ["EnrichedNetworkNode"], Union[float, int]
         ] = receptive_field_provider,
+        filter_kernel_size_1: bool = False,
     ) -> bool:
         """Checks if this layer is a border layer.
         A border layer is predicted not advance the
@@ -455,6 +456,8 @@ class EnrichedNetworkNode(Node):
                                         receptive field sizes, which is currently
                                         the most reliable  way of predicting
                                         unproductive layers.
+            filter_kernel_size_1:       any layer with a kernel size of 1 may not
+                                        be a border layer if this is set.
 
         Returns:
             True if this layer is predicted to be unproductive
@@ -487,7 +490,20 @@ class EnrichedNetworkNode(Node):
         # the layer itself and all following layers have a receptive field size
         # GREATER than the input resolution
         # return all(direct_predecessors) and own and all(successors)
-        return all(direct_predecessors) and own  # and all(successors)
+        can_be_border = not (
+            filter_kernel_size_1
+            and (
+                (
+                    isinstance(self.layer_info.kernel_size, Sequence)
+                    and all(np.asarray(self.layer_info.kernel_size) == 1)
+                )
+                or (
+                    isinstance(self.layer_info.kernel_size, int)
+                    and self.kernel_size == 1
+                )
+            )
+        )
+        return all(direct_predecessors) and own and can_be_border  # and all(successors)
 
     def is_in(self, container: Union[List[Node], Dict[Node, Any]]) -> bool:
         """Checks if this node is inside a an iterable collection.
