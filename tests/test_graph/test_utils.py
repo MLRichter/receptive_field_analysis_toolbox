@@ -336,7 +336,7 @@ class TestFindInputResolutionRange:
         r_min, r_max = input_resolution_range(sequential_network)
         assert len(r_max) == 2
         assert len(r_min) == 2
-        assert r_min == (13, 13)
+        assert r_min == (11, 11)
         assert r_max == (13, 13)
 
     def test_with_non_sequential(self, nonsequential_network2):
@@ -350,7 +350,7 @@ class TestFindInputResolutionRange:
         r_min, r_max = input_resolution_range(sequential_network_non_square)
         assert len(r_max) == 2
         assert len(r_min) == 2
-        assert r_min == (13, 25)
+        assert r_min == (11, 21)
         assert r_max == (13, 25)
 
     def test_with_non_square_receptive_field_sizes_without_se(
@@ -358,9 +358,7 @@ class TestFindInputResolutionRange:
     ):
         model = torchvision.models.resnet50()
         graph = create_graph_from_pytorch_model(model)
-        min_res, max_res = input_resolution_range(
-            graph, filter_all_inf_rf=False
-        )  # (75, 75), (427, 427)
+        min_res, max_res = input_resolution_range(graph)  # (75, 75), (427, 427)
         assert len(min_res) == 2
         assert len(max_res) == 2
         assert min_res == (75, 75)

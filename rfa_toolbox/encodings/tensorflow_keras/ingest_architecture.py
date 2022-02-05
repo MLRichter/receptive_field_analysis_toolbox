@@ -6,6 +6,7 @@ from tensorflow.keras.models import Model
 from rfa_toolbox.encodings.tensorflow_keras.layer_handlers import (
     AnyHandler,
     DenseHandler,
+    GlobalPoolingHandler,
     InputHandler,
     KernelBasedHandler,
     PoolingBasedHandler,
@@ -22,6 +23,7 @@ PARSERS = [
     KernelBasedHandler(),
     PoolingBasedHandler(),
     DenseHandler(),
+    GlobalPoolingHandler(),
     AnyHandler(),
 ]
 
@@ -174,6 +176,9 @@ def create_graph_from_model(
                 By default, not filtering is done.
     """
     model_dict = keras_model_to_dict(model)
+    from pprint import pprint
+
+    pprint(model_dict)
     callable_filter = (
         filter_rf
         if (not isinstance(filter_rf, str) and filter_rf is not None)

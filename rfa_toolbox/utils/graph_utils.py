@@ -145,9 +145,33 @@ def filters_non_infinite_rf_sizes(
     return result
 
 
+def _x1_larger_x2(
+    x1: Union[Tuple[int, ...], int], x2: Union[Tuple[int, ...], int]
+) -> bool:
+    """Compare two receptive field sizes.
+
+    Args:
+        x1: the first receptive field size
+        x2: the second receptive field size
+
+    Returns:
+        True if the first receptive field size is smaller than the second.
+    """
+    if (
+        isinstance(x1, Sequence)
+        or isinstance(x1, np.ndarray)
+        or isinstance(x2, Sequence)
+        or isinstance(x2, np.ndarray)
+    ):
+        return all(np.asarray(x1) < np.asarray(x2))
+    else:
+        return x1 < x2
+
+
 def input_resolution_range(
     graph: EnrichedNetworkNode,
     filter_all_inf_rf: bool = False,
+    filter_kernel_size_1: bool = False,
     cardinality: int = 2,
 ) -> Tuple[Tuple[int, ...], Tuple[int, ...]]:
     """Obtain the smallest and largest feasible input resolution.
@@ -182,8 +206,10 @@ def input_resolution_range(
     """
     all_nodes = obtain_all_nodes(graph)
     all_nodes = filters_non_convolutional_node(all_nodes)
+    if filter_kernel_size_1:
+        all_nodes = [node for node in all_nodes if node.kernel_size > 1]
     if not filter_all_inf_rf:
-        rf_min = [x.receptive_field_min for x in all_nodes]
+        rf_min = [xi.receptive_field_min for x in all_nodes for xi in x.predecessors]
         rf_max = [x.receptive_field_max for x in all_nodes]
     else:
         rf_min = [
@@ -199,7 +225,11 @@ def input_resolution_range(
             for x in all_nodes
         ]
 
-    def find_max(rf: List[Union[Tuple[int, ...], int]], axis: int = 0) -> int:
+    def find_max(
+        rf: List[Union[Tuple[int, ...], int]],
+        axis: int = 0,
+        second_largest: bool = False,
+    ) -> int:
         """Find the maximum value of a list of tuples or integers.
 
         Args:
@@ -209,11 +239,15 @@ def input_resolution_range(
         Returns:
             The maximum value of the list.
         """
-        rf_no_tuples = [
+        rf_no_tuples = {
             x[axis] if isinstance(x, Sequence) or isinstance(x, np.ndarray) else x
             for x in rf
-        ]
-        return max(rf_no_tuples)
+        }
+        if not second_largest:
+            return max(rf_no_tuples)
+        else:
+            rf_no_tuples.remove(max(rf_no_tuples))
+            return max(rf_no_tuples)
 
     r_max = tuple(find_max(rf_max, i) for i in range(cardinality))
     r_min = tuple(find_max(rf_min, i) for i in range(cardinality))
