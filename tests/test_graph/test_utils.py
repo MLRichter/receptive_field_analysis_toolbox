@@ -336,7 +336,7 @@ class TestFindInputResolutionRange:
         r_min, r_max = input_resolution_range(sequential_network)
         assert len(r_max) == 2
         assert len(r_min) == 2
-        assert r_min == (11, 11)
+        assert r_min == (13, 13)
         assert r_max == (13, 13)
 
     def test_with_non_sequential(self, nonsequential_network2):
@@ -350,7 +350,7 @@ class TestFindInputResolutionRange:
         r_min, r_max = input_resolution_range(sequential_network_non_square)
         assert len(r_max) == 2
         assert len(r_min) == 2
-        assert r_min == (11, 21)
+        assert r_min == (13, 25)
         assert r_max == (13, 25)
 
     def test_with_non_square_receptive_field_sizes_without_se(
