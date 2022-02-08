@@ -147,7 +147,7 @@ def filters_non_infinite_rf_sizes(
 
 def input_resolution_range(
     graph: EnrichedNetworkNode,
-    filter_all_inf_rf: bool = False,
+    filter_all_inf_rf: bool = True,
     filter_kernel_size_1: bool = False,
     cardinality: int = 2,
 ) -> Tuple[Tuple[int, ...], Tuple[int, ...]]:
