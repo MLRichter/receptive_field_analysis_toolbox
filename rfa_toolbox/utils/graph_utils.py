@@ -234,5 +234,5 @@ def input_resolution_range(
             return max(rf_no_tuples)
 
     r_max = tuple(find_max(rf_max, i) for i in range(cardinality))
-    r_min = tuple(find_max(rf_min, i) for i in range(cardinality))
+    r_min = tuple(find_max(rf_min, i, lower_bound) for i in range(cardinality))
     return r_min, r_max
