@@ -150,6 +150,7 @@ def input_resolution_range(
     filter_all_inf_rf: bool = True,
     filter_kernel_size_1: bool = False,
     cardinality: int = 2,
+    lower_bound: bool = False,
 ) -> Tuple[Tuple[int, ...], Tuple[int, ...]]:
     """Obtain the smallest and largest feasible input resolution.
     The smallest feasible input resolution is defined as the input smallest input
@@ -164,7 +165,7 @@ def input_resolution_range(
     a to small receptive field size.
 
     Args:
-        graph: The neural network
+        graph:              The neural network
         filter_all_inf_rf:  filters ALL infinite receptive field sizes before
                             computing the result, this may come in handy
                             if you want to ignore the influence
@@ -176,7 +177,12 @@ def input_resolution_range(
                             misleading, since these types of modules are not realy
                             build to extract features from the image.
                             This functionality is disabled by default.
-        cardinality: The tensor shape, which is 2D by default.
+        cardinality:        The tensor shape, which is 2D by default.
+        lower_bound:        Disabled by default. If disabled, returns the lowest
+                            resolution which utilizes the entire
+                            network receptive field expansion.
+                            If enabled it returns the lowest resolution exspected
+                            to yield no unproductive, weighted layers.
 
     Returns:
         Smallest and largest feasible input resolution.
@@ -223,6 +229,7 @@ def input_resolution_range(
         if not second_largest:
             return max(rf_no_tuples)
         else:
+            rf_no_tuples = set(rf_no_tuples)
             rf_no_tuples.remove(max(rf_no_tuples))
             return max(rf_no_tuples)
 
