@@ -5,41 +5,17 @@ import numpy as np
 from rfa_toolbox.graphs import EnrichedNetworkNode
 
 
-def _remove_duplicates(nodes: List[EnrichedNetworkNode]) -> List[EnrichedNetworkNode]:
-    result = []
-    for node in nodes:
-        if node.is_in(result):
-            continue
-        else:
-            result.append(node)
-    return result
-
-
-def obtain_all_nodes(
-    output_node: EnrichedNetworkNode, search_from_output: bool = False
-) -> List[EnrichedNetworkNode]:
+def obtain_all_nodes(output_node: EnrichedNetworkNode) -> List[EnrichedNetworkNode]:
     """Fetch all nodes from a single node of the compute graph.
 
     Args:
         output_node:            output node of the graph
-        search_from_output:     False by default. If True,
-                                the nodes will be searched
-                                using the BFS-Algorithm. If False,
-                                the internal registry of the node will be used,
-                                which may be dangerous if more than one
-                                input-node exists.
 
     Returns:
         A List containing all EnrichedNetworkNodes.
 
     """
-    if search_from_output:
-        all_nodes = [output_node]
-        for pred in output_node.predecessors:
-            all_nodes.extend(obtain_all_nodes(pred, False))
-        return _remove_duplicates(all_nodes)
-    else:
-        return output_node.all_layers
+    return output_node.all_layers
 
 
 def obtain_border_layers(
