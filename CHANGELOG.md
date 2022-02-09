@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v1.4.4 (2022-02-09)
+### Fix
+* Build fixed ([`4f9bf5e`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/4f9bf5e7ef260a6271bfbf7e3d057712b6eecd61))
+* Kernel size one can be ignored. Keras now recognizes DepthWiseSeperable convolutions correctly as convolutions ([`1f901f7`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/1f901f7ea179fd2df5d8509b286d8784a03914e7))
+* Kernel size one can be ignored. Keras now recognizes DepthWiseSeperable convolutions correctly as convolutions ([`e7fd86d`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/e7fd86d8424bb1e80db8049cbb6a9cda106813e3))
+* Kernel size one can be ignored. Keras now recognizes DepthWiseSeperable convolutions correctly as convolutions ([`0cd9167`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/0cd91671490970987e90b4c70ea5d15499c18968))
+
 ## v1.4.3 (2022-02-05)
 ### Fix
 * Kernel size one can be ignored. Keras now recognizes DepthWiseSeperable convolutions correctly as convolutions ([`9bd498a`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/9bd498a14a5834f951ad8746f9e783512b4cb61a))
