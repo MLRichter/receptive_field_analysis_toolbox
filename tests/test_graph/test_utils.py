@@ -382,7 +382,7 @@ class TestFindInputResolutionRange:
         min_res, max_res = input_resolution_range(graph)  # (75, 75), (427, 427)
         assert len(min_res) == 2
         assert len(max_res) == 2
-        assert min_res == (75, 75)
+        assert min_res == (96, 96)
         assert max_res == (427, 427)
 
     def test_with_non_square_receptive_field_sizes_wit_se(
