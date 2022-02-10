@@ -21,12 +21,13 @@ def node_id(node: EnrichedNetworkNode) -> str:
 
 
 def _feature_map_size_label(feature_map_size: Union[int, Sequence[int]]) -> str:
+    print(feature_map_size)
     if not isinstance(feature_map_size, Sequence) and not isinstance(
         feature_map_size, np.ndarray
     ):
         return (
-            f"\\nFeature Map Res.: {min(feature_map_size, 1)} "
-            f"x {min(feature_map_size, 1)}"
+            f"\\nFeature Map Res.: {max(feature_map_size, 1)} "
+            f"x {max(feature_map_size, 1)}"
         )
     else:
         fm = np.asarray(feature_map_size)
