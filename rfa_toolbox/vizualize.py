@@ -24,12 +24,14 @@ def _feature_map_size_label(feature_map_size: Union[int, Sequence[int]]) -> str:
     if not isinstance(feature_map_size, Sequence) and not isinstance(
         feature_map_size, np.ndarray
     ):
-        return f"\\nFeature Map Res.: {feature_map_size} x {feature_map_size}"
-    else:
         return (
-            "\\nFeature Map Res.: "
-            f"{' x '.join(np.asarray(feature_map_size).astype(int).astype(str))}"
+            f"\\nFeature Map Res.: {min(feature_map_size, 1)} "
+            f"x {min(feature_map_size, 1)}"
         )
+    else:
+        fm = np.asarray(feature_map_size)
+        fm[fm < 1] = 1
+        return "\\nFeature Map Res.: " f"{' x '.join(fm.astype(int).astype(str))}"
 
 
 def visualize_node(
