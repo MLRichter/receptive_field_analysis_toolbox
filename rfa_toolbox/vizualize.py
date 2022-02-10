@@ -21,7 +21,6 @@ def node_id(node: EnrichedNetworkNode) -> str:
 
 
 def _feature_map_size_label(feature_map_size: Union[int, Sequence[int]]) -> str:
-    print(feature_map_size)
     if not isinstance(feature_map_size, Sequence) and not isinstance(
         feature_map_size, np.ndarray
     ):
@@ -93,8 +92,13 @@ def visualize_node(
 
     filters = f"\\n{node.layer_info.filters} filters"
     units = f"\\n{node.layer_info.units} units"
-    feature_map_size = _feature_map_size_label(
-        np.asarray(input_res) // np.asarray(node.get_maximum_scale_factor())
+
+    feature_map_size = (
+        _feature_map_size_label(
+            np.asarray(input_res) // np.asarray(node.get_maximum_scale_factor())
+        )
+        if node.kernel_size != np.inf
+        else ""
     )
 
     label = l_name
