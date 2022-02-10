@@ -1,3 +1,5 @@
+from typing import Sequence, Union
+
 import graphviz
 import numpy as np
 
@@ -18,6 +20,20 @@ def node_id(node: EnrichedNetworkNode) -> str:
     return f"{node.name}-{id(node)}"
 
 
+def _feature_map_size_label(feature_map_size: Union[int, Sequence[int]]) -> str:
+    if not isinstance(feature_map_size, Sequence) and not isinstance(
+        feature_map_size, np.ndarray
+    ):
+        return (
+            f"\\nFeature Map Res.: {min(feature_map_size, 1)} "
+            f"x {min(feature_map_size, 1)}"
+        )
+    else:
+        fm = np.asarray(feature_map_size)
+        fm[fm < 1] = 1
+        return "\\nFeature Map Res.: " f"{' x '.join(fm.astype(int).astype(str))}"
+
+
 def visualize_node(
     node: EnrichedNetworkNode,
     dot: graphviz.Digraph,
@@ -26,6 +42,7 @@ def visualize_node(
     color_critical: bool,
     include_rf_info: bool = True,
     filter_kernel_size_1: bool = False,
+    include_fm_info: bool = True,
 ) -> None:
     """Create a node in a graphviz-graph based on an EnrichedNetworkNode instance.
     Also creates all edges that lead from predecessor nodes to this node.
@@ -75,6 +92,9 @@ def visualize_node(
 
     filters = f"\\n{node.layer_info.filters} filters"
     units = f"\\n{node.layer_info.units} units"
+    feature_map_size = _feature_map_size_label(
+        np.asarray(input_res) // np.asarray(node.get_maximum_scale_factor())
+    )
 
     label = l_name
     if node.layer_info.filters is not None:
@@ -83,6 +103,8 @@ def visualize_node(
         label += units
     if include_rf_info:
         label += rf_info
+    if include_fm_info:
+        label += feature_map_size
 
     dot.node(
         f"{node.name}-{id(node)}",
@@ -102,6 +124,7 @@ def visualize_architecture(
     color_border: bool = True,
     include_rf_info: bool = True,
     filter_kernel_size_1: bool = False,
+    include_fm_info: bool = True,
 ) -> graphviz.Digraph:
     """Visualize an architecture using graphviz
     and mark critical and border layers in the graph visualization.
@@ -136,13 +159,6 @@ def visualize_architecture(
             color_critical=color_critical,
             include_rf_info=include_rf_info,
             filter_kernel_size_1=filter_kernel_size_1,
+            include_fm_info=include_fm_info,
         )
     return f
-
-
-if __name__ == "__main__":
-    from rfa_toolbox.architectures.resnet import resnet18
-
-    model = resnet18()
-    dot = visualize_architecture(model, "resnet18", 32)
-    dot.view()
