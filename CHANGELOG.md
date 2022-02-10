@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.5.0 (2022-02-10)
+### Feature
+* Feature maps are now also considered, when checking for unproductive layers ([`ffb756b`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/ffb756bbc2f6233482d072abbe433f13aef1ea0f))
+* Feature maps are now also considered, when checking for unproductive layers ([`b43d7c4`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/b43d7c4bcc593b094c71e3ee1a921f2a9f0523a6))
+* Feature maps are now also considered, when checking for unproductive layers ([`425a87f`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/425a87fd02f3541dee345daa61016af51d87f18a))
+
 ## v1.4.4 (2022-02-09)
 ### Fix
 * Build fixed ([`4f9bf5e`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/4f9bf5e7ef260a6271bfbf7e3d057712b6eecd61))
