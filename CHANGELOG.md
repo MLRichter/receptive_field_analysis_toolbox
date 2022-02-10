@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.5.1 (2022-02-10)
+### Fix
+* Removed dead code ([`2b9b2c3`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/2b9b2c3d07915d6c6b896bc040e3f18c19730d48))
+* Feature maps are correctly displayed now ([`27b9a71`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/27b9a71c6a7e82a058440d8ab8c359d499f88472))
+* Feature maps are correctly displayed now ([`10f97a5`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/10f97a500d94a61d0411577a8a2242fc4016268f))
+
 ## v1.5.0 (2022-02-10)
 ### Feature
 * Feature maps are now also considered, when checking for unproductive layers ([`ffb756b`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/ffb756bbc2f6233482d072abbe433f13aef1ea0f))
