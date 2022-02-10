@@ -165,6 +165,10 @@ def input_resolution_range(
     """
     all_nodes = obtain_all_nodes(graph)
     all_nodes = filters_non_convolutional_node(all_nodes)
+    kerneL_rf_min = [
+        np.asarray(node.kernel_size) * np.asarray(node.get_maximum_scale_factor())
+        for node in all_nodes
+    ]
     if filter_kernel_size_1:
         all_nodes = [node for node in all_nodes if node.kernel_size > 1]
     if not filter_all_inf_rf:
@@ -183,6 +187,7 @@ def input_resolution_range(
             )
             for x in all_nodes
         ]
+    rf_min = rf_min + kerneL_rf_min
 
     def find_max(
         rf: List[Union[Tuple[int, ...], int]],

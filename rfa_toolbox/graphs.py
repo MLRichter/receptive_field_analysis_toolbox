@@ -377,6 +377,25 @@ class EnrichedNetworkNode(Node):
             self._group_by_dim(self.receptive_field_sizes), func
         )
 
+    def _scale_factors(self) -> Union[int, Sequence[int]]:
+        return [elem.multiplicator for elem in self.receptive_field_info]
+
+    def _apply_function_on_multiplicator(
+        self, func: Callable[[List[int]], int]
+    ) -> Union[Sequence[int], int]:
+        """Apply a function on the multiplicators of the receptive field growths
+
+        Args:
+            func:  The function to apply.
+
+        Returns:
+            The result of the function.
+
+        """
+        return self._apply_function_on_receptive_field_groups(
+            self._group_by_dim(self._scale_factors()), func
+        )
+
     def _receptive_field_min(self):
         return self._apply_function_on_receptive_field_sizes(
             lambda x: min(x, default=0)
@@ -433,6 +452,32 @@ class EnrichedNetworkNode(Node):
         for pred in self.predecessors:
             pred.succecessors.append(self)
 
+    def get_maximum_scale_factor(self) -> Union[int, Sequence[int]]:
+        return self._apply_function_on_multiplicator(lambda x: max(x, default=0))
+
+    def compute_feature_map_size(self, input_resolution: Union[int, Sequence[int]]):
+        """Compute the feature map size.
+
+        Args:
+            input_resolution:  The input resolution.
+
+        Returns:
+            The feature map size.
+
+        """
+        scale_factor = self.get_maximum_scale_factor()
+        return np.asarray(input_resolution) // np.asarray(scale_factor)
+
+    def _feature_map_size_larger_than_kernel(
+        self, pred: "EnrichedNetworkNode", input_resolution: int
+    ):
+        return np.all(
+            np.asarray(
+                pred.compute_feature_map_size(input_resolution)
+                <= np.asarray(self.layer_info.kernel_size)
+            )
+        )
+
     def is_border(
         self,
         input_resolution: Union[int, Sequence[int]],
@@ -476,8 +521,20 @@ class EnrichedNetworkNode(Node):
         ]
         # of course, this means that this layer also needs to fullfill this property
         own = np.all(
-            np.asarray(input_resolution) <= np.asarray(self.receptive_field_min)
+            np.asarray(input_resolution) < np.asarray(self.receptive_field_min)
         )
+
+        if self.layer_info.kernel_size != np.inf:
+            behaves_like_fully_connected = np.asarray(
+                [
+                    self._feature_map_size_larger_than_kernel(pred, input_resolution)
+                    for pred in self.predecessors
+                ]
+            )
+            if len(behaves_like_fully_connected) != 0 and np.all(
+                behaves_like_fully_connected
+            ):
+                return True
         # additionally (only relevant for multipath architectures)
         # all following layer are border layers as well
         # successors = [

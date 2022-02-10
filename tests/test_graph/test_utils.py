@@ -271,6 +271,7 @@ class TestObtainBorderLayers:
         borders = obtain_border_layers(
             vgg16_model, input_resolution=input_res, filter_dense=True
         )
+        print(borders)
         assert len(borders) == 0
         for border in borders:
             assert border.receptive_field_min >= input_res
@@ -282,6 +283,7 @@ class TestObtainBorderLayers:
         borders = obtain_border_layers(
             vgg16_model, input_resolution=input_res, filter_dense=False
         )
+        print(borders)
         assert len(borders) == 2
         for border in borders:
             assert border.receptive_field_min >= input_res
@@ -304,22 +306,34 @@ class TestObtainBorderLayers:
         borders = obtain_border_layers(
             resnet18_model, input_resolution=input_res, filter_dense=True
         )
-        assert len(borders) == 3
+        assert len(borders) == 9
         for border in borders:
-            assert border.receptive_field_min >= input_res
+            fm = False
             for pred in border.predecessors:
-                assert pred.receptive_field_min >= input_res
+                too_small_feature_map = (
+                    pred.compute_feature_map_size(input_res) <= border.kernel_size
+                )
+                assert pred.receptive_field_min >= input_res or too_small_feature_map
+                if too_small_feature_map:
+                    fm = True
+            assert border.receptive_field_min >= input_res or fm
 
     def test_obtaining_border_layer_in_very_large_architecture(self, resnet101_model):
         input_res = 32
         borders = obtain_border_layers(
             resnet101_model, input_resolution=input_res, filter_dense=True
         )
-        assert len(borders) == 26
+        assert len(borders) == 57
         for border in borders:
-            assert border.receptive_field_min >= input_res
+            fm = False
             for pred in border.predecessors:
-                assert pred.receptive_field_min >= input_res
+                too_small_feature_map = (
+                    pred.compute_feature_map_size(input_res) <= border.kernel_size
+                )
+                assert pred.receptive_field_min >= input_res or too_small_feature_map
+                if too_small_feature_map:
+                    fm = True
+            assert border.receptive_field_min >= input_res or fm
 
 
 class TestFindInputResolutionRange:
