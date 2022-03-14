@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v1.6.0 (2022-03-14)
+### Feature
+* Changed linear layer handling behavior ([`ab230f1`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/ab230f1a6066f7c6a70bc0136f72064bd08615d0))
+* Changed linear layer handling behavior ([`18398d3`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/18398d3c463618400a83e563eb5e35485fe13c7a))
+
 ## v1.5.1 (2022-02-10)
 ### Fix
 * Removed dead code ([`2b9b2c3`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/2b9b2c3d07915d6c6b896bc040e3f18c19730d48))
