@@ -172,7 +172,7 @@ class LinearHandler(LayerInfoHandler):
     def __call__(
         self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
     ) -> LayerDefinition:
-        kernel_size = None
+        kernel_size = 1
         stride_size = 1
         features = obtain_module_with_resolvable_string(
             resolvable_string, model
@@ -182,6 +182,23 @@ class LinearHandler(LayerInfoHandler):
             kernel_size=kernel_size,
             stride_size=stride_size,
             units=features,
+        )
+
+
+@attrs(auto_attribs=True, frozen=True, slots=True)
+class FlattenHandler(LayerInfoHandler):
+    """Extracts information from linear (fully connected) layers."""
+
+    def can_handle(self, name: str) -> bool:
+        return "flatten" in name.lower()
+
+    def __call__(
+        self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
+    ) -> LayerDefinition:
+        kernel_size = None
+        stride_size = 1
+        return LayerDefinition(
+            name="Flatten", kernel_size=kernel_size, stride_size=stride_size
         )
 
 

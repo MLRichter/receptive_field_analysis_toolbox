@@ -306,7 +306,7 @@ class TestObtainBorderLayers:
         borders = obtain_border_layers(
             resnet18_model, input_resolution=input_res, filter_dense=True
         )
-        assert len(borders) == 9
+        assert len(borders) == 10
         for border in borders:
             fm = False
             for pred in border.predecessors:
@@ -323,7 +323,7 @@ class TestObtainBorderLayers:
         borders = obtain_border_layers(
             resnet101_model, input_resolution=input_res, filter_dense=True
         )
-        assert len(borders) == 57
+        assert len(borders) == 58
         for border in borders:
             fm = False
             for pred in border.predecessors:
