@@ -11,6 +11,7 @@ from rfa_toolbox.encodings.pytorch.layer_handlers import (
     AnyConv,
     AnyHandler,
     AnyPool,
+    FlattenHandler,
     FunctionalKernelHandler,
     LinearHandler,
 )
@@ -30,6 +31,7 @@ RESOLVING_STRATEGY = [
     AnyConv(),
     AnyPool(),
     AnyAdaptivePool(),
+    FlattenHandler(),
     LinearHandler(),
     FunctionalKernelHandler(),
     AnyHandler(),

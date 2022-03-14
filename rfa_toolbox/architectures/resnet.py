@@ -119,7 +119,9 @@ def bottleneck(
 def head(feature_extractor: EnrichedNetworkNode) -> EnrichedNetworkNode:
     readout = EnrichedNetworkNode(
         name="GlobalAveragePooling",
-        layer_info=LayerDefinition(name="GAP", kernel_size=None, stride_size=None),
+        layer_info=LayerDefinition(
+            name="Global Average Pooling", kernel_size=1, stride_size=None
+        ),
         predecessors=[feature_extractor],
     )
     print("GAP")

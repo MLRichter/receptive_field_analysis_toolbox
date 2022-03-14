@@ -91,7 +91,9 @@ class DenseHandler(LayerInfoHandler):
         """Transform the json-representation
         of a compute node in the tensorflow-graph"""
         name = node["class_name"]
-        return LayerDefinition(name=name, units=node["config"]["units"])
+        return LayerDefinition(
+            name=name, kernel_size=1, stride_size=1, units=node["config"]["units"]
+        )
 
 
 @attrs(frozen=True, slots=True, auto_attribs=True)
@@ -105,6 +107,19 @@ class GlobalPoolingHandler(LayerInfoHandler):
         of a compute node in the tensorflow-graph"""
         name = node["class_name"]
         return LayerDefinition(name=name)
+
+
+@attrs(frozen=True, slots=True, auto_attribs=True)
+class FlattenHandler(LayerInfoHandler):
+    def can_handle(self, node: Dict[str, Any]) -> bool:
+        """Handles only layers feature units as attribute"""
+        return "Flatten" in node["class_name"]
+
+    def __call__(self, node: Dict[str, Any]) -> LayerDefinition:
+        """Transform the json-representation
+        of a compute node in the tensorflow-graph"""
+        name = node["class_name"]
+        return LayerDefinition(name=name, kernel_size=None)
 
 
 @attrs(frozen=True, slots=True, auto_attribs=True)
