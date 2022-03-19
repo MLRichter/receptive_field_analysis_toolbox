@@ -383,6 +383,7 @@ def create_graph_from_model(
     ] = None,
     input_res: Tuple[int, int, int, int] = (1, 3, 399, 399),
     custom_layers: Optional[List[str]] = None,
+    display_se_modules: bool = False,
 ) -> EnrichedNetworkNode:
     """Create a graph of enriched network nodes from a PyTorch-Model.
 
@@ -405,6 +406,13 @@ def create_graph_from_model(
     Returns:
         The EnrichedNetworkNodeGraph
     """
+    custom_layers = (
+        ["ConvNormActivation"]
+        if custom_layers is None
+        else custom_layers + ["ConvNormActivation"]
+    )
+    if not display_se_modules:
+        custom_layers.append("SqueezeExcitation")
     filter_func = (
         filter_rf
         if (not isinstance(filter_rf, str) and filter_rf is not None)

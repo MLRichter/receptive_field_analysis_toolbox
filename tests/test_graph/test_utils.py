@@ -15,6 +15,19 @@ from rfa_toolbox.utils.graph_utils import (
 
 
 @pytest.fixture()
+def example():
+    import pandas as pd
+
+    pd.DataFrame.from_dict(
+        {"columnInt": [1, 2, 3], "colStr": ["A", "1", "B"], "colFloat": [1.0, 2.0, 3.0]}
+    ).to_csv("float.csv", sep=";")
+    yield "float.csv"
+    import os
+
+    os.remove("float.csv")
+
+
+@pytest.fixture()
 def single_node():
     node0 = EnrichedNetworkNode(
         name="Layer0",

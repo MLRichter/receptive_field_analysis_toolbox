@@ -11,9 +11,11 @@ from rfa_toolbox.encodings.pytorch.layer_handlers import (
     AnyConv,
     AnyHandler,
     AnyPool,
+    ConvNormActivationHandler,
     FlattenHandler,
     FunctionalKernelHandler,
     LinearHandler,
+    SqueezeExcitationHandler,
 )
 from rfa_toolbox.encodings.pytorch.substitutors import (
     input_substitutor,
@@ -28,6 +30,8 @@ from rfa_toolbox.graphs import (
 )
 
 RESOLVING_STRATEGY = [
+    ConvNormActivationHandler(),
+    SqueezeExcitationHandler(),
     AnyConv(),
     AnyPool(),
     AnyAdaptivePool(),

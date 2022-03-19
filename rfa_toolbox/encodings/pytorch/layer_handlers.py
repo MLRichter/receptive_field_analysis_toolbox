@@ -79,6 +79,49 @@ class Conv2d(LayerInfoHandler):
 
 
 @attrs(auto_attribs=True, frozen=True, slots=True)
+class ConvNormActivationHandler(LayerInfoHandler):
+    """This handler explicitly operated on the torch.nn.Conv2d-Layer."""
+
+    def can_handle(self, name: str) -> bool:
+        if "ConvNormActivation" in name.split(".")[-1]:
+            return True
+        else:
+            return False
+
+    def __call__(
+        self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
+    ) -> LayerDefinition:
+        module = obtain_module_with_resolvable_string(resolvable_string, model)
+        submodules = list(module.modules())
+        conv_layer = submodules[1]
+        activation = "" if len(submodules) < 4 else f"-{type(submodules[3]).__name__}"
+        kernel_size = (
+            conv_layer.kernel_size
+            # if isinstance(conv_layer.kernel_size, int)
+            # else conv_layer.kernel_size[0]
+        )
+        stride_size = (
+            conv_layer.stride
+            # if isinstance(conv_layer.stride, int)
+            # else conv_layer.stride[0]
+        )
+        filters = conv_layer.out_channels
+        if not isinstance(kernel_size, Sequence) and not isinstance(
+            kernel_size, np.ndarray
+        ):
+            kernel_size_name = f"{kernel_size}x{kernel_size}"
+        else:
+            kernel_size_name = "x".join([str(k) for k in kernel_size])
+        final_name = f"Conv-Norm{activation} {kernel_size_name} / {stride_size}"
+        return LayerDefinition(
+            name=final_name,  # f"{name} {kernel_size}x{kernel_size}",
+            kernel_size=kernel_size,
+            stride_size=stride_size,
+            filters=filters,
+        )
+
+
+@attrs(auto_attribs=True, frozen=True, slots=True)
 class AnyConv(Conv2d):
     """Extract layer information in convolutional layers."""
 
@@ -129,6 +172,23 @@ class AnyAdaptivePool(Conv2d):
         self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
     ) -> LayerDefinition:
         kernel_size = None
+        stride_size = 1
+        return LayerDefinition(
+            name=name, kernel_size=kernel_size, stride_size=stride_size
+        )
+
+
+@attrs(auto_attribs=True, frozen=True, slots=True)
+class SqueezeExcitationHandler(Conv2d):
+    """Extract information from adaptive pooling layers."""
+
+    def can_handle(self, name: str) -> bool:
+        return "SqueezeExcitation" in name
+
+    def __call__(
+        self, model: torch.nn.Module, resolvable_string: str, name: str, **kwargs
+    ) -> LayerDefinition:
+        kernel_size = 1
         stride_size = 1
         return LayerDefinition(
             name=name, kernel_size=kernel_size, stride_size=stride_size
