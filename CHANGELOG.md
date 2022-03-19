@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v1.6.1 (2022-03-19)
+### Fix
+* Added more elaborate filtering of modules for PyTorch ([`94d6d10`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/94d6d1055c80063dc996bccca86573e053346cad))
+* Added more elaborate filtering of modules for PyTorch ([`52bf78d`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/52bf78da707abf0471463c2c6934321ad8d39c91))
+* Added more elaborate filtering of modules for PyTorch ([`2f87346`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/2f873461155368af172795bfc4ca88140432eb34))
+* Added more elaborate filtering of modules for PyTorch ([`1516bb5`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/1516bb514034579be669fdf0b041fe0dce1e0141))
+
 ## v1.6.0 (2022-03-14)
 ### Feature
 * Changed linear layer handling behavior ([`ab230f1`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/ab230f1a6066f7c6a70bc0136f72064bd08615d0))
