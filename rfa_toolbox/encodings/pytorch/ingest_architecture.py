@@ -402,6 +402,10 @@ def create_graph_from_model(
                         will defaulted to have no effect on the
                         receptive field size. You may need to
                         implement some additional layer handlers.
+        display_se_modules: False by default. If True, displays the structure
+                        inside Squeeze-and-Excitation modules and considers their
+                        maximum receptive field size infinite, which is technically
+                        closer to the truth but irrelevant in practice.
 
     Returns:
         The EnrichedNetworkNodeGraph
