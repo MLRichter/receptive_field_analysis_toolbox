@@ -121,6 +121,91 @@ def filters_non_infinite_rf_sizes(
     return result
 
 
+def filter_layers_not_expanding_receptive_field(
+    nodes: List[EnrichedNetworkNode],
+) -> List[EnrichedNetworkNode]:
+    """Filter all layers with a kernel size greater than 1.
+    In essence, all layers that expand the receptive field.
+    """
+    result = []
+    for node in nodes:
+        k_size = np.asarray(node.kernel_size)
+        if np.all(np.isinf(k_size)) or np.all(k_size == 1):
+            continue
+        result.append(node)
+    return result
+
+
+def _find_highest_cardinality(arrays: Union[int, Sequence, np.ndarray, Tuple]) -> int:
+    """Find the highest cardinality of the given array.
+
+    Args:
+        arrays:  a list of arrays or a single array
+
+    Returns:
+        The highest cardinality of the given array.
+    """
+    return max([len(array) for array in arrays if hasattr(array, "__len__")] + [1])
+
+
+def _func_rf_for_dim(
+    cardinality: int,
+    prev_rf: List[Union[int, Sequence[int]]],
+    func=min,
+    default: int = 0,
+) -> int:
+    """Find the minimum receptive field size for the given dim.
+
+    Args:
+        cardinality:  the cardinality of the receptive field
+        prev_rf:      the previous receptive field sizes
+
+    Returns:
+        The minimum receptive field size for the given cardinality.
+    """
+    result: List[int] = []
+    for rf in prev_rf:
+        result.append(rf[cardinality]) if isinstance(rf, Sequence) or isinstance(
+            rf, np.ndarray
+        ) else result.append(rf)
+
+    return func(result) if result else default
+
+
+def unproductive_resolution(node: EnrichedNetworkNode) -> Union[int, Tuple[int, ...]]:
+    """Obtain the resolution that is unproductive.
+    A layer is unproductive if it has a receptive field size
+    that is smaller than the input resolution.
+    """
+    predecessors = node.predecessors
+    prev_rf = [p.receptive_field_min for p in predecessors]
+    cardinality = max(_find_highest_cardinality(prev_rf), 1)
+    result = []
+    for i in range(cardinality):
+        result.append(_func_rf_for_dim(i, prev_rf))
+    return result[0] if cardinality == 1 else tuple(result)
+
+
+def find_smallest_resolution_with_no_unproductive_layer(
+    graph: EnrichedNetworkNode,
+) -> Tuple[int, ...]:
+    """Find the smallest resolution for which no layer is unproductive.
+    This is the case if no layer with a kernel size greater than
+    1 has predecessors with a receptive
+    field size larger than the input resolution.
+    """
+    all_nodes = obtain_all_nodes(graph)
+    expanding_nodes = filter_layers_not_expanding_receptive_field(all_nodes)
+    unproductive_resolutions = [
+        unproductive_resolution(node) for node in expanding_nodes
+    ]
+    cardinality = min(_find_highest_cardinality(unproductive_resolutions), 1)
+    result = []
+    for i in range(cardinality):
+        result.append(_func_rf_for_dim(i, unproductive_resolutions, max))
+    return tuple(result)
+
+
 def input_resolution_range(
     graph: EnrichedNetworkNode,
     filter_all_inf_rf: bool = True,
@@ -215,5 +300,9 @@ def input_resolution_range(
             return max(rf_no_tuples)
 
     r_max = tuple(find_max(rf_max, i) for i in range(cardinality))
-    r_min = tuple(find_max(rf_min, i, lower_bound) for i in range(cardinality))
+    if lower_bound:
+        res = find_smallest_resolution_with_no_unproductive_layer(graph)
+        r_min = tuple(res[i] if len(res) < i else res[0] for i in range(cardinality))
+    else:
+        r_min = tuple(find_max(rf_min, i) for i in range(cardinality))
     return r_min, r_max
