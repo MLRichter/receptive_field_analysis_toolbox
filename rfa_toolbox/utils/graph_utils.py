@@ -277,7 +277,6 @@ def input_resolution_range(
     def find_max(
         rf: List[Union[Tuple[int, ...], int]],
         axis: int = 0,
-        second_largest: bool = False,
     ) -> int:
         """Find the maximum value of a list of tuples or integers.
 
@@ -292,12 +291,7 @@ def input_resolution_range(
             x[axis] if isinstance(x, Sequence) or isinstance(x, np.ndarray) else x
             for x in rf
         }
-        if not second_largest:
-            return max(rf_no_tuples)
-        else:
-            rf_no_tuples = set(rf_no_tuples)
-            rf_no_tuples.remove(max(rf_no_tuples))
-            return max(rf_no_tuples)
+        return max(rf_no_tuples)
 
     r_max = tuple(find_max(rf_max, i) for i in range(cardinality))
     if lower_bound:
