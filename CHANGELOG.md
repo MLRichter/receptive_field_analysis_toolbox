@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v1.7.0 (2022-03-23)
+### Feature
+* Changed the behavior of the lower-bound option again ([`42ca57c`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/42ca57c7aa5239291484abab7e089e38fa7aa556))
+* Changed the behavior of the lower-bound option again ([`a14b4e2`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/a14b4e200829bfbce159dfa3f0aaa209c805aac6))
+* Changed the behavior of the lower-bound option again ([`02e392b`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/02e392b30fee10cf1be214c8eacc688bc8f49dcf))
+* Changed the behavior of the lower-bound option again ([`286f3de`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/286f3de49037ce4e40a77a5a3f48d4bb99c360b5))
+
 ## v1.6.1 (2022-03-19)
 ### Fix
 * Added more elaborate filtering of modules for PyTorch ([`94d6d10`](https://github.com/MLRichter/receptive_field_analysis_toolbox/commit/94d6d1055c80063dc996bccca86573e053346cad))
