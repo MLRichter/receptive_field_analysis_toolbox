@@ -302,7 +302,9 @@ def input_resolution_range(
     r_max = tuple(find_max(rf_max, i) for i in range(cardinality))
     if lower_bound:
         res = find_smallest_resolution_with_no_unproductive_layer(graph)
-        r_min = tuple(res[i] if len(res) < i else res[0] for i in range(cardinality))
+        kernel_r_min = tuple(find_max(kerneL_rf_min, i) for i in range(cardinality))
+        rf_r_min = tuple(res[i] if len(res) < i else res[0] for i in range(cardinality))
+        r_min = tuple(min(x, y) for x, y in zip(rf_r_min, kernel_r_min))
     else:
         r_min = tuple(find_max(rf_min, i) for i in range(cardinality))
     return r_min, r_max
