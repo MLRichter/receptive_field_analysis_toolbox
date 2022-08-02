@@ -320,6 +320,12 @@ required to process an image, which increases by roughly a factor of 8.
 In any way, RFAToolbox allows you to optimize your convolutional neural network architectures
 for efficiency, performance or a sweetspot between the two without the need for long-running trial-and-error sessions.
 
+## Citation
+
+If you use ReceptiveFieldAnalysisToolbox for your publication, please cite [1] and [2].
+      [1] M.L. Richter, J. Schöning, A. Wiedenroth & U. Krumnack. Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training. In International Conference On Machine Learning And Applications (ICMLA) 2021. IEEE.
+      [2] M.L. Richter, J. Schöning, A. Wiedenroth & U. Krumnack. Receptive Field Analysis for Optimizing Convolutional Neural Network Architectures Without Training. In Deep Learning Applications 2022. Springer (InPress).
+
 ## Credits
 
 This package was created with
