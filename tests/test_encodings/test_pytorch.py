@@ -106,7 +106,7 @@ class TestOnPreimplementedModels:
                     if rf == np.inf or (isinstance(rf, Sequence) and np.inf in rf):
                         infs_nf += 1
         assert infs_nf > infs
-        assert infs_nf == 371
+        assert infs_nf == 661
         assert infs == 64
 
     def test_make_graph_efficientnetb0_with_inf_filter_with_ops_modules(self):
