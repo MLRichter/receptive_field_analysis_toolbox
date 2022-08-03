@@ -326,7 +326,6 @@ If you use ReceptiveFieldAnalysisToolbox for your publication, please cite [1] a
 
 [1] M.L. Richter, J. Schöning, A. Wiedenroth & U. Krumnack. Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training. In International Conference On Machine Learning And Applications (ICMLA) 2021. IEEE.
 
-
 [2] M.L. Richter, J. Schöning, A. Wiedenroth & U. Krumnack. Receptive Field Analysis for Optimizing Convolutional Neural Network Architectures Without Training. In Deep Learning Applications 2022. Springer (InPress).
 
 ## Credits
