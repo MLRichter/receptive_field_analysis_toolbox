@@ -32,7 +32,7 @@ myst-parser = {version = "^0.18.0", optional = true}
 numpy = "^1.21.4"
 attrs = "^21.2.0"
 tqdm = "^4.62.3"
-graphviz = "^0.19.1"
+graphviz = "^0.20.0"
 
 [tool.poetry.extras]
 docs = [
