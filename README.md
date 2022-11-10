@@ -1,35 +1,5 @@
 # ReceptiveFieldAnalysisToolbox
 
-<p align="center">
-  <a href="https://github.com/MLRichter/receptive_field_analysis_toolbox/actions?query=workflow%3ACI">
-    <img src="https://img.shields.io/github/workflow/status/MLRichter/receptive_field_analysis_toolbox/CI/main?label=CI&logo=github&style=flat-square" alt="CI Status" >
-  </a>
-  <a href="https://receptive-field-analysis-toolbox.readthedocs.io/en/latest/index.html">
-    <img src="https://img.shields.io/readthedocs/receptive-field-analysis-toolbox.svg?logo=read-the-docs&logoColor=fff&style=flat-square" alt="Documentation Status">
-  </a>
-    <a href="https://codecov.io/gh/MLRichter/receptive_field_analysis_toolbox">
-        <img src="https://codecov.io/gh/MLRichter/receptive_field_analysis_toolbox/branch/main/graph/badge.svg?token=3K52NPEAEU"/>
-    </a>
-</p>
-<p align="center">
-  <a href="https://python-poetry.org/">
-    <img src="https://img.shields.io/badge/packaging-poetry-299bd7?style=flat-square&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAASCAYAAABrXO8xAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJJSURBVHgBfZLPa1NBEMe/s7tNXoxW1KJQKaUHkXhQvHgW6UHQQ09CBS/6V3hKc/AP8CqCrUcpmop3Cx48eDB4yEECjVQrlZb80CRN8t6OM/teagVxYZi38+Yz853dJbzoMV3MM8cJUcLMSUKIE8AzQ2PieZzFxEJOHMOgMQQ+dUgSAckNXhapU/NMhDSWLs1B24A8sO1xrN4NECkcAC9ASkiIJc6k5TRiUDPhnyMMdhKc+Zx19l6SgyeW76BEONY9exVQMzKExGKwwPsCzza7KGSSWRWEQhyEaDXp6ZHEr416ygbiKYOd7TEWvvcQIeusHYMJGhTwF9y7sGnSwaWyFAiyoxzqW0PM/RjghPxF2pWReAowTEXnDh0xgcLs8l2YQmOrj3N7ByiqEoH0cARs4u78WgAVkoEDIDoOi3AkcLOHU60RIg5wC4ZuTC7FaHKQm8Hq1fQuSOBvX/sodmNJSB5geaF5CPIkUeecdMxieoRO5jz9bheL6/tXjrwCyX/UYBUcjCaWHljx1xiX6z9xEjkYAzbGVnB8pvLmyXm9ep+W8CmsSHQQY77Zx1zboxAV0w7ybMhQmfqdmmw3nEp1I0Z+FGO6M8LZdoyZnuzzBdjISicKRnpxzI9fPb+0oYXsNdyi+d3h9bm9MWYHFtPeIZfLwzmFDKy1ai3p+PDls1Llz4yyFpferxjnyjJDSEy9CaCx5m2cJPerq6Xm34eTrZt3PqxYO1XOwDYZrFlH1fWnpU38Y9HRze3lj0vOujZcXKuuXm3jP+s3KbZVra7y2EAAAAAASUVORK5CYII=" alt="Poetry">
-  </a>
-  <a href="https://github.com/ambv/black">
-    <img src="https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square" alt="black">
-  </a>
-  <a href="https://github.com/pre-commit/pre-commit">
-    <img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=flat-square" alt="pre-commit">
-  </a>
-</p>
-<p align="center">
-  <a href="https://pypi.org/project/rfa_toolbox/">
-    <img src="https://img.shields.io/pypi/v/rfa_toolbox.svg?logo=python&logoColor=fff&style=flat-square" alt="PyPI Version">
-  </a>
-  <img src="https://img.shields.io/pypi/pyversions/rfa_toolbox.svg?style=flat-square&logo=python&amp;logoColor=fff" alt="Supported Python versions">
-  <img src="https://img.shields.io/pypi/l/rfa_toolbox.svg?style=flat-square" alt="License">
-</p>
-
 This is RFA-Toolbox, a simple and easy-to-use library that allows you to optimize your neural network architectures
 using receptive field analysis (RFA) and create graph visualizations of your architecture.
 
@@ -237,11 +207,6 @@ At the latest, this is the case when the receptive field of a layer is BIGGER th
 context can be added at this point.
 For convolutional layers this is a problem, because layers past this "Border Layer" now lack the primary mechenism convolutional layers
 use to improve the intermediate representation of the data, making these layers unproductive.
-If you are interested in the details of this phenomenon I recommend that you read these:
-
-- [(Input) Size Matters for Convolutional Neural Network Classifier](https://link.springer.com/chapter/10.1007/978-3-030-86340-1_11)
-- [Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training](https://arxiv.org/abs/2106.12307)
-  (published at the 20th IEEE International Conference for Machine Learning Application - ICMLA)
 
 ### Optimizing Architectures using Receptive Field Analysis
 
@@ -319,14 +284,6 @@ required to process an image, which increases by roughly a factor of 8.
 
 In any way, RFAToolbox allows you to optimize your convolutional neural network architectures
 for efficiency, performance or a sweetspot between the two without the need for long-running trial-and-error sessions.
-
-## Citation
-
-If you use ReceptiveFieldAnalysisToolbox for your publication, please cite [1] and [2].
-
-[1] M.L. Richter, J. Schöning, A. Wiedenroth & U. Krumnack. Should You Go Deeper? Optimizing Convolutional Neural Network Architectures without Training. In International Conference On Machine Learning And Applications (ICMLA) 2021. IEEE.
-
-[2] M.L. Richter, J. Schöning, A. Wiedenroth & U. Krumnack. Receptive Field Analysis for Optimizing Convolutional Neural Network Architectures Without Training. In Deep Learning Applications 2022. Springer (InPress).
 
 ## Credits
 
