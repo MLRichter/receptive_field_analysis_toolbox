@@ -2,11 +2,11 @@
 name = "rfa_toolbox"
 version = "1.7.0"
 description = "A toolbox for analyzing the receptive field expansion in neural networks."
-authors = ["Mats L. Richter <matrichter@uni-osnabrueck.de>"]
+authors = [""]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/MLRichter/receptive_field_analysis_toolbox"
-documentation = "https://receptive_field_analysis_toolbox.readthedocs.io"
+repository = ""
+documentation = ""
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
@@ -19,8 +19,8 @@ packages = [
 ]
 
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/MLRichter/rfa_toolbox/issues"
-"Changelog" = "https://rfa_toolbox.readthedocs.io/changelog.html"
+"Bug Tracker" = ""
+"Changelog" = ""
 
 [tool.poetry.dependencies]
 python = ">=3.7,<3.11"
