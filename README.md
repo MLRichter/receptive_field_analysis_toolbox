@@ -7,7 +7,7 @@ using receptive field analysis (RFA) and create graph visualizations of your arc
 
 Install this via pip:
 
-`pip install rfa_toolbox`
+`pip install repo_will_be_published_with_camera_ready`
 
 ## What is Receptive Field Analysis?
 
